@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4875474778308391327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4875474778308391325}
+  - component: {fileID: 4875474778308391326}
+  m_Layer: 0
+  m_Name: DungeonGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4875474778308391325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4875474778308391327}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4875474778308391326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4875474778308391327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302faed95149bc54f894593445f4f526, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FloorTileObj: {fileID: 1757188351475757774, guid: da91927c0204e8942a1473413bbf59dc,
+    type: 3}
+  WallTileObj: {fileID: 1251282748155956737, guid: 7b6ed0393ae98894e8eaa4a3ddbd6a5c,
+    type: 3}
+  RoofTileObj: {fileID: 1757188351475757774, guid: da91927c0204e8942a1473413bbf59dc,
+    type: 3}
+  FreeSpaceObj: {fileID: 8749633959148235509, guid: 1f77c6a44e6fcf443b2f1d2c9cfe058e,
+    type: 3}
+  mapWidth: 50
+  mapLength: 50
+  manager: {fileID: 0}
