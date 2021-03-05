@@ -7,43 +7,68 @@ public class PlayerMov : MonoBehaviour
     Player player;
 
     Vector2 dir;
-    Vector2 position;
+    [SerializeField]
+    float inputDelay = 0.5f;
+    float inputTimer;
+    bool inputDelayOn = false;
 
-    DungeonManager dungeon;
-    Tile[,] map;
+    DungeonManager dungeonManager;
+
+    void Awake()
+    {
+        inputTimer = 0;
+    }
+
     void Start()
     {
         //dungeon = FindObjectOfType<DungeonManager>();
         //map = dungeon.map;
-        position = this.transform.position;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            MovePlayer(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            MovePlayer(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            //RODAR CAM
-            Quaternion r90 = Quaternion.AngleAxis(-90, Vector3.up);
-            this.transform.localRotation *= r90;
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            //RODAR CAM
-            Quaternion r90 = Quaternion.AngleAxis(90, Vector3.up);
-            this.transform.localRotation *= r90;
-        }
+        input();
+
+
+
+
     }
 
-    void MovePlayer(int i)
+    void input()
     {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        if (vertical != 0 && inputTimer <= 0)
+        {
+            if (vertical > 0) vertical = 1;
+            else vertical = -1;
+            MovePlayer(vertical);
+            inputTimer = inputDelay;
+            
+        }
+        if (horizontal != 0 && inputTimer <= 0)
+        {
+            if (horizontal > 0) horizontal = 1;
+            else horizontal = -1;
+            RotatePlayer(horizontal);
+            inputTimer = inputDelay;
+        }
+
+        if (inputTimer > 0) inputTimer -= Time.deltaTime;
+    }
+
+    void MovePlayer(float i)
+    {
+        //Debug.Log($"Moving: {i}");
         this.transform.position += i*this.transform.forward;
+    }
+
+    void RotatePlayer(float dir)
+    {
+        Debug.Log($"rotating: {dir}");
+        //RODAR CAM
+        Quaternion r90 = Quaternion.AngleAxis(90 * dir, Vector3.up);
+        this.transform.localRotation *= r90;
     }
 }

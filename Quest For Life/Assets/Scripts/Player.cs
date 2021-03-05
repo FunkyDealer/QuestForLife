@@ -21,6 +21,12 @@ public class Player : Entity
     [HideInInspector]
     Tile currentTile;
     FacingDirection direction;
+    PlayerMov movementManager;
+
+    void Awake()
+    {
+        movementManager = GetComponent<PlayerMov>();
+    }
 
     // Start is called before the first frame update
     void Start()
