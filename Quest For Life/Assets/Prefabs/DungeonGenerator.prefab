@@ -45,12 +45,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FloorTileObj: {fileID: 1757188351475757774, guid: da91927c0204e8942a1473413bbf59dc,
     type: 3}
+  RoofTileObj: {fileID: 5567033828480467614, guid: 6f30747357a560e498b460f63b4230c2,
+    type: 3}
   WallTileObj: {fileID: 1251282748155956737, guid: 7b6ed0393ae98894e8eaa4a3ddbd6a5c,
     type: 3}
-  RoofTileObj: {fileID: 1757188351475757774, guid: da91927c0204e8942a1473413bbf59dc,
+  RoomTileObj: {fileID: 8749633959148235509, guid: 1f77c6a44e6fcf443b2f1d2c9cfe058e,
     type: 3}
-  FreeSpaceObj: {fileID: 8749633959148235509, guid: 1f77c6a44e6fcf443b2f1d2c9cfe058e,
+  HallTileObj: {fileID: 6658242228435006213, guid: 7cd94138aa1da8a4b91fe1d926a8b781,
+    type: 3}
+  EntranceTileObj: {fileID: 4305351633049835609, guid: e019fa9ace6cc174fb0d500ee39abc7c,
+    type: 3}
+  ExitTileObj: {fileID: 5352125047789940246, guid: bb33cfd3364d3894d8c8861b11a65da7,
+    type: 3}
+  ShopTileObj: {fileID: 8626401485566072793, guid: 73a2c1653a21ea64f98ff5d6926cd237,
+    type: 3}
+  ChestTileObj: {fileID: 7181777340757903058, guid: 1dac99a9426bb3c459af85b883fb80c3,
+    type: 3}
+  fountainTileObj: {fileID: 8507400267005278429, guid: 1c43dd9b16c4d354a99031a6606f95ae,
     type: 3}
   mapWidth: 50
   mapLength: 50
   manager: {fileID: 0}
+  Finished: 0
