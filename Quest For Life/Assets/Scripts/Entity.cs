@@ -14,8 +14,10 @@ public class Entity : MonoBehaviour
 
     //Other Stats
     protected int Power;
-
-
+    protected int Defence;
+    protected int Accuracy;
+    protected int Dodge;
+    protected int Speed;
 
 
     // Start is called before the first frame update
