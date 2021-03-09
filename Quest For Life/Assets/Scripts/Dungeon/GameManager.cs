@@ -6,7 +6,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     GameObject dungeonManagerObj;
-    DungeonManager dungeonManager;
+    [HideInInspector]
+    public DungeonManager dungeonManager;
 
     [SerializeField]
     public GameObject player;

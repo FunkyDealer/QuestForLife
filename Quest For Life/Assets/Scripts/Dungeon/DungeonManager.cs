@@ -11,7 +11,7 @@ public class DungeonManager : MonoBehaviour
     public Tile[,] map;
 
     [SerializeField]
-    Dictionary<Tile, GameObject> FreeTiles;
+    public Dictionary<Tile, GameObject> FreeTiles;
 
     [HideInInspector]
     public GameManager manager;
@@ -43,10 +43,10 @@ public class DungeonManager : MonoBehaviour
     public void StartFloor(DungeonGenerator DG, Vector2 spawn)
     {
         Destroy(DG.gameObject);
-
+        
         Vector3 spawnPos = FreeTiles[map[(int)spawn.x, (int)spawn.y]].transform.position;
         spawnPos.y = 1f;
-
+        
         manager.player.gameObject.transform.position = spawnPos;
 
     }
