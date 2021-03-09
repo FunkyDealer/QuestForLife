@@ -11,19 +11,17 @@ public class PlayerMov : MonoBehaviour
     float inputDelay = 0.5f;
     float inputTimer;
     bool inputDelayOn = false;
-    GameManager game;
 
-    DungeonManager dungeonManager;
 
     void Awake()
     {
         inputTimer = 0;
+        player = GetComponent<Player>();
     }
 
     void Start()
     {
-        game = FindObjectOfType<GameManager>();
-        dungeonManager = game.dungeonManager;
+
     }
 
     void Update()
@@ -39,9 +37,9 @@ public class PlayerMov : MonoBehaviour
         if (vertical != 0 && inputTimer <= 0)
         {
             if (vertical > 0) vertical = 1;
-            else vertical = -1;
-              MovePlayer(vertical);
-          //  CheckNewPos(vertical);
+            else vertical = -1;   
+            
+             CheckNewPos(vertical);
             inputTimer = inputDelay;
 
         }
@@ -56,55 +54,83 @@ public class PlayerMov : MonoBehaviour
         if (inputTimer > 0) inputTimer -= Time.deltaTime;
     }
 
-    void MovePlayer(float i)
+    void MovePlayer(Vector2 newPos)
     {
-        //Debug.Log($"Moving: {i}");
-        this.transform.position += 4 * i * this.transform.forward;
+        Vector3 targetPos = player.dungeonManager.FreeTiles[player.dungeonManager.map[(int)newPos.x, (int)newPos.y]].transform.position;
+
+        targetPos = new Vector3(targetPos.x, player.gameObject.transform.position.y, targetPos.z);
+
+        this.transform.position = targetPos;
+        player.currentTile = player.dungeonManager.map[(int)newPos.x, (int)newPos.y];
     }
 
     void RotatePlayer(float dir)
     {
-        Debug.Log($"rotating: {dir}");
-        //RODAR CAM
+        switch (player.direction)
+        {
+            case Player.FacingDirection.North:
+                if (dir > 0) player.direction = Player.FacingDirection.East;
+                else player.direction = Player.FacingDirection.West;
+                break;
+            case Player.FacingDirection.East:
+                if (dir > 0) player.direction = Player.FacingDirection.South;
+                else player.direction = Player.FacingDirection.North;
+                break;
+            case Player.FacingDirection.West:
+                if (dir > 0) player.direction = Player.FacingDirection.North;
+                else player.direction = Player.FacingDirection.South;
+                break;
+            case Player.FacingDirection.South:
+                if (dir > 0) player.direction = Player.FacingDirection.West;
+                else player.direction = Player.FacingDirection.East;
+                break;
+        }
+
+        //ROTATE CAM
         Quaternion r90 = Quaternion.AngleAxis(90 * dir, Vector3.up);
         this.transform.localRotation *= r90;
     }
 
     void CheckNewPos(float i)
     {
-        if (dungeonManager == null)
+        Vector2 newPos = new Vector2(player.currentTile.x, player.currentTile.y);
+
+        switch (player.direction)
         {
-            dungeonManager = game.dungeonManager;
+            case Player.FacingDirection.North:
+                newPos = new Vector2(player.currentTile.x-i, player.currentTile.y);
+                break;
+            case Player.FacingDirection.East:
+                newPos = new Vector2(player.currentTile.x, player.currentTile.y+i);
+                break;
+            case Player.FacingDirection.West:
+                newPos = new Vector2(player.currentTile.x, player.currentTile.y-i);
+                break;
+            case Player.FacingDirection.South:
+                newPos = new Vector2(player.currentTile.x+i, player.currentTile.y);
+                break;
         }
 
-        Vector3 nextPos = this.transform.position + 4 * i * this.transform.forward;
-
-        Debug.Log(dungeonManager.map[(int)nextPos.x, (int)nextPos.z].type);
-
-        switch (dungeonManager.map[(int)nextPos.x, (int)nextPos.z].type)
+        switch (player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type)
         {
             case Tile.Type.filling:
-                MovePlayer(i);
+
                 break;
             case Tile.Type.hall:
-                MovePlayer(i);
+                MovePlayer(newPos);
                 break;
             case Tile.Type.none:
-                MovePlayer(i);
+
                 break;
             case Tile.Type.room:
-                MovePlayer(i);
+                MovePlayer(newPos);
                 break;
             default:
-                Debug.Log(dungeonManager.map[(int)nextPos.x, (int)nextPos.z].type);
+                Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
                 break;
         }
 
     }
 
-    void Interação()
-    {
 
-
-    }
 }

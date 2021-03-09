@@ -16,6 +16,8 @@ public class DungeonManager : MonoBehaviour
     [HideInInspector]
     public GameManager manager;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +50,7 @@ public class DungeonManager : MonoBehaviour
         spawnPos.y = 1f;
         
         manager.player.gameObject.transform.position = spawnPos;
+        manager.player.currentTile = map[(int)spawn.x,(int)spawn.y];
 
     }
     

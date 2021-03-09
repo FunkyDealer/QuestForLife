@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    enum FacingDirection
+    public enum FacingDirection
     {
         North,
         East,
@@ -19,13 +19,14 @@ public class Player : Entity
     public DungeonManager dungeonManager;
 
     [HideInInspector]
-    Tile currentTile;
-    FacingDirection direction;
+    public Tile currentTile;
+    public FacingDirection direction;
     PlayerMov movementManager;
 
     void Awake()
     {
         movementManager = GetComponent<PlayerMov>();
+        direction = FacingDirection.East;
     }
 
     // Start is called before the first frame update

@@ -10,9 +10,14 @@ public class GameManager : MonoBehaviour
     public DungeonManager dungeonManager;
 
     [SerializeField]
-    public GameObject player;
+    GameObject playerObj;
+    [HideInInspector]
+    public Player player;
 
-
+    void Awake()
+    {
+        player = playerObj.GetComponent<Player>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +26,7 @@ public class GameManager : MonoBehaviour
         DungeonManager dm = o.GetComponent<DungeonManager>();        
         dungeonManager = dm;
         dungeonManager.manager = this;
+        player.dungeonManager = dungeonManager;
     }
 
     // Update is called once per frame
