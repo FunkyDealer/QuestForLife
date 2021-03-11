@@ -17,10 +17,13 @@ public class Tile
     {
         Entrance,
         Exit,
+        LockedExit,
         Shop,
-        fountain,
-        chest,
-        none
+        Fountain,
+        Chest,
+        Boss,
+        Key,
+        None
     }
 
     public enum Facing
@@ -55,7 +58,7 @@ public class Tile
         this.y = y;
         roomNumber = 0;
         hallNumber = 0;
-        feature = Feature.none;
+        feature = Feature.None;
         type = Type.filling;
         facing = Facing.none;
 

@@ -10,6 +10,7 @@ public class Room
     public int number;
     public bool shop;
     public bool chest;
+    public bool key;
 
     public Room(int x, int y, int width, int height)
     {

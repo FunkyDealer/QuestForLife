@@ -7,16 +7,36 @@ public class PlayerMov : MonoBehaviour
     Player player;
 
     Vector2 dir;
+    Vector3 nextPosition;
+    Quaternion nextRotation;
+    float nextRotationDir;
+
     [SerializeField]
-    float inputDelay = 0.5f;
+    float inputDelay = 0.1f;    
+    [SerializeField]
+    float velocity = 50f;
+    [SerializeField]
+    float turningVelocity = 50f;
     float inputTimer;
     bool inputDelayOn = false;
 
+    DungeonManager dungeonManager;
+
+    enum MovementState
+    {
+        WAITINGINPUT,
+        MOVING,
+        TURNING,
+        FROZEN,
+        COOLDOWN
+    }
+    MovementState movementState;
 
     void Awake()
     {
         inputTimer = 0;
         player = GetComponent<Player>();
+        movementState = MovementState.WAITINGINPUT;
     }
 
     void Start()
@@ -26,7 +46,70 @@ public class PlayerMov : MonoBehaviour
 
     void Update()
     {
-        input();
+        switch (movementState)
+        {
+            case MovementState.WAITINGINPUT:
+                input();
+                break;
+            case MovementState.MOVING:
+
+
+                break;
+            case MovementState.TURNING:
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, nextRotation, turningVelocity * Time.deltaTime);
+                break;
+            case MovementState.FROZEN:
+                break;
+            case MovementState.COOLDOWN:
+                if (inputTimer < inputDelay) inputTimer += Time.deltaTime;
+                else
+                {
+                    inputTimer = 0;
+                    movementState = MovementState.WAITINGINPUT;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        switch (movementState)
+        {
+            case MovementState.WAITINGINPUT:
+                break;
+            case MovementState.MOVING:
+
+                //Direction to move
+                Vector3 dir = nextPosition - transform.position;
+                dir.Normalize();
+
+                transform.position += dir * velocity * Time.deltaTime; //Moving
+
+                float mag = Vector3.Distance(transform.position, nextPosition);
+                if (mag < 0.1f)
+                {
+                    this.transform.position = nextPosition;
+                    movementState = MovementState.COOLDOWN;
+                }
+
+                break;
+            case MovementState.TURNING:               
+                Vector3 targetForward = nextRotation * Vector3.forward;
+                
+                if (Vector3.Dot(transform.forward, targetForward) > 0.99995)
+                {
+                    transform.localRotation = nextRotation;
+                    movementState = MovementState.COOLDOWN;
+                }                
+
+                break;
+            case MovementState.FROZEN:
+                break;
+            default:
+                break;
+        }
     }
 
     void input()
@@ -34,61 +117,53 @@ public class PlayerMov : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        if (vertical != 0 && inputTimer <= 0)
+        if (vertical != 0)
         {
             if (vertical > 0) vertical = 1;
-            else vertical = -1;   
-            
-             CheckNewPos(vertical);
-            inputTimer = inputDelay;
+            else vertical = -1;
+
+            CheckNewPos(vertical);
 
         }
-        if (horizontal != 0 && inputTimer <= 0)
+        if (horizontal != 0)
         {
             if (horizontal > 0) horizontal = 1;
             else horizontal = -1;
             RotatePlayer(horizontal);
-            inputTimer = inputDelay;
         }
-
-        if (inputTimer > 0) inputTimer -= Time.deltaTime;
     }
 
-    void MovePlayer(Vector2 newPos)
-    {
-        Vector3 targetPos = player.dungeonManager.FreeTiles[player.dungeonManager.map[(int)newPos.x, (int)newPos.y]].transform.position;
 
-        targetPos = new Vector3(targetPos.x, player.gameObject.transform.position.y, targetPos.z);
 
-        this.transform.position = targetPos;
-        player.currentTile = player.dungeonManager.map[(int)newPos.x, (int)newPos.y];
-    }
+
+
 
     void RotatePlayer(float dir)
     {
         switch (player.direction)
         {
-            case Player.FacingDirection.North:
-                if (dir > 0) player.direction = Player.FacingDirection.East;
-                else player.direction = Player.FacingDirection.West;
+            case Global.FacingDirection.NORTH:
+                if (dir > 0) player.direction = Global.FacingDirection.EAST;
+                else player.direction = Global.FacingDirection.WEST;
                 break;
-            case Player.FacingDirection.East:
-                if (dir > 0) player.direction = Player.FacingDirection.South;
-                else player.direction = Player.FacingDirection.North;
+            case Global.FacingDirection.EAST:
+                if (dir > 0) player.direction = Global.FacingDirection.SOUTH;
+                else player.direction = Global.FacingDirection.NORTH;
                 break;
-            case Player.FacingDirection.West:
-                if (dir > 0) player.direction = Player.FacingDirection.North;
-                else player.direction = Player.FacingDirection.South;
+            case Global.FacingDirection.WEST:
+                if (dir > 0) player.direction = Global.FacingDirection.NORTH;
+                else player.direction = Global.FacingDirection.SOUTH;
                 break;
-            case Player.FacingDirection.South:
-                if (dir > 0) player.direction = Player.FacingDirection.West;
-                else player.direction = Player.FacingDirection.East;
+            case Global.FacingDirection.SOUTH:
+                if (dir > 0) player.direction = Global.FacingDirection.WEST;
+                else player.direction = Global.FacingDirection.EAST;
                 break;
         }
 
-        //ROTATE CAM
+        //nextRotationDir = dir;
         Quaternion r90 = Quaternion.AngleAxis(90 * dir, Vector3.up);
-        this.transform.localRotation *= r90;
+        nextRotation = transform.localRotation * r90;
+        movementState = MovementState.TURNING;
     }
 
     void CheckNewPos(float i)
@@ -97,17 +172,17 @@ public class PlayerMov : MonoBehaviour
 
         switch (player.direction)
         {
-            case Player.FacingDirection.North:
-                newPos = new Vector2(player.currentTile.x-i, player.currentTile.y);
+            case Global.FacingDirection.NORTH:
+                newPos = new Vector2(player.currentTile.x - i, player.currentTile.y);
                 break;
-            case Player.FacingDirection.East:
-                newPos = new Vector2(player.currentTile.x, player.currentTile.y+i);
+            case Global.FacingDirection.EAST:
+                newPos = new Vector2(player.currentTile.x, player.currentTile.y + i);
                 break;
-            case Player.FacingDirection.West:
-                newPos = new Vector2(player.currentTile.x, player.currentTile.y-i);
+            case Global.FacingDirection.WEST:
+                newPos = new Vector2(player.currentTile.x, player.currentTile.y - i);
                 break;
-            case Player.FacingDirection.South:
-                newPos = new Vector2(player.currentTile.x+i, player.currentTile.y);
+            case Global.FacingDirection.SOUTH:
+                newPos = new Vector2(player.currentTile.x + i, player.currentTile.y);
                 break;
         }
 
@@ -117,19 +192,30 @@ public class PlayerMov : MonoBehaviour
 
                 break;
             case Tile.Type.hall:
-                MovePlayer(newPos);
+                CalculateNextPosition(newPos);
                 break;
             case Tile.Type.none:
 
                 break;
             case Tile.Type.room:
-                MovePlayer(newPos);
+                CalculateNextPosition(newPos);
                 break;
             default:
                 Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
                 break;
         }
+    }
 
+    void CalculateNextPosition(Vector2 newPos)
+    {
+        Vector3 targetPos = player.dungeonManager.FreeTiles[player.dungeonManager.map[(int)newPos.x, (int)newPos.y]].transform.position;
+
+        targetPos = new Vector3(targetPos.x, player.gameObject.transform.position.y, targetPos.z);
+
+        //this.transform.position = targetPos;
+        player.currentTile = player.dungeonManager.map[(int)newPos.x, (int)newPos.y];
+        nextPosition = targetPos;
+        movementState = MovementState.MOVING;
     }
 
 

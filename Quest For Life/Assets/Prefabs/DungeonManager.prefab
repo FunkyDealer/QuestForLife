@@ -46,3 +46,7 @@ MonoBehaviour:
   DungeonGeneratorObj: {fileID: 4875474778308391327, guid: 018b6371cad63b24c840bd574b41ed0a,
     type: 3}
   manager: {fileID: 0}
+  MAX_LEAF_SIZE: 30
+  MIN_LEAF_SIZE: 9
+  mapWidth: 30
+  mapLength: 40

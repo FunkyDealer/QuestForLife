@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Partition 
 {
-
-    private const int MIN_LEAF_SIZE = 6;
+    private int MIN_LEAF_SIZE = 6;
 
     public int x, y, width, height; //Position and dimension of the partition
 
@@ -16,8 +15,9 @@ public class Partition
 
     Random r;
 
-    public Partition(int X, int Y, int Width, int Height)
+    public Partition(int X, int Y, int Width, int Height, int MIN_LEAF_SIZE)
     {
+        this.MIN_LEAF_SIZE = MIN_LEAF_SIZE;
         x = X;
         y = Y;
         width = Width;
@@ -53,13 +53,13 @@ public class Partition
         // create our left and right children based on the direction of the split
         if (splitH)
         {
-            leftChild = new Partition(x, y, width, split);
-            rightChild = new Partition(x, y + split, width, height - split);
+            leftChild = new Partition(x, y, width, split, MIN_LEAF_SIZE);
+            rightChild = new Partition(x, y + split, width, height - split, MIN_LEAF_SIZE);
         }
         else
         {
-            leftChild = new Partition(x, y, split, height);
-            rightChild = new Partition(x + split, y, width - split, height);
+            leftChild = new Partition(x, y, split, height, MIN_LEAF_SIZE);
+            rightChild = new Partition(x + split, y, width - split, height, MIN_LEAF_SIZE);
         }
         return true; // split successful!
     }

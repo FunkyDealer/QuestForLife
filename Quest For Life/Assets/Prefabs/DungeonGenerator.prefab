@@ -63,7 +63,17 @@ MonoBehaviour:
     type: 3}
   fountainTileObj: {fileID: 8507400267005278429, guid: 1c43dd9b16c4d354a99031a6606f95ae,
     type: 3}
+  lockedStairsObj: {fileID: 6041432630883975932, guid: 890d77ff6ef77d84f9eeb4e429eb2ba7,
+    type: 3}
+  keysObj:
+  - {fileID: 7882561287122699064, guid: 954b347684822cf438ea6a9a68b27b25, type: 3}
+  - {fileID: 2218526636505523049, guid: 3541d530aec50ab4a92e48d3d5336fc5, type: 3}
+  - {fileID: 506773101568427789, guid: 089f326c686987f4a99a6c36b2ad08e6, type: 3}
+  - {fileID: 5705270227842899175, guid: 95192888db65b9e47a9f005d46e56ab8, type: 3}
   mapWidth: 50
   mapLength: 50
   manager: {fileID: 0}
   Finished: 0
+  MAX_LEAF_SIZE: 20
+  MIN_LEAF_SIZE: 6
+  parent: 1

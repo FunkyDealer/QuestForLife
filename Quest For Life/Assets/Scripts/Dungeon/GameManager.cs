@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     GameObject dungeonManagerObj;
     [HideInInspector]
     public DungeonManager dungeonManager;
-
+    
     [SerializeField]
     GameObject playerObj;
     [HideInInspector]

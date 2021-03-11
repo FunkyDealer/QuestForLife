@@ -4,13 +4,7 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    public enum FacingDirection
-    {
-        North,
-        East,
-        West,
-        South
-    }
+
 
     [SerializeField]
     public GameManager gameManager;
@@ -20,13 +14,13 @@ public class Player : Entity
 
     [HideInInspector]
     public Tile currentTile;
-    public FacingDirection direction;
+    public Global.FacingDirection direction;
     PlayerMov movementManager;
 
     void Awake()
     {
         movementManager = GetComponent<PlayerMov>();
-        direction = FacingDirection.East;
+        direction = Global.FacingDirection.EAST;
     }
 
     // Start is called before the first frame update
