@@ -506,7 +506,9 @@ public class DungeonGenerator : MonoBehaviour
             {
                 Vector3 position = new Vector3(x * 4 + 2, -0.1f, y * 4 + 2);
                // Instantiate(FloorTileObj, position, Quaternion.identity);
-                InstantiateObj(FloorTileObj, position);
+                if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);              
+
+                
             }
         }
     }
@@ -567,7 +569,7 @@ public class DungeonGenerator : MonoBehaviour
                             break;
                         case Tile.Type.filling:
                            // Instantiate(WallTileObj, position, Quaternion.identity);
-                            InstantiateObj(WallTileObj, position);
+                           // InstantiateObj(WallTileObj, position);
                             break;
                         default:
                             Debug.Log($"Error drawing a Occupied tile at X: {x} Y: {y}");
@@ -639,7 +641,7 @@ public class DungeonGenerator : MonoBehaviour
             {
                 Vector3 position = new Vector3(x * 4 + 2, 5.1f, y * 4 + 2);
                 //Instantiate(RoofTileObj, position, Quaternion.identity);
-                InstantiateObj(RoofTileObj, position);
+                if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);
             }
         }
     }

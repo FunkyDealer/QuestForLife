@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    protected string EntityName;
     protected int Level;
 
     //Health and Mana
@@ -23,32 +24,12 @@ public class Entity : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
-    }
-
-    public float Cur_Healt()
-    {
-        return currentHealth;
-    }
-    public float Cur_Mana()
-    {
-        return currentMana;
-    }
-
-    public void Heal(int heal)
-    {
-        currentHealth += heal;
-        Debug.Log("You heal " + heal + "Current healt is" + currentHealth);
-    }
-    public void DealDMG(int dmg)
-    {
-        currentHealth -= dmg;
-        Debug.Log("You damage " + dmg + "Current healt is" + currentHealth);
+        
     }
 }

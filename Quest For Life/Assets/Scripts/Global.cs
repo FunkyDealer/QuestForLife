@@ -44,4 +44,12 @@ public class Global
     }
 
 
+    public struct DungeonMonsterInfo
+    {
+        public string Name;
+        public int minFloor;
+        public int maxFloor;
+    }
+
+
 }

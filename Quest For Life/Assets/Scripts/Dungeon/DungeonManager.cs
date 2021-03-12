@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class DungeonManager : MonoBehaviour
 {
+
+    //Dungeon Generation start
     [SerializeField]
     GameObject DungeonGeneratorObj;
-
     [HideInInspector]
     public Tile[,] map;
-
     [SerializeField]
     public Dictionary<Tile, GameObject> FreeTiles;
-
     [HideInInspector]
     public GameManager manager;
-
     [SerializeField]
     int MAX_LEAF_SIZE = 20;
     [SerializeField]
     int MIN_LEAF_SIZE = 6;
-
     [SerializeField]
     int mapWidth = 20;
     [SerializeField]
@@ -29,14 +26,34 @@ public class DungeonManager : MonoBehaviour
     DungeonGenPreset Easy = new DungeonGenPreset(30, 9, 20, 20);
     DungeonGenPreset Memium = new DungeonGenPreset(30, 9, 30, 40);
     DungeonGenPreset Hard = new DungeonGenPreset(40, 9, 50, 50);
-
     DungeonGenPreset custom;
+    //Dungeon Generation end
+
+    
+    public MonsterGenerator monsterGenerator;    
+    public List<GameObject> monsterPrefabs;
 
     int times;
 
+    [SerializeField]
+    bool genDemo = false;
+    
     void Awake()
     {
+        Dictionary<int, GameObject> MonsterPrefabs;
+        MonsterPrefabs = new Dictionary<int, GameObject>();
+
+        int i = 1;
+        foreach (var o in monsterPrefabs)
+        {
+            MonsterPrefabs.Add(1, o);
+            i++;
+        }
+
+
         custom = new DungeonGenPreset(MAX_LEAF_SIZE, MIN_LEAF_SIZE, mapWidth, mapLength);
+
+        monsterGenerator = new MonsterGenerator(MonsterPrefabs);
     }
 
     // Start is called before the first frame update
@@ -46,13 +63,19 @@ public class DungeonManager : MonoBehaviour
 
         times = 0;
 
-        //for (int i = 0; i < 99; i++)
-        //{
-        //    StartCoroutine(StartFloorGenerationDelay(times, 0, i));
-        //    times++;
-        //}
+        if (genDemo)
+        { 
+            for (int i = 0; i < 99; i++)
+            {
+                StartCoroutine(StartFloorGenerationDelay(times, 0, i));
+                times++;
+            }
+         }else
+        {
+            StartFloorGeneration();
+        }
 
-        StartFloorGeneration();
+        
 
 
     }
@@ -128,8 +151,8 @@ public class DungeonManager : MonoBehaviour
 
     public void StartFloor(DungeonGenerator DG, Vector2 spawn)
     {
-        Destroy(DG);
-        //StartCoroutine(DestroyFloor(1, DG.gameObject));
+        if (!genDemo) Destroy(DG);
+        else StartCoroutine(DestroyFloor(1, DG.gameObject));
 
         Vector3 spawnPos = FreeTiles[map[(int)spawn.x, (int)spawn.y]].transform.position;
         spawnPos.y = 1f;

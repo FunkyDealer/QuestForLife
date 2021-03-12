@@ -50,3 +50,5 @@ MonoBehaviour:
   MIN_LEAF_SIZE: 9
   mapWidth: 30
   mapLength: 40
+  monsterPrefabs: []
+  genDemo: 0
