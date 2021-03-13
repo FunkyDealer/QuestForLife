@@ -28,20 +28,25 @@ public class PlayerMov : MonoBehaviour
         MOVING,
         TURNING,
         FROZEN,
+        IN_BATTLE,
         COOLDOWN
     }
     MovementState movementState;
+
+    bool inBattle;
 
     void Awake()
     {
         inputTimer = 0;
         player = GetComponent<Player>();
         movementState = MovementState.WAITINGINPUT;
+        inBattle = false;
+      
     }
 
     void Start()
     {
-
+        dungeonManager = player.dungeonManager;
     }
 
     void Update()
@@ -52,7 +57,6 @@ public class PlayerMov : MonoBehaviour
                 input();
                 break;
             case MovementState.MOVING:
-
 
                 break;
             case MovementState.TURNING:
@@ -67,6 +71,16 @@ public class PlayerMov : MonoBehaviour
                     inputTimer = 0;
                     movementState = MovementState.WAITINGINPUT;
                 }
+                break;
+            case MovementState.IN_BATTLE:
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    inBattle = false;
+                    movementState = MovementState.COOLDOWN;
+                    dungeonManager.EndBattle();
+                }
+
                 break;
             default:
                 break;
@@ -91,7 +105,10 @@ public class PlayerMov : MonoBehaviour
                 if (mag < 0.1f)
                 {
                     this.transform.position = nextPosition;
-                    movementState = MovementState.COOLDOWN;
+
+                    inBattle = dungeonManager.CheckForEncounter();
+                    if (inBattle) movementState = MovementState.IN_BATTLE;
+                    else movementState = MovementState.COOLDOWN;
                 }
 
                 break;
@@ -106,6 +123,8 @@ public class PlayerMov : MonoBehaviour
 
                 break;
             case MovementState.FROZEN:
+                break;
+            case MovementState.IN_BATTLE:
                 break;
             default:
                 break;
@@ -132,11 +151,6 @@ public class PlayerMov : MonoBehaviour
             RotatePlayer(horizontal);
         }
     }
-
-
-
-
-
 
     void RotatePlayer(float dir)
     {
@@ -222,7 +236,7 @@ public class PlayerMov : MonoBehaviour
                     case Tile.Feature.Key:
                         break;
                     case Tile.Feature.None:
-                        CalculateNextPosition(newPos);
+                        CalculateNextPosition(newPos);                        
                         break;
                     default:
                         break;

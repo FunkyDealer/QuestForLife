@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
-    public int BaseAttackPower;
-    public Global.Type Resistence;
-    public Global.Type Weakness;
+    int BaseAttackPower;
+    Global.Type Resistence;
+    Global.Type Weakness;
 
 
     int HealthGainPerLevel;
@@ -20,7 +20,8 @@ public class Enemy : Entity
     int BaseMoneyReward;
 
     int MonsterID;
-    int PrefabID;
+
+    Global.Spell[] KnownSpells;
 
 
     // Start is called before the first frame update
@@ -33,6 +34,33 @@ public class Enemy : Entity
     void Update()
     {
 
+    }
+
+    public void getStats(Global.DungeonMonsterInfo info, int level)
+    {
+        name = info.Name;
+        this.Level = level;
+        this.MonsterID = info.id;
+
+        maxHealth = info.BaseHealth + info.HealthGainPerLevel * level;
+        currentHealth = maxHealth;
+        maxMana = info.BaseHealth + info.HealthGainPerLevel * level; 
+        currentMana = maxMana;
+
+
+        Power = info.BasePower + info.PowerGainPerLevel * level; 
+        Defence = info.BaseDefence + info.DefenceGainPerLevel * level; 
+        Accuracy = info.BaseAccuracy + info.AccuracyGainPerLevel * level; 
+        Dodge = info.BaseDodge + info.DodgeGainPerLevel * level; 
+        Speed = info.BaseSpeed + info.SpeedGainPerLevel * level;
+
+        KnownSpells = info.spells;
+
+        this.Resistence = info.Resistence;
+        this.Weakness = info.Weakness;
+
+        this.BaseAttackPower = info.BaseAttackPower;
+        this.BaseMoneyReward = info.BaseReward;
     }
 
 }

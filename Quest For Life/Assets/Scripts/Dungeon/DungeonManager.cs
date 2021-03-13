@@ -44,24 +44,18 @@ public class DungeonManager : MonoBehaviour
     GameObject currentFloorObject;
 
     int currentFloor;
-    
+
+    const int DEFAULT_ENCOUNTER_THRESHOLD = 10;
+    int currentThresHold = 10;
+
     void Awake()
     {
-        Dictionary<int, GameObject> MonsterPrefabs;
-        MonsterPrefabs = new Dictionary<int, GameObject>();
-
-        int i = 1;
-        foreach (var o in monsterPrefabs)
-        {
-            MonsterPrefabs.Add(1, o);
-            i++;
-        }
 
         currentFloor = 0;
 
         custom = new DungeonGenPreset(MAX_LEAF_SIZE, MIN_LEAF_SIZE, mapWidth, mapLength);
 
-        monsterGenerator = new MonsterGenerator(MonsterPrefabs);
+        monsterGenerator = new MonsterGenerator(this);
     }
 
     // Start is called before the first frame update
@@ -189,11 +183,35 @@ public class DungeonManager : MonoBehaviour
     {
         Destroy(currentFloorObject);
     }
+    
 
-
-    public void SpawnPlayer(Vector3 position)
+    public bool CheckForEncounter()
     {
+        bool enemyEncounter = Random.Range(0, 100) < currentThresHold;
 
+        if (enemyEncounter)
+        {
+            currentThresHold = DEFAULT_ENCOUNTER_THRESHOLD;
+
+            //START ENCOUNTER
+            Debug.Log("Encounter Starting");
+            manager.MonsterCamera.SetActive(true);
+        }
+        else
+        {
+            currentThresHold += 2;
+        }
+
+
+        return enemyEncounter;
     }
+
+    public void EndBattle()
+    {
+        manager.MonsterCamera.SetActive(false);
+    }
+
+
+
 
 }

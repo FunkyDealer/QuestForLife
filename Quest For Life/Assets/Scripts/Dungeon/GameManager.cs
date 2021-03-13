@@ -17,7 +17,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject monsterRoom;
 
+    [HideInInspector]
     public bool startingNewGame;
+
+    [SerializeField]
+    public GameObject MonsterCamera;
 
     void Awake()
     {
