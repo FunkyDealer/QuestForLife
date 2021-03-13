@@ -198,7 +198,36 @@ public class PlayerMov : MonoBehaviour
 
                 break;
             case Tile.Type.room:
-                CalculateNextPosition(newPos);
+                switch (player.dungeonManager.map[(int)newPos.x, (int)newPos.y].feature)
+                {
+                    case Tile.Feature.Entrance:
+                        CalculateNextPosition(newPos);
+                        break;
+                    case Tile.Feature.Exit:
+                        MoveToNextFloor(newPos);
+                        Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
+                        break;
+                    case Tile.Feature.LockedExit:
+                        MoveToNextFloor(newPos);
+                        Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
+                        break;
+                    case Tile.Feature.Shop:
+                        break;
+                    case Tile.Feature.Fountain:
+                        break;
+                    case Tile.Feature.Chest:
+                        break;
+                    case Tile.Feature.Boss:
+                        break;
+                    case Tile.Feature.Key:
+                        break;
+                    case Tile.Feature.None:
+                        CalculateNextPosition(newPos);
+                        break;
+                    default:
+                        break;
+                }
+                
                 break;
             default:
                 Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
@@ -218,5 +247,8 @@ public class PlayerMov : MonoBehaviour
         movementState = MovementState.MOVING;
     }
 
-
+    void MoveToNextFloor(Vector2 newPos)
+    {
+        player.EnterExit();
+    }
 }

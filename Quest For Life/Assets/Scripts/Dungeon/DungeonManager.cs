@@ -35,8 +35,15 @@ public class DungeonManager : MonoBehaviour
 
     int times;
 
+    int floor;
+
     [SerializeField]
     bool genDemo = false;
+
+    [HideInInspector]
+    GameObject currentFloorObject;
+
+    int currentFloor;
     
     void Awake()
     {
@@ -50,6 +57,7 @@ public class DungeonManager : MonoBehaviour
             i++;
         }
 
+        currentFloor = 0;
 
         custom = new DungeonGenPreset(MAX_LEAF_SIZE, MIN_LEAF_SIZE, mapWidth, mapLength);
 
@@ -59,10 +67,9 @@ public class DungeonManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FreeTiles = new Dictionary<Tile, GameObject>();
+        
 
         times = 0;
-
         if (genDemo)
         { 
             for (int i = 0; i < 99; i++)
@@ -70,12 +77,22 @@ public class DungeonManager : MonoBehaviour
                 StartCoroutine(StartFloorGenerationDelay(times, 0, i));
                 times++;
             }
-         }else
+         }    
+    }
+
+    public void CreateNewFloor()
+    {
+        if (FreeTiles == null) FreeTiles = new Dictionary<Tile, GameObject>();
+        FreeTiles.Clear();
+
+        if (currentFloorObject != null)
         {
-            StartFloorGeneration();
+            DestroyCurrentFloor();            
         }
 
-        
+        currentFloor++;
+
+        StartFloorGeneration();
 
 
     }
@@ -122,9 +139,8 @@ public class DungeonManager : MonoBehaviour
 
     void StartFloorGeneration()
     {
-
-        GameObject DGobj = Instantiate(DungeonGeneratorObj, Vector3.zero, Quaternion.identity);
-        DungeonGenerator DG = DGobj.GetComponent<DungeonGenerator>();
+        currentFloorObject = Instantiate(DungeonGeneratorObj, Vector3.zero, Quaternion.identity);
+        DungeonGenerator DG = currentFloorObject.GetComponent<DungeonGenerator>();
         DG.manager = this;
 
         GameObject o = DG.gameObject;
@@ -148,7 +164,6 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
-
     public void StartFloor(DungeonGenerator DG, Vector2 spawn)
     {
         if (!genDemo) Destroy(DG);
@@ -157,8 +172,9 @@ public class DungeonManager : MonoBehaviour
         Vector3 spawnPos = FreeTiles[map[(int)spawn.x, (int)spawn.y]].transform.position;
         spawnPos.y = 1f;
 
-        manager.player.gameObject.transform.position = spawnPos;
-        manager.player.currentTile = map[(int)spawn.x, (int)spawn.y];
+
+        manager.SpawnPlayer(spawnPos, spawn, map);
+
 
     }
 
@@ -167,6 +183,17 @@ public class DungeonManager : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         Destroy(o);
+    }
+
+    void DestroyCurrentFloor()
+    {
+        Destroy(currentFloorObject);
+    }
+
+
+    public void SpawnPlayer(Vector3 position)
+    {
+
     }
 
 }

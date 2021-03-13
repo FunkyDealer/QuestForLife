@@ -197,6 +197,7 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   dungeonManager: {fileID: 0}
   direction: 0
+  currentMoney: 0
 --- !u!114 &854255256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,7 +210,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9130303f8c983024eac29228d24bb215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputDelay: 0.5
+  inputDelay: 0.2
+  velocity: 25
+  turningVelocity: 10
 --- !u!1 &6929561943919630930
 GameObject:
   m_ObjectHideFlags: 0

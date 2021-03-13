@@ -45,4 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dungeonManagerObj: {fileID: 4875133677892062727, guid: 53b7c64e3f6352440b2d5dc53b5a60a6,
     type: 3}
+  dungeonManager: {fileID: 0}
+  playerObj: {fileID: 2115102508002413112, guid: 64c8cc07022032e41953272f55ab2c84,
+    type: 3}
   player: {fileID: 0}
+  monsterRoom: {fileID: 0}

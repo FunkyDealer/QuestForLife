@@ -17,10 +17,41 @@ public class Player : Entity
     public Global.FacingDirection direction;
     PlayerMov movementManager;
 
+    public int currentMoney;
+    int currentExperience;
+    int totalExperience;
+
+    int experienceToNextLevel;
+
+
+    int minHealthGain = 5;
+    int maxHealthGain = 20;
+
+    int minManaGain = 5;
+    int maxManaGain = 10;
+
+    int minPowerGain = 1;
+    int maxPowerGain = 5;
+
+    int minDefenseGain = 2;
+    int maxDefenseGain = 5;
+
+    int minAccuracyGain = 2;
+    int maxAccuracyGain = 5;
+
+    int minDodgeGain = 1;
+    int maxDodgeGain = 5;
+
+    int minSpeedGain = 1;
+    int maxSpeedGain = 5;
+
+
     void Awake()
     {
         movementManager = GetComponent<PlayerMov>();
         direction = Global.FacingDirection.EAST;
+
+        EntityName = "Mage";
     }
 
     // Start is called before the first frame update
@@ -34,4 +65,74 @@ public class Player : Entity
     {
         
     }
+
+    public void EnterExit()
+    {
+        dungeonManager.CreateNewFloor();
+
+
+    }
+
+    public void Spawn(Vector3 worldPos, Vector3 mapPos, Tile[,] map, GameManager gameManager, DungeonManager dungeonManager)
+    {
+        gameObject.transform.position = worldPos;
+        currentTile = map[(int)mapPos.x, (int)mapPos.y];
+        this.gameManager = gameManager;
+        this.dungeonManager = dungeonManager;
+
+        StartNewPlayer();
+    }
+
+    public void Move(Vector3 worldPos, Vector3 mapPos, Tile[,] map)
+    {
+
+        gameObject.transform.position = worldPos;
+        currentTile = map[(int)mapPos.x, (int)mapPos.y];
+    }
+
+
+    void StartNewPlayer()
+    {
+        Level = 1;
+
+        maxHealth = 100;
+        currentHealth = maxHealth;
+        maxMana = 50;
+        currentMana = maxMana;
+
+        Power = 10;
+        Defence = 10;
+        Accuracy = 10;
+        Dodge = 10;
+        Speed = 10;
+
+        currentMoney = 100;
+
+        experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
+
+        gameManager.startingNewGame = false;
+    }
+
+    public void gainExp(int ammount)
+    {
+        currentExperience += ammount;
+        totalExperience += ammount;
+
+        if (currentExperience >= experienceToNextLevel)
+        {
+            int excessExp = currentExperience - experienceToNextLevel;
+            
+
+            LevelUp(excessExp);
+        }
+    }
+
+    public void LevelUp(int excessXp)
+    {
+        Level ++;
+        currentExperience = excessXp;
+
+        //Stats up
+    }
+
 }

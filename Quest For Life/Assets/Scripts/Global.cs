@@ -49,6 +49,7 @@ public class Global
         public string Name;
         public int minFloor;
         public int maxFloor;
+        public int id;
     }
 
 

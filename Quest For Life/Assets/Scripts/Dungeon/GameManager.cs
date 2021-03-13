@@ -14,9 +14,14 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public Player player;
 
+    [SerializeField]
+    public GameObject monsterRoom;
+
+    public bool startingNewGame;
+
     void Awake()
     {
-        player = playerObj.GetComponent<Player>();
+        startingNewGame = true;
     }
 
     // Start is called before the first frame update
@@ -26,7 +31,8 @@ public class GameManager : MonoBehaviour
         DungeonManager dm = o.GetComponent<DungeonManager>();        
         dungeonManager = dm;
         dungeonManager.manager = this;
-        player.dungeonManager = dungeonManager;
+        dungeonManager.CreateNewFloor();
+        
     }
 
     // Update is called once per frame
@@ -37,4 +43,25 @@ public class GameManager : MonoBehaviour
 
 
     }
+
+    public void SpawnPlayer(Vector3 WorldPosition, Vector2 MapPosition, Tile[,] map)
+    {
+        if (player == null)
+        {
+            GameObject o = Instantiate(playerObj, WorldPosition, Quaternion.identity);
+
+            player = o.GetComponent<Player>();
+
+            
+        }
+
+        if (startingNewGame) player.Spawn(WorldPosition, MapPosition, map, this, dungeonManager);
+        else player.Move(WorldPosition, MapPosition, map);
+
+    }
+
+
+
+
+
 }
