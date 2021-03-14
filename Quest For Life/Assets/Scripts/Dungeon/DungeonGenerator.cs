@@ -279,7 +279,7 @@ public class DungeonGenerator : MonoBehaviour
         }
         if (numberOfRooms < 2) return false;
 
-        Debug.Log($"there are {numberOfRooms} rooms");
+        //Debug.Log($"there are {numberOfRooms} rooms");
         // Debug.Log($"there are {numberOfHalls} halls");
 
         //foreach (var h in halls)
@@ -313,7 +313,7 @@ public class DungeonGenerator : MonoBehaviour
         map[exitX, exitY].type = Tile.Type.room;
         //  Debug.Log($"Exit is in room {map[exitX, exitY].roomNumber} at X: {map[exitX, exitY].x} Y: {map[exitX, exitY].y}");
 
-        Debug.Log($"Entrance: r:{map[entranceX, entranceY].roomNumber} X:{map[entranceX, entranceY].x} Y:{map[entranceX, entranceY].y}; Exit: r:{map[exitX, exitY].roomNumber} X:{map[exitX, exitY].x} Y:{map[exitX, exitY].y}");
+        //Debug.Log($"Entrance: r:{map[entranceX, entranceY].roomNumber} X:{map[entranceX, entranceY].x} Y:{map[entranceX, entranceY].y}; Exit: r:{map[exitX, exitY].roomNumber} X:{map[exitX, exitY].x} Y:{map[exitX, exitY].y}");
 
         if (shop) //create the Shop
         {
@@ -490,7 +490,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        Debug.Log($"{keyNumber} keys successfully placed, { chestNumber} chests successfully placed");
+        //Debug.Log($"{keyNumber} keys successfully placed, { chestNumber} chests successfully placed");
     }
     #endregion
 

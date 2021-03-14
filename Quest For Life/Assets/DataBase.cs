@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,7 +49,8 @@ public class DataBase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        readSpells(SpellInfoFile);
+        ReadMonsters(MonsterInfoFile);
 
 
     }
@@ -59,27 +61,140 @@ public class DataBase : MonoBehaviour
         
     }
 
+    void readSpells(TextAsset file)
+    {
+        Spells = new Dictionary<int, Global.Spell>();
 
-    //void ReadExcel()
-    //{
-    //public TextAsset Excel;
-    //
-    //    string[] data = Excel.text.Split(new string[] { ";", "\n" }, StringSplitOptions.None);
-    //    //   Debug.Log(Excel.text);
-    //    //   Debug.Log(data.Length);
-    //    int size = data.Length / 3 - 1;
-    //    dados = new Dados[size];
-    //    //    Debug.Log(size);
-    //    for (int i = 0; i < size; i++)
-    //    {
-    //        Debug.Log(i);
-    //        dados[i] = new Dados();
-    //        dados[i].nome = data[3 * (i + 1)];
-    //        dados[i].hp = int.Parse(data[3 * (i + 1) + 1]);
-    //        dados[i].poder = int.Parse(data[3 * (i + 1) + 2]);
-    //    }
-    //    Debug.Log("Fim");
+        string[] lines = file.text.Split(new string[] { "\n" }, StringSplitOptions.None);
+        int lineCount = lines.Length;
+        Debug.Log($"{lineCount - 2} spells found");
 
-    //    text.text = $" {dados[0].nome}; {dados[0].hp}; {dados[0].poder}; /n {dados[1].nome};  {dados[1].hp}; {dados[1].poder}  ";
-    //}
+        for (int i = 1; i < lineCount - 1; i++)
+        {
+            string[] data = (lines[i].Trim()).Split(","[0]);
+
+            Global.Spell spell = new Global.Spell();
+
+            spell.Name = data[0];
+            spell.Id = int.Parse(data[1]);
+            spell.type = ConvertStringToType(data[2]);
+            spell.Power = int.Parse(data[3]);
+            spell.Cost = int.Parse(data[4]);
+            spell.Accuracy = int.Parse(data[5]);
+            spell.effect = ConvertToAttackEffect(int.Parse(data[6]));
+
+            Spells.Add(spell.Id, spell);
+           // Debug.Log($"Adding new Spell: {spell.Name}, {spell.Id}, {spell.type}, {spell.Power},  {spell.Cost}, {spell.Accuracy},  {spell.effect}");
+        }
+
+        Debug.Log("Spells Database Finished");
+    }
+
+    Global.Type ConvertStringToType(string t)
+    {
+        switch (t.ToUpper())
+        {
+            case "FIRE":
+                return Global.Type.FIRE;
+            case "WATER":
+                return Global.Type.WATER;
+            case "THUNDER":
+                return Global.Type.THUNDER;
+            case "LIGHT":
+                return Global.Type.LIGHT;
+            case "DARKNESS":
+                return Global.Type.DARKNESS;
+            default:
+                return Global.Type.NONE;
+        }
+    }
+
+    Global.AttackEffect ConvertToAttackEffect(int i)
+    {
+        switch (i)
+        {                
+            case 1:
+                return Global.AttackEffect.HEAL;               
+            case 2:
+                return Global.AttackEffect.DEATH;                
+            default:
+                return Global.AttackEffect.NONE;
+        }
+    }
+
+    void ReadMonsters(TextAsset file)
+    {
+        Monsters = new Dictionary<int, Global.DungeonMonsterInfo>();
+
+         string[] lines = file.text.Split(new string[] { "\n" }, StringSplitOptions.None);
+            int lineCount = lines.Length;
+        Debug.Log($"{lineCount - 2} Monsters found");
+
+        for (int i = 1; i < lineCount - 1; i++)
+            {
+            string[] data = (lines[i].Trim()).Split(","[0]);
+            Global.DungeonMonsterInfo monster = new Global.DungeonMonsterInfo();
+
+                monster.Name = data[0];
+                monster.minFloor = int.Parse(data[1]);
+                monster.maxFloor = int.Parse(data[2]);
+                monster.id = int.Parse(data[3]);
+                monster.BaseHealth = int.Parse(data[4]);
+                monster.HealthGainPerLevel = int.Parse(data[5]);
+                monster.BaseMana = int.Parse(data[6]);
+                monster.ManaGainPerLevel = int.Parse(data[7]);
+                monster.BasePower = int.Parse(data[8]);
+                monster.PowerGainPerLevel = int.Parse(data[9]);
+                monster.BaseDefence = int.Parse(data[10]);
+                monster.DefenceGainPerLevel = int.Parse(data[11]);
+                monster.BaseAccuracy = int.Parse(data[12]);
+                monster.AccuracyGainPerLevel = int.Parse(data[13]);
+                monster.BaseDodge = int.Parse(data[14]);
+                monster.DodgeGainPerLevel = int.Parse(data[15]);
+                monster.BaseSpeed = int.Parse(data[16]);
+                monster.SpeedGainPerLevel = int.Parse(data[17]);
+                monster.BaseAttackPower = int.Parse(data[18]);
+                monster.BaseReward = int.Parse(data[19]);
+
+                monster.Resistence = ConvertStringToType(data[20]);
+                monster.Weakness = ConvertStringToType(data[21]);
+
+                int[] spellIds = new int[3];
+                int spellCounter = 0;
+                for (int s = 0; s < 3; s++)
+                 {
+                    spellIds[s] = int.Parse(data[22 + s]);
+                if (spellIds[s] != 0) spellCounter++;
+                 }
+
+                monster.spells = new Global.Spell[spellCounter];
+
+                spellCounter = 0;
+                for (int S = 0; S < 3; S++)
+                {
+                     if (spellIds[S] != 0) { monster.spells[spellCounter] = convertToSpell(spellIds[S]); spellCounter++; }           
+                }
+
+           // if (monster.spells.Length > 0) Debug.Log($"Adding new monster: {monster.Name}, {monster.id}, {monster.Weakness}, {monster.spells[monster.spells.Length-1].Name}");
+           // else Debug.Log($"Adding new monster: {monster.Name}, {monster.id}, {monster.Weakness}, no spells");
+        }
+
+        Debug.Log("Monsters Database Finished");
+    }
+
+    Global.Spell convertToSpell(int i)
+    {
+        try
+        {
+            Global.Spell spell = Spells[i];
+            return spell;
+        }
+        catch (Exception)
+        {
+            Debug.Log($"Trying to return an empty Spell - Spell ID: {i}");
+            return new Global.Spell();
+        }        
+    }
+
+    
 }
