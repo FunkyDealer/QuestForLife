@@ -73,6 +73,7 @@ public class Global
         public int SpeedGainPerLevel;
 
         public Spell[] spells;
+
     }
 
     public struct Spell

@@ -4,22 +4,35 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    protected string EntityName;
-    protected int Level;
+    [HideInInspector]
+    public string EntityName;
+    [HideInInspector]
+    public int Level;
 
     //Health and Mana
-    protected int maxHealth;
-    protected int currentHealth;
-    protected int maxMana;
-    protected int currentMana;
+    [HideInInspector]
+    public int maxHealth;
+    [HideInInspector]
+    public int currentHealth;
+    [HideInInspector]
+    public int maxMana;
+    [HideInInspector]
+    public int currentMana;
 
     //Other Stats
-    protected int Power;
-    protected int Defence;
-    protected int Accuracy;
-    protected int Dodge;
-    protected int Speed;
+    [HideInInspector]
+    public int Power;
+    [HideInInspector]
+    public int Defence;
+    [HideInInspector]
+    public int Accuracy;
+    [HideInInspector]
+    public int Dodge;
+    [HideInInspector]
+    public int Speed;
 
+    [HideInInspector]
+    public BattleManager battleManager;
 
     // Start is called before the first frame update
     void Start()
@@ -32,4 +45,6 @@ public class Entity : MonoBehaviour
     {
         
     }
+
+
 }

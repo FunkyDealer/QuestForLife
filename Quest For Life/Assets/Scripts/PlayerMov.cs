@@ -78,7 +78,7 @@ public class PlayerMov : MonoBehaviour
                 {
                     inBattle = false;
                     movementState = MovementState.COOLDOWN;
-                    dungeonManager.EndBattle();
+                    player.EndBattle();
                 }
 
                 break;

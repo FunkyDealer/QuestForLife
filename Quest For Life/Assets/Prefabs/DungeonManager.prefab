@@ -52,3 +52,4 @@ MonoBehaviour:
   mapLength: 40
   monsterPrefabs: []
   genDemo: 0
+  monsterGeneratorPrefab: {fileID: 0}

@@ -30,7 +30,6 @@ public class DungeonManager : MonoBehaviour
     //Dungeon Generation end
 
     
-    public MonsterGenerator monsterGenerator;    
     public List<GameObject> monsterPrefabs;
 
     int times;
@@ -48,6 +47,8 @@ public class DungeonManager : MonoBehaviour
     const int DEFAULT_ENCOUNTER_THRESHOLD = 10;
     int currentThresHold = 10;
 
+
+
     void Awake()
     {
 
@@ -55,7 +56,6 @@ public class DungeonManager : MonoBehaviour
 
         custom = new DungeonGenPreset(MAX_LEAF_SIZE, MIN_LEAF_SIZE, mapWidth, mapLength);
 
-        monsterGenerator = new MonsterGenerator(this);
     }
 
     // Start is called before the first frame update
@@ -195,7 +195,12 @@ public class DungeonManager : MonoBehaviour
 
             //START ENCOUNTER
             Debug.Log("Encounter Starting");
-            manager.MonsterCamera.SetActive(true);
+
+            manager.player.StartBattle();
+
+            MonsterGenerator mg = gameObject.AddComponent(typeof(MonsterGenerator)) as MonsterGenerator;
+            mg.Initiate(this, manager.player, currentFloor);
+
         }
         else
         {
@@ -206,10 +211,6 @@ public class DungeonManager : MonoBehaviour
         return enemyEncounter;
     }
 
-    public void EndBattle()
-    {
-        manager.MonsterCamera.SetActive(false);
-    }
 
 
 

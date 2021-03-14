@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : Entity
-{
-    int BaseAttackPower;
-    Global.Type Resistence;
-    Global.Type Weakness;
+{   
+    public int BaseAttackPower;
+    public Global.Type Resistence;
+    public Global.Type Weakness;
 
 
     int HealthGainPerLevel;
@@ -17,9 +17,9 @@ public class Enemy : Entity
     int DodgeGainPerLevel;
     int SpeedGainPerLevel;
 
-    int BaseMoneyReward;
+    public int BaseMoneyReward;
 
-    int MonsterID;
+    public int MonsterID;
 
     Global.Spell[] KnownSpells;
 
@@ -27,7 +27,7 @@ public class Enemy : Entity
     // Start is called before the first frame update
     void Start()
     {
-
+        Debug.Log($"{Level};{currentHealth};{currentMana};{Power};{Defence};{Accuracy};{Dodge};{Speed}{BaseAttackPower};{BaseMoneyReward}");
     }
 
     // Update is called once per frame
@@ -38,7 +38,7 @@ public class Enemy : Entity
 
     public void getStats(Global.DungeonMonsterInfo info, int level)
     {
-        name = info.Name;
+        EntityName = info.Name;
         this.Level = level;
         this.MonsterID = info.id;
 
@@ -61,6 +61,16 @@ public class Enemy : Entity
 
         this.BaseAttackPower = info.BaseAttackPower;
         this.BaseMoneyReward = info.BaseReward;
+    }
+
+    void getDamage()
+    {
+
+    }
+
+    void CheckForDefeat()
+    {
+
     }
 
 }

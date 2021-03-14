@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
-    Entity attacker;
-    Entity defender;
+    public Entity attacker;
+    public Entity defender;
 
 
 

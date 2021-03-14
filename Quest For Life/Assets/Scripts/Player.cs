@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class Player : Entity
 {
-
-
     [SerializeField]
+    GameObject NavigationInterFacePrefab;
+    [SerializeField]
+    GameObject BattleInterfacePrefab;
+
+    [HideInInspector]
+    NaviagationInterfaceManager navigationInterFace;
+    [HideInInspector]
+    BattleInterFaceManager battleInterface;
+
+    [HideInInspector]
     public GameManager gameManager;
 
     [HideInInspector]
@@ -14,9 +22,11 @@ public class Player : Entity
 
     [HideInInspector]
     public Tile currentTile;
+    [HideInInspector]
     public Global.FacingDirection direction;
     PlayerMov movementManager;
 
+    [HideInInspector]
     public int currentMoney;
     int currentExperience;
     int totalExperience;
@@ -52,6 +62,9 @@ public class Player : Entity
         direction = Global.FacingDirection.EAST;
 
         EntityName = "Mage";
+
+        navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NaviagationInterfaceManager>();
+        navigationInterFace.getInformation(this, dungeonManager);
     }
 
     // Start is called before the first frame update
@@ -60,11 +73,31 @@ public class Player : Entity
         
     }
 
+    public void StartBattle()
+    {
+        navigationInterFace.gameObject.SetActive(false);
+
+        battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();
+       // battleInterface.getInformation(this, , gameManager);
+        gameManager.MonsterCamera.SetActive(true);
+    }
+
+    public void EndBattle()
+    {   
+        Destroy(battleInterface.gameObject);
+        battleInterface = null;
+        gameManager.MonsterCamera.SetActive(false);
+
+        navigationInterFace.gameObject.SetActive(true);
+    }
+
     // Update is called once per frame
     void Update()
     {
         
     }
+
+   
 
     public void EnterExit()
     {

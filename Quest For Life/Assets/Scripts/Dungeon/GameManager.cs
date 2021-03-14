@@ -23,6 +23,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject MonsterCamera;
 
+    [SerializeField]
+    GameObject BattleInterface;
+    [SerializeField]
+    GameObject BattleManager;
+
     void Awake()
     {
         startingNewGame = true;

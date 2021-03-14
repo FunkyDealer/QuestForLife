@@ -194,6 +194,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0dc142aa3d8eb94e9c0fe3451b86455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EntityName: 
+  Level: 0
+  maxHealth: 0
+  currentHealth: 0
+  maxMana: 0
+  currentMana: 0
+  Power: 0
+  Defence: 0
+  Accuracy: 0
+  Dodge: 0
+  Speed: 0
+  battleManager: {fileID: 0}
+  NavigationInterFacePrefab: {fileID: 7367118153519915494, guid: a067b6cf7c0d843458a2176acb0c944a,
+    type: 3}
+  BattleInterfacePrefab: {fileID: 1920330424229684931, guid: 0dda8a5e43c87a54abf1b5fce3c9090a,
+    type: 3}
   gameManager: {fileID: 0}
   dungeonManager: {fileID: 0}
   direction: 0
