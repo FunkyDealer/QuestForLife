@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : Entity
-{   
-    public int BaseAttackPower;
-    public Global.Type Resistence;
-    public Global.Type Weakness;
-
+{      
 
     int HealthGainPerLevel;
     int ManaGainPerLevel;
@@ -27,7 +23,7 @@ public class Enemy : Entity
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log($"{Level};{currentHealth};{currentMana};{Power};{Defence};{Accuracy};{Dodge};{Speed}{BaseAttackPower};{BaseMoneyReward}");
+        Debug.Log($"{EntityName}: Level:{Level}; Health: {currentHealth}; - {currentMana};{Power};{Defence};{Accuracy};{Dodge};{Speed}{BaseAttackPower};{BaseMoneyReward}");
     }
 
     // Update is called once per frame
@@ -63,14 +59,15 @@ public class Enemy : Entity
         this.BaseMoneyReward = info.BaseReward;
     }
 
-    void getDamage()
+
+
+    public override BattleAction ChooseAction(Entity enemy)
     {
+        AttackAction AttackAction = new AttackAction(this, enemy, this.BaseAttackPower, Global.Type.NONE);
 
-    }
+        Debug.Log("the Monster Chose to do a normal Attack");
 
-    void CheckForDefeat()
-    {
-
+        return AttackAction;
     }
 
 }

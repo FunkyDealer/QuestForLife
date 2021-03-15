@@ -74,12 +74,12 @@ public class PlayerMov : MonoBehaviour
                 break;
             case MovementState.IN_BATTLE:
 
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    inBattle = false;
-                    movementState = MovementState.COOLDOWN;
-                    player.EndBattle();
-                }
+                //if (Input.GetKeyDown(KeyCode.Escape))
+                //{
+                //    inBattle = false;
+                //    movementState = MovementState.COOLDOWN;
+                //    player.EndBattle();
+                //}
 
                 break;
             default:
@@ -264,5 +264,12 @@ public class PlayerMov : MonoBehaviour
     void MoveToNextFloor(Vector2 newPos)
     {
         player.EnterExit();
+    }
+
+
+    public void EndBattle()
+    {
+        inBattle = false;
+        movementState = MovementState.COOLDOWN;
     }
 }

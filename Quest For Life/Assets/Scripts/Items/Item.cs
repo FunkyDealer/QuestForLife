@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item
 {
     public int Cost;
+    public int ID;
     
 
 

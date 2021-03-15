@@ -185,7 +185,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &227808108
 GameObject:
@@ -548,51 +548,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 940183548}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1295411804
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1295411806}
-  - component: {fileID: 1295411805}
-  m_Layer: 0
-  m_Name: BattleManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1295411805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1295411804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e8a6672f034f934298b1edd7fbb2cb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attacker: {fileID: 0}
-  defender: {fileID: 0}
---- !u!4 &1295411806
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1295411804}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1392553731
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +585,7 @@ Transform:
   - {fileID: 1806903995}
   - {fileID: 341394749}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1392553733
 MonoBehaviour:
@@ -1179,17 +1134,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 565087578188327375, guid: 3966afd6b90f89e4585beed819a72346,
         type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 565087578188327375, guid: 3966afd6b90f89e4585beed819a72346,
-        type: 3}
-      propertyPath: playerObj
-      value: 
-      objectReference: {fileID: 2115102508002413112, guid: 64c8cc07022032e41953272f55ab2c84,
-        type: 3}
-    - target: {fileID: 565087578188327375, guid: 3966afd6b90f89e4585beed819a72346,
-        type: 3}
       propertyPath: monsterRoom
       value: 
       objectReference: {fileID: 1392553731}
@@ -1198,12 +1142,6 @@ PrefabInstance:
       propertyPath: MonsterCamera
       value: 
       objectReference: {fileID: 341394746}
-    - target: {fileID: 565087578188327375, guid: 3966afd6b90f89e4585beed819a72346,
-        type: 3}
-      propertyPath: BattleInterface
-      value: 
-      objectReference: {fileID: 1920330424229684931, guid: 0dda8a5e43c87a54abf1b5fce3c9090a,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3966afd6b90f89e4585beed819a72346, type: 3}
 --- !u!1001 &5702421858735921301
@@ -1251,7 +1189,7 @@ PrefabInstance:
     - target: {fileID: 5043625991665939181, guid: 79a1a056e28e2724eb83e4a4ffa53258,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5043625991665939181, guid: 79a1a056e28e2724eb83e4a4ffa53258,
         type: 3}

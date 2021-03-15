@@ -38,7 +38,7 @@ public class MonsterRoomManager : MonoBehaviour
         
     }
 
-    public void GetMonster(GameObject monster)
+    public void SetMonster(GameObject monster)
     {
         this.currentMonster = monster;
 
@@ -56,5 +56,31 @@ public class MonsterRoomManager : MonoBehaviour
     public void RemoveMonster()
     {
         Destroy(currentMonster);
+    }
+
+    public Entity GetMonster()
+    {
+        return currentMonster.GetComponent<Entity>();
+    }
+
+    public void StartBattle()
+    {
+
+    }
+
+    public void EndBattle()
+    {
+        
+    }
+
+    public void MonsterDeath()
+    {
+        currentMonster = null;
+    }
+
+
+    public void PlayerDeath()
+    {
+        
     }
 }

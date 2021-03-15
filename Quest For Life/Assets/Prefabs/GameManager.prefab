@@ -50,3 +50,5 @@ MonoBehaviour:
     type: 3}
   player: {fileID: 0}
   monsterRoom: {fileID: 0}
+  startingNewGame: 0
+  MonsterCamera: {fileID: 0}

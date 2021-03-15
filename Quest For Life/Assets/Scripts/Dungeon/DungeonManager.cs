@@ -8,6 +8,8 @@ public class DungeonManager : MonoBehaviour
     //Dungeon Generation start
     [SerializeField]
     GameObject DungeonGeneratorObj;
+    [SerializeField]
+    GameObject BattleManagerObj;
     [HideInInspector]
     public Tile[,] map;
     [SerializeField]
@@ -46,6 +48,7 @@ public class DungeonManager : MonoBehaviour
 
     const int DEFAULT_ENCOUNTER_THRESHOLD = 10;
     int currentThresHold = 10;
+    int stepCounter;
 
 
 
@@ -53,6 +56,7 @@ public class DungeonManager : MonoBehaviour
     {
 
         currentFloor = 0;
+        stepCounter = 0;
 
         custom = new DungeonGenPreset(MAX_LEAF_SIZE, MIN_LEAF_SIZE, mapWidth, mapLength);
 
@@ -168,8 +172,6 @@ public class DungeonManager : MonoBehaviour
 
 
         manager.SpawnPlayer(spawnPos, spawn, map);
-
-
     }
 
     IEnumerator DestroyFloor(int time, GameObject o)
@@ -187,30 +189,41 @@ public class DungeonManager : MonoBehaviour
 
     public bool CheckForEncounter()
     {
-        bool enemyEncounter = Random.Range(0, 100) < currentThresHold;
-
-        if (enemyEncounter)
+        bool enemyEncounter = false;
+        stepCounter++;
+        
+        if (stepCounter > 10)
         {
-            currentThresHold = DEFAULT_ENCOUNTER_THRESHOLD;
+            enemyEncounter = Random.Range(0, 100) < currentThresHold;
 
-            //START ENCOUNTER
-            Debug.Log("Encounter Starting");
-
-            manager.player.StartBattle();
-
-            MonsterGenerator mg = gameObject.AddComponent(typeof(MonsterGenerator)) as MonsterGenerator;
-            mg.Initiate(this, manager.player, currentFloor);
-
-        }
-        else
-        {
-            currentThresHold += 2;
+            if (enemyEncounter)
+            {
+                currentThresHold = DEFAULT_ENCOUNTER_THRESHOLD;
+                InitiateBattle();
+                stepCounter = 0;
+            }
+            else
+            {
+                currentThresHold += 2;
+            }
         }
 
 
         return enemyEncounter;
     }
 
+    void InitiateBattle()
+    {
+        //START ENCOUNTER
+        Debug.Log("Encounter Starting");        
+
+        MonsterGenerator mg = gameObject.AddComponent(typeof(MonsterGenerator)) as MonsterGenerator;
+        mg.Initiate(this, manager.player, currentFloor);
+
+        BattleManager bm = Instantiate(BattleManagerObj, Vector3.zero, Quaternion.identity).GetComponent<BattleManager>();
+
+        bm.StartBattle(manager.player, manager.player.StartBattle());
+    }
 
 
 

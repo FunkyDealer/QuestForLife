@@ -11,8 +11,6 @@ public class Player : Entity
 
     [HideInInspector]
     NaviagationInterfaceManager navigationInterFace;
-    [HideInInspector]
-    BattleInterFaceManager battleInterface;
 
     [HideInInspector]
     public GameManager gameManager;
@@ -58,6 +56,9 @@ public class Player : Entity
 
     void Awake()
     {
+        this.Weakness = Global.Type.NONE;
+        this.Resistence = Global.Type.NONE;
+
         movementManager = GetComponent<PlayerMov>();
         direction = Global.FacingDirection.EAST;
 
@@ -65,6 +66,8 @@ public class Player : Entity
 
         navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NaviagationInterfaceManager>();
         navigationInterFace.getInformation(this, dungeonManager);
+
+        BaseAttackPower = 40;
     }
 
     // Start is called before the first frame update
@@ -73,22 +76,21 @@ public class Player : Entity
         
     }
 
-    public void StartBattle()
+    public BattleInterFaceManager StartBattle()
     {
         navigationInterFace.gameObject.SetActive(false);
 
         battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();
-       // battleInterface.getInformation(this, , gameManager);
-        gameManager.MonsterCamera.SetActive(true);
+        
+        return battleInterface;
     }
 
-    public void EndBattle()
+    public override void EndBattle()
     {   
-        Destroy(battleInterface.gameObject);
         battleInterface = null;
-        gameManager.MonsterCamera.SetActive(false);
 
         navigationInterFace.gameObject.SetActive(true);
+        movementManager.EndBattle();
     }
 
     // Update is called once per frame
@@ -134,7 +136,7 @@ public class Player : Entity
         currentMana = maxMana;
 
         Power = 10;
-        Defence = 10;
+        Defence = 15;
         Accuracy = 10;
         Dodge = 10;
         Speed = 10;
@@ -166,6 +168,22 @@ public class Player : Entity
         currentExperience = excessXp;
 
         //Stats up
+    }
+
+    protected override void ReceiveDamage(int attackPower)
+    {
+        currentHealth -= attackPower;
+
+        Debug.Log($"Player Received {attackPower} damage!");
+        Debug.Log($"current health is {currentHealth}");
+
+        if (currentHealth <= 0)
+        {
+            battleManager.PlayerDeath();
+            battleInterface.PlayerDeath();
+           // Debug.Log($"Player Died!");
+            dead = true;
+        }
     }
 
 }

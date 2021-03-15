@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemUseAction : BattleAction
 {
-    Item itemToUse;
+    public Item itemToUse;
 
 
 }

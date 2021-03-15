@@ -45,6 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DungeonGeneratorObj: {fileID: 4875474778308391327, guid: 018b6371cad63b24c840bd574b41ed0a,
     type: 3}
+  BattleManagerObj: {fileID: 6363284396884599822, guid: eca36360e3caca849989a041de9425a5,
+    type: 3}
   manager: {fileID: 0}
   MAX_LEAF_SIZE: 30
   MIN_LEAF_SIZE: 9
@@ -52,4 +54,3 @@ MonoBehaviour:
   mapLength: 40
   monsterPrefabs: []
   genDemo: 0
-  monsterGeneratorPrefab: {fileID: 0}

@@ -37,7 +37,7 @@ public class MonsterGenerator : MonoBehaviour
         GameObject o = DataBase.inst.MonsterPrefabs[monster.id];
         o.GetComponent<Enemy>().getStats(monster, currentFloor);
         o.name = $"{monster.Name} - lvl {currentFloor}";       
-        MonsterRoomManager.inst.GetMonster(o);  //Send monster Object to Monster Room for Spawning
+        MonsterRoomManager.inst.SetMonster(o);  //Send monster Object to Monster Room for Spawning
 
         Debug.Log("Finished Monster generation.");
 
