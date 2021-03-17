@@ -74,12 +74,6 @@ public class PlayerMov : MonoBehaviour
                 break;
             case MovementState.IN_BATTLE:
 
-                //if (Input.GetKeyDown(KeyCode.Escape))
-                //{
-                //    inBattle = false;
-                //    movementState = MovementState.COOLDOWN;
-                //    player.EndBattle();
-                //}
 
                 break;
             default:
@@ -110,7 +104,6 @@ public class PlayerMov : MonoBehaviour
                     if (inBattle) movementState = MovementState.IN_BATTLE;
                     else movementState = MovementState.COOLDOWN;
                 }
-
                 break;
             case MovementState.TURNING:               
                 Vector3 targetForward = nextRotation * Vector3.forward;
@@ -228,12 +221,14 @@ public class PlayerMov : MonoBehaviour
                     case Tile.Feature.Shop:
                         break;
                     case Tile.Feature.Fountain:
+                        UseFountain();
                         break;
                     case Tile.Feature.Chest:
                         break;
                     case Tile.Feature.Boss:
                         break;
                     case Tile.Feature.Key:
+                        CalculateNextPosition(newPos);
                         break;
                     case Tile.Feature.None:
                         CalculateNextPosition(newPos);                        
@@ -264,12 +259,19 @@ public class PlayerMov : MonoBehaviour
     void MoveToNextFloor(Vector2 newPos)
     {
         player.EnterExit();
+        movementState = MovementState.COOLDOWN;
     }
 
 
     public void EndBattle()
     {
         inBattle = false;
+        movementState = MovementState.COOLDOWN;
+    }
+
+    void UseFountain()
+    {
+        player.UseFountain();
         movementState = MovementState.COOLDOWN;
     }
 }

@@ -106,3 +106,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3779362ef9e5ca74788dbab73267cbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EntityName: Red Slime
+  Level: 9
+  maxHealth: 104
+  currentHealth: 104
+  maxMana: 104
+  currentMana: 104
+  Power: 42
+  Defence: 34
+  Accuracy: 37
+  Dodge: 23
+  Speed: 34
+  BaseAttackPower: 40
+  battleManager: {fileID: 0}
+  Resistence: 0
+  Weakness: 1
+  battleInterface: {fileID: 0}
+  dead: 0
+  BaseMoneyReward: 20
+  BaseExpReward: 150
+  MonsterID: 2

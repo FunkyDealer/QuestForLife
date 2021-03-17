@@ -53,6 +53,9 @@ public class Player : Entity
     int minSpeedGain = 1;
     int maxSpeedGain = 5;
 
+    List<Global.Spell> knownSpells;
+
+    public List<Global.Spell> getKnownSpells() => knownSpells;
 
     void Awake()
     {
@@ -68,6 +71,19 @@ public class Player : Entity
         navigationInterFace.getInformation(this, dungeonManager);
 
         BaseAttackPower = 40;
+        knownSpells = new List<Global.Spell>();
+
+        getAllSpells();
+    }
+
+    void getAllSpells()
+    {
+
+        foreach (var s in DataBase.inst.Spells)
+        {
+            knownSpells.Add(s.Value);
+        }
+
     }
 
     // Start is called before the first frame update
@@ -148,8 +164,15 @@ public class Player : Entity
         gameManager.startingNewGame = false;
     }
 
-    public void gainExp(int ammount)
+    public void gainExp(Enemy enemy)
     {
+        int baseExp = enemy.BaseExpReward;
+        int Elevel = enemy.Level;
+        int multiplier = 3;
+
+        int ammount = (int)(baseExp + (baseExp * multiplier) * Mathf.Log(Elevel, 2));
+        Debug.Log($"Gained {ammount} exp!");
+
         currentExperience += ammount;
         totalExperience += ammount;
 
@@ -167,7 +190,20 @@ public class Player : Entity
         Level ++;
         currentExperience = excessXp;
 
+        experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));        
+
         //Stats up
+        maxHealth += Random.Range(5, 21);
+        maxMana += Random.Range(5, 11);
+
+        Power += Random.Range(1, 6);
+        Defence += Random.Range(2, 6);
+        Accuracy += Random.Range(2, 6);
+        Dodge += Random.Range(1, 6);
+        Speed += Random.Range(1, 6);
+
+
+        RecoverAll();
     }
 
     protected override void ReceiveDamage(int attackPower)
@@ -186,4 +222,17 @@ public class Player : Entity
         }
     }
 
+    public void UseFountain()
+    {
+        RecoverAll();
+
+        Debug.Log("Player Used fountain, health and mana restaured!");
+    }
+
+
+    void RecoverAll()
+    {
+        currentHealth = maxHealth;
+        currentMana = maxMana;
+    }
 }

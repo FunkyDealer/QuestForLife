@@ -106,3 +106,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3779362ef9e5ca74788dbab73267cbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EntityName: Blue Slime
+  Level: 8
+  maxHealth: 98
+  currentHealth: 98
+  maxMana: 98
+  currentMana: 98
+  Power: 30
+  Defence: 39
+  Accuracy: 34
+  Dodge: 21
+  Speed: 31
+  BaseAttackPower: 40
+  battleManager: {fileID: 0}
+  Resistence: 1
+  Weakness: 2
+  battleInterface: {fileID: 0}
+  dead: 0
+  BaseMoneyReward: 20
+  BaseExpReward: 200
+  MonsterID: 3

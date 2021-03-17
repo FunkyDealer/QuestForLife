@@ -75,7 +75,9 @@ public class MonsterRoomManager : MonoBehaviour
 
     public void MonsterDeath()
     {
+        RemoveMonster();
         currentMonster = null;
+       
     }
 
 

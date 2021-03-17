@@ -63,8 +63,8 @@ public class BattleManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1); //Wait for 1 second
 
-        roundNumber++;    
-        interfaceManager.canAct = true;
+        roundNumber++;
+        interfaceManager.StartChoice();
         Debug.Log("Choose your Action! (Enter)");
 
 
@@ -173,8 +173,7 @@ public class BattleManager : MonoBehaviour
 
     public void MonsterDeath() //If the Monster Dies
     {
-        death = true;
-
+        death = true;        
         MonsterRoomManager.inst.MonsterDeath();
     }
 

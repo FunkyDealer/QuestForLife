@@ -14,6 +14,10 @@ public class BattleInterFaceManager : MonoBehaviour
 
     public bool canAct;
 
+    [SerializeField]
+    GameObject SpellSelector;
+
+
     public void getInformation(Entity player, Entity enemy,  BattleManager battleManager)
     {
         this.player = (Player)player;
@@ -23,12 +27,14 @@ public class BattleInterFaceManager : MonoBehaviour
 
         canAct = false;
 
-        
+       
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        SpellSelector.SetActive(false);
+
         player.gameManager.MonsterCamera.SetActive(true);
     }
 
@@ -40,8 +46,22 @@ public class BattleInterFaceManager : MonoBehaviour
             ChooseAction();
             
         }
+        else if (canAct && Input.GetKeyDown(KeyCode.S))
+        {
+            SpellMenu();
+        }
 
 
+    }
+
+    public void StartChoice()
+    {
+        canAct = true;
+    }
+
+    public void EndChoice()
+    {
+        canAct = false;
     }
 
     public void PlayerDeath()
@@ -56,7 +76,7 @@ public class BattleInterFaceManager : MonoBehaviour
 
     void ChooseAction()
     {
-        canAct = false;
+        EndChoice();
         AttackAction a = new AttackAction(player, enemy, player.BaseAttackPower, Global.Type.LIGHT);
         battleManager.ReceiveActions(a, player);
 
@@ -71,9 +91,44 @@ public class BattleInterFaceManager : MonoBehaviour
 
         player.gameManager.MonsterCamera.SetActive(false);
 
+
+        player.gainExp(enemy);
+
+
         player.EndBattle();
 
         Destroy(this.gameObject);
+    }
+
+    void SpellMenu()
+    {
+        if (SpellSelector.activeInHierarchy)
+        {
+            SpellSelector.SetActive(false);
+        }
+        else SpellSelector.SetActive(true);
+    }
+
+    public void CastSpell(Global.Spell spell)
+    {
+        if (canAct && player.currentHealth >= spell.Cost)
+        {
+            EndChoice();
+            SpellMenu();
+
+            CastSpellAction action = new CastSpellAction();
+
+            action.speed = player.Speed;
+            action.spell = spell;
+            action.Target = enemy;
+            action.user = player;
+
+            Debug.Log($"Choosing to do {action.spell.Name}");
+            
+
+
+            battleManager.ReceiveActions(action, player);
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-MonsterName,RangeMin,RangeMax,ID,Health,HealthGain,Mana,manaGain,Power,PowerGain,Defence,DefenceGain,Accuracy,AccuracyGain,Dodge,DodgeGain,Speed,SpeedGain,BaseAttPow,BaseReward,Resistance,Weakness,Spell1Id,Spell2Id,Spell3Id
-Green Slime,1,13,1,50,5,10,1,4,2,7,2,10,3,5,2,7,3,30,10,None,None,0,0,0
-Red Slime,3,14,2,50,6,10,1,6,4,7,3,10,3,5,2,7,3,40,20,Fire,Water,1,0,0
-Blue Slime,5,14,3,50,6,10,1,6,3,7,4,10,3,5,2,7,3,40,20,Water,Thunder,2,0,0
+MonsterName,RangeMin,RangeMax,ID,Health,HealthGain,Mana,manaGain,Power,PowerGain,Defence,DefenceGain,Accuracy,AccuracyGain,Dodge,DodgeGain,Speed,SpeedGain,BaseAttPow,BaseReward,BaseExp,Resistance,Weakness,Spell1Id,Spell2Id,Spell3Id
+Green Slime,1,13,1,50,5,10,1,4,2,7,2,10,3,5,2,7,3,30,10,50,None,None,0,0,0
+Red Slime,3,14,2,50,6,10,1,6,4,7,3,10,3,5,2,7,3,40,20,150,Fire,Water,1,0,0
+Blue Slime,5,14,3,50,6,10,1,6,3,7,4,10,3,5,2,7,3,40,20,200,Water,Thunder,2,0,0

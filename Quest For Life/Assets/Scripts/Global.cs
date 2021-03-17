@@ -60,6 +60,7 @@ public class Global
 
         public int BaseAttackPower;
         public int BaseReward;
+        public int BaseExpReward;
 
         public Type Resistence;
         public Type Weakness;

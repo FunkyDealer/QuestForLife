@@ -155,15 +155,16 @@ public class DataBase : MonoBehaviour
                 monster.SpeedGainPerLevel = int.Parse(data[17]);
                 monster.BaseAttackPower = int.Parse(data[18]);
                 monster.BaseReward = int.Parse(data[19]);
+                monster.BaseExpReward = int.Parse(data[20]);
 
-                monster.Resistence = ConvertStringToType(data[20]);
-                monster.Weakness = ConvertStringToType(data[21]);
+                monster.Resistence = ConvertStringToType(data[21]);
+                monster.Weakness = ConvertStringToType(data[22]);
 
                 int[] spellIds = new int[3];
                 int spellCounter = 0;
                 for (int s = 0; s < 3; s++)
                  {
-                    spellIds[s] = int.Parse(data[22 + s]);
+                    spellIds[s] = int.Parse(data[23 + s]);
                 if (spellIds[s] != 0) spellCounter++;
                  }
 

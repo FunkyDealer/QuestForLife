@@ -47,5 +47,5 @@ MonoBehaviour:
   - {fileID: 3062223073250991363, guid: 7209a86d70609ac40b981644cb5eb1e8, type: 3}
   - {fileID: 2250979852166427208, guid: ef06307c09493c64bb4eb9eb8813b79a, type: 3}
   - {fileID: 4332449162212752354, guid: 621abede3050f85468ad5c85c49a0050, type: 3}
-  MonsterInfoFile: {fileID: 4900000, guid: 776fafb3ae431654f94f5391d9f66ff2, type: 3}
+  MonsterInfoFile: {fileID: 4900000, guid: facabba7cc6cbc440a1f7e6103c540e2, type: 3}
   SpellInfoFile: {fileID: 4900000, guid: b65fd95f0d2333840b26b8fad20cf0d2, type: 3}

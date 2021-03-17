@@ -506,10 +506,8 @@ public class DungeonGenerator : MonoBehaviour
             for (int y = 0; y < mapLength; y++)
             {
                 Vector3 position = new Vector3(x * 4 + 2, -0.1f, y * 4 + 2);
-               // Instantiate(FloorTileObj, position, Quaternion.identity);
-                if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);              
+                if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);            
 
-                
             }
         }
     }
@@ -532,15 +530,12 @@ public class DungeonGenerator : MonoBehaviour
                             switch (map[x,y].feature)
                             {
                                 case Tile.Feature.Exit:
-                                    //Instantiate(ExitTileObj, position, Quaternion.identity);
                                     InstantiateObj(ExitTileObj, position);
                                     break;
                                 case Tile.Feature.LockedExit:
-                                   // Instantiate(lockedStairsObj, position, Quaternion.identity);
                                     InstantiateObj(lockedStairsObj, position);
                                     break;
                                 case Tile.Feature.Fountain:
-                                    //Instantiate(fountainTileObj, position, Quaternion.identity);
                                     InstantiateObj(fountainTileObj, position);
                                     break;
                                 default:
@@ -552,15 +547,12 @@ public class DungeonGenerator : MonoBehaviour
                             switch (map[x,y].feature)
                             {
                                 case Tile.Feature.Shop:
-                                  // Instantiate(ShopTileObj, position, Quaternion.identity);
                                     InstantiateObj(ShopTileObj, position);
                                     break;
                                 case Tile.Feature.Chest:
-                                    //  Instantiate(ChestTileObj, position, Quaternion.identity);
                                     InstantiateObj(ChestTileObj, position);
                                     break;
                                 case Tile.Feature.None:
-                                    //  Instantiate(WallTileObj, position, Quaternion.identity);
                                     InstantiateObj(WallTileObj, position);
                                     break;
                                 default:
@@ -585,21 +577,14 @@ public class DungeonGenerator : MonoBehaviour
                             switch (map[x,y].feature)
                             {                               
                                 case Tile.Feature.Entrance:
-                                  //  GameObject e = Instantiate(EntranceTileObj, position, Quaternion.identity);
-                                  //  manager.AddFreeTile(x, y, e);
                                     InstantiateFreeObj(EntranceTileObj, position, x, y);
                                     break;
                                 case Tile.Feature.Key:
-                                    //GameObject R = Instantiate(RoomTileObj, position, Quaternion.identity);
-                                   // manager.AddFreeTile(x, y, R);
                                     InstantiateFreeObj(RoomTileObj, position, x, y);
-                                    // Instantiate(keysObj[placedKey], position, Quaternion.identity);
                                     InstantiateObj(keysObj[placedKey], position);
                                     placedKey++;
                                     break;
                                 case Tile.Feature.None:
-                                   // GameObject r = Instantiate(RoomTileObj, position, Quaternion.identity);
-                                  //  manager.AddFreeTile(x, y, r);
                                     InstantiateFreeObj(RoomTileObj, position, x, y);
                                     break;
                                 default:
@@ -611,8 +596,6 @@ public class DungeonGenerator : MonoBehaviour
                             switch (map[x,y].feature)
                             {
                                 case Tile.Feature.None:
-                                   // GameObject h = Instantiate(HallTileObj, position, Quaternion.identity);
-                                   // manager.AddFreeTile(x, y, h);
                                     InstantiateFreeObj(HallTileObj, position, x, y);
                                     break;
                                 default:
@@ -641,7 +624,6 @@ public class DungeonGenerator : MonoBehaviour
             for (int y = 0; y < mapLength; y++)
             {
                 Vector3 position = new Vector3(x * 4 + 2, 5.1f, y * 4 + 2);
-                //Instantiate(RoofTileObj, position, Quaternion.identity);
                 if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);
             }
         }

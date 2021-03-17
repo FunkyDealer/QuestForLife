@@ -14,6 +14,7 @@ public class Enemy : Entity
     int SpeedGainPerLevel;
 
     public int BaseMoneyReward;
+    public int BaseExpReward;
 
     public int MonsterID;
 
@@ -57,6 +58,7 @@ public class Enemy : Entity
 
         this.BaseAttackPower = info.BaseAttackPower;
         this.BaseMoneyReward = info.BaseReward;
+        this.BaseExpReward = info.BaseExpReward;
     }
 
 
