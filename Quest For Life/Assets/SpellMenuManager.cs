@@ -12,25 +12,38 @@ public class SpellMenuManager : MonoBehaviour
     BattleInterFaceManager manager;
 
     [SerializeField]
-    RectTransform Content;
+    RectTransform FireContent;
+    [SerializeField]
+    RectTransform WaterContent;
+    [SerializeField]
+    RectTransform ThunderContent;
+    [SerializeField]
+    RectTransform LightContent;
+
+    Dictionary<int, GameObject> FireButtons;
+    Dictionary<int, GameObject> WaterButtons;
+    Dictionary<int, GameObject> ThunderButtons;
+    Dictionary<int, GameObject> LightButtons;
 
     [SerializeField]
-    GameObject nextObject;
+    List<Button> buttons;
 
-    [SerializeField]
-    GameObject previousObject;
+    List<GameObject> menuContent;
 
-    int page;
-    int pageTotal;
-
-    Dictionary<int, GameObject> buttons;
 
     void Awake()
     {
-        page = 1;
-        pageTotal = 0;
-        previousObject.SetActive(false);
-        buttons = new Dictionary<int, GameObject>();
+        FireButtons = new Dictionary<int, GameObject>();
+        WaterButtons = new Dictionary<int, GameObject>();
+        ThunderButtons = new Dictionary<int, GameObject>();
+        LightButtons = new Dictionary<int, GameObject>();
+
+        menuContent = new List<GameObject>();
+
+        menuContent.Add(FireContent.gameObject);
+        menuContent.Add(WaterContent.gameObject);
+        menuContent.Add(ThunderContent.gameObject);
+        menuContent.Add(LightContent.gameObject);
     }
 
     // Start is called before the first frame update
@@ -47,35 +60,116 @@ public class SpellMenuManager : MonoBehaviour
 
     public void PopulateButtons()
     {
-        int buttonNum = 1;
+        int fireButtonNum = 0;
+        int waterButtonNum = 0;
+        int thunderButtonNum = 0;
+        int lightButtonNum = 0;
+        
+
         foreach (var spell in manager.player.getKnownSpells())
         {
-            GameObject o = Instantiate(buttonPrefab, Content.gameObject.transform);
-            BattleSpellButton b = o.GetComponent<BattleSpellButton>();
-            b.assignedSpell = spell;
-            b.battleManager = manager;
+            switch (spell.type)
+            {
+                case Global.Type.FIRE:                   
+                    fireButtonNum++;
+                    FireButtons.Add(fireButtonNum, createButton(spell, FireContent, fireButtonNum));
+                    break;
+                case Global.Type.WATER:
+                    waterButtonNum++;
+                    WaterButtons.Add(waterButtonNum, createButton(spell, WaterContent, waterButtonNum));
+                    break;
+                case Global.Type.THUNDER:
+                    thunderButtonNum++;
+                    ThunderButtons.Add(thunderButtonNum, createButton(spell, ThunderContent, thunderButtonNum));
+                    break;
+                case Global.Type.LIGHT:
+                    lightButtonNum++;
+                    LightButtons.Add(lightButtonNum, createButton(spell, LightContent, lightButtonNum));
+                    break;
+                default:
+                    break;
+            }           
+        }      
+    }
 
-            buttons.Add(buttonNum, o);
-            buttonNum++;
-            if (buttonNum > (pageTotal * 6)) pageTotal++;
+    GameObject createButton(Global.Spell spell, RectTransform parent, int ButtonNum)
+    {
+        parent.sizeDelta = new Vector2(parent.sizeDelta.x, 30 * (ButtonNum));
+
+        GameObject o = Instantiate(buttonPrefab, parent.gameObject.transform);
+        BattleSpellButton b = o.GetComponent<BattleSpellButton>();
+
+        b.assignedSpell = spell;
+        b.battleManager = manager;
+        if (spell.type == Global.Type.LIGHT) b.target = true;
+        else b.target = false;
+
+        return o;
+    }
+
+
+    public void FireButtonClick()
+    {
+        if (manager.canAct && !manager.selectingTarget)
+        {
+            if (FireContent.gameObject.activeInHierarchy) FireContent.gameObject.SetActive(false);
+            else
+            {
+                disableAllContentMenus();
+
+                FireContent.gameObject.SetActive(true);
+            }
         }
-      
     }
 
-    public void NextPage()
+    public void ThunderButtonClick()
     {
-        Content.anchoredPosition -= new Vector2(273, 0);
-        page++;
-        if (page > 1) previousObject.SetActive(true);
-        if (page == 3) nextObject.SetActive(false);
+        if (manager.canAct && !manager.selectingTarget)
+        {
+            if (ThunderContent.gameObject.activeInHierarchy) ThunderContent.gameObject.SetActive(false);
+            else
+            {
+                disableAllContentMenus();
+
+                ThunderContent.gameObject.SetActive(true);
+            }
+        }
     }
 
-    public void PreviousPage()
+    public void WaterButtonClick()
     {
-        Content.anchoredPosition += new Vector2(273, 0);
-        page--;
-        if (page < 3) nextObject.SetActive(true);
-        if (page == 1) previousObject.SetActive(false);
+        if (manager.canAct && !manager.selectingTarget)
+        {
+            if (WaterContent.gameObject.activeInHierarchy) WaterContent.gameObject.SetActive(false);
+            else
+            {
+                disableAllContentMenus();
+
+                WaterContent.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void LightButtonClick()
+    {
+        if (manager.canAct && !manager.selectingTarget)
+        {
+            if (LightContent.gameObject.activeInHierarchy) LightContent.gameObject.SetActive(false);
+            else
+            {
+                disableAllContentMenus();
+
+                LightContent.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void disableAllContentMenus()
+    {
+        foreach (var m in menuContent)
+        {
+            m.SetActive(false);
+        }
     }
 
 }

@@ -77,7 +77,7 @@ public class Entity : MonoBehaviour
                 break;
             case CastSpellAction b:
 
-                currentMana -= b.spell.Cost;
+                castSpell(b);
 
                 break;
             case ItemUseAction c:
@@ -118,9 +118,10 @@ public class Entity : MonoBehaviour
 
                 break;
             case CastSpellAction b:
-                int spellDamage = (( (int) (b.user.Power * checkForWeakness(b.spell.type)) * b.spell.Power) / (Defence + 1) );
 
-                ReceiveDamage(spellDamage);
+                ReceiveSpellAttack(b);
+
+
                 break;
             case ItemUseAction c:
 
@@ -156,6 +157,30 @@ public class Entity : MonoBehaviour
         if (Weakness == type) { Debug.Log("Super Effective Move!"); return 2; }
         else if (Resistence == type) return 0.5f;
         else return 1;
+    }
+
+    protected void castSpell(CastSpellAction b)
+    {
+        currentMana -= b.spell.Cost;
+        if (b.Target == this)
+        {
+            if (b.spell.type == Global.Type.LIGHT)
+            {
+                this.currentHealth += b.spell.Power;
+                if (currentHealth >= maxHealth) currentHealth = maxHealth;
+                Debug.Log($"{b.user}  healed himself for {b.spell.Power} hp points!");
+            }
+        }
+    }
+
+    protected void ReceiveSpellAttack(CastSpellAction b)
+    {
+        if (b.Target == this)
+        {
+            int spellDamage = (((int)(b.user.Power * checkForWeakness(b.spell.type)) * b.spell.Power) / (Defence + 1));
+
+            ReceiveDamage(spellDamage);
+        }
     }
 
     public virtual void EndBattle()

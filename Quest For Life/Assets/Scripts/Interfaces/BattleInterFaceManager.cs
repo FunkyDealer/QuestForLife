@@ -17,6 +17,15 @@ public class BattleInterFaceManager : MonoBehaviour
     [SerializeField]
     GameObject SpellSelector;
 
+    [SerializeField]
+    BattlePlayerStatsManager StatsManager;
+
+    [SerializeField]
+    GameObject PlayerSelectButton;
+    [SerializeField]
+    GameObject EnemySelectButton;
+
+    public bool selectingTarget;
 
     public void getInformation(Entity player, Entity enemy,  BattleManager battleManager)
     {
@@ -26,14 +35,14 @@ public class BattleInterFaceManager : MonoBehaviour
 
 
         canAct = false;
-
+        selectingTarget = false;
        
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        SpellSelector.SetActive(false);
+        //SpellSelector.SetActive(false);
 
         player.gameManager.MonsterCamera.SetActive(true);
     }
@@ -43,12 +52,7 @@ public class BattleInterFaceManager : MonoBehaviour
     {
         if (canAct && Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            ChooseAction();
-            
-        }
-        else if (canAct && Input.GetKeyDown(KeyCode.S))
-        {
-            SpellMenu();
+            AttackAction();            
         }
 
 
@@ -57,6 +61,8 @@ public class BattleInterFaceManager : MonoBehaviour
     public void StartChoice()
     {
         canAct = true;
+        selectingTarget = false;
+        
     }
 
     public void EndChoice()
@@ -74,17 +80,6 @@ public class BattleInterFaceManager : MonoBehaviour
 
     }
 
-    void ChooseAction()
-    {
-        EndChoice();
-        AttackAction a = new AttackAction(player, enemy, player.BaseAttackPower, Global.Type.LIGHT);
-        battleManager.ReceiveActions(a, player);
-
-        Debug.Log("the Player Chose to do a normal Attack");
-
-       
-    }
-
     public void EndBattle()
     {
         battleManager.CleanUp();
@@ -100,18 +95,34 @@ public class BattleInterFaceManager : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    void SpellMenu()
+
+    public void AttackAction()
     {
-        if (SpellSelector.activeInHierarchy)
+        if (canAct && !selectingTarget)
         {
-            SpellSelector.SetActive(false);
+            EndChoice();
+            AttackAction a = new AttackAction(player, enemy, player.BaseAttackPower, Global.Type.LIGHT);
+            battleManager.ReceiveActions(a, player);
+
+            Debug.Log("the Player Chose to do a normal Attack");
         }
-        else SpellSelector.SetActive(true);
     }
 
-    public void CastSpell(Global.Spell spell)
+    public void SpellMenu()
     {
-        if (canAct && player.currentHealth >= spell.Cost)
+        if (canAct)
+        {
+            if (SpellSelector.activeInHierarchy)
+            {
+                SpellSelector.SetActive(false);
+            }
+            else SpellSelector.SetActive(true);
+        }
+    }
+
+    public void CastSpell(Global.Spell spell, Entity target)
+    {
+        if (canAct && player.currentMana >= spell.Cost)
         {
             EndChoice();
             SpellMenu();
@@ -120,15 +131,71 @@ public class BattleInterFaceManager : MonoBehaviour
 
             action.speed = player.Speed;
             action.spell = spell;
-            action.Target = enemy;
+            action.Target = target;
             action.user = player;
 
-            Debug.Log($"Choosing to do {action.spell.Name}");
-            
+            Debug.Log($"Choosing to do {action.spell.Name}");           
 
 
             battleManager.ReceiveActions(action, player);
+            selectingTarget = false;
+
+            PlayerSelectButton.SetActive(false);
+            EnemySelectButton.SetActive(false);
         }
     }
+
+    public void ItemMenu()
+    {
+        if (canAct && !selectingTarget)
+        {
+
+        }
+    }
+
+    public void StatsMenu()
+    {
+        if (canAct && !selectingTarget)
+        {
+
+        }
+    }
+
+    public void InvestigateAction()
+    {
+        if (canAct && !selectingTarget)
+        {
+
+        }
+    }
+
+    public void RunAction()
+    {
+        if (canAct && !selectingTarget)
+        {
+
+        }
+    }
+    
+
+    public void ChooseTarget(Global.Spell spell)
+    {
+        if (canAct && player.currentMana >= spell.Cost)
+        {
+            SpellMenuManager s = SpellSelector.GetComponent<SpellMenuManager>();
+            s.disableAllContentMenus();
+            
+
+            PlayerSelectButton.SetActive(true);
+            SpellTargetButton p = PlayerSelectButton.GetComponent<SpellTargetButton>();
+            p.assignedSpell = spell;
+
+            EnemySelectButton.SetActive(true);
+            SpellTargetButton e = EnemySelectButton.GetComponent<SpellTargetButton>();
+            e.assignedSpell = spell;
+            selectingTarget = true;
+        }
+    }
+
 
 }

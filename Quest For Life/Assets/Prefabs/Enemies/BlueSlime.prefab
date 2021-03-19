@@ -107,16 +107,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityName: Blue Slime
-  Level: 8
-  maxHealth: 98
-  currentHealth: 98
-  maxMana: 98
-  currentMana: 98
-  Power: 30
-  Defence: 39
-  Accuracy: 34
-  Dodge: 21
-  Speed: 31
+  Level: 6
+  maxHealth: 86
+  currentHealth: 86
+  maxMana: 86
+  currentMana: 86
+  Power: 24
+  Defence: 31
+  Accuracy: 28
+  Dodge: 17
+  Speed: 25
   BaseAttackPower: 40
   battleManager: {fileID: 0}
   Resistence: 1

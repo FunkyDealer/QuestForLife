@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class BattleSpellButton : BattleButton
 {
+    [HideInInspector]
     public Global.Spell assignedSpell;
-
+    [HideInInspector]
+    public bool target;
     
 
     // Start is called before the first frame update
@@ -29,7 +31,8 @@ public class BattleSpellButton : BattleButton
     {
         base.Activate();
 
-        battleManager.CastSpell(assignedSpell);
+        if (!target) battleManager.CastSpell(assignedSpell, battleManager.enemy);
+        else battleManager.ChooseTarget(assignedSpell);
     }
 
     
