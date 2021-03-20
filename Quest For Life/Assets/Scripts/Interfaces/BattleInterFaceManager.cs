@@ -27,6 +27,12 @@ public class BattleInterFaceManager : MonoBehaviour
 
     public bool selectingTarget;
 
+    [SerializeField]
+    MessageDisplayer messageDisplayer;
+
+    [SerializeField]
+    GameObject blockers;
+
     public void getInformation(Entity player, Entity enemy,  BattleManager battleManager)
     {
         this.player = (Player)player;
@@ -61,6 +67,7 @@ public class BattleInterFaceManager : MonoBehaviour
     public void StartChoice()
     {
         canAct = true;
+        blockers.SetActive(!canAct);
         selectingTarget = false;
         
     }
@@ -68,6 +75,7 @@ public class BattleInterFaceManager : MonoBehaviour
     public void EndChoice()
     {
         canAct = false;
+        blockers.SetActive(!canAct);
     }
 
     public void PlayerDeath()
@@ -134,7 +142,8 @@ public class BattleInterFaceManager : MonoBehaviour
             action.Target = target;
             action.user = player;
 
-            Debug.Log($"Choosing to do {action.spell.Name}");           
+            Debug.Log($"Choosing to do {action.spell.Name}");
+            
 
 
             battleManager.ReceiveActions(action, player);
@@ -183,8 +192,7 @@ public class BattleInterFaceManager : MonoBehaviour
         if (canAct && player.currentMana >= spell.Cost)
         {
             SpellMenuManager s = SpellSelector.GetComponent<SpellMenuManager>();
-            s.disableAllContentMenus();
-            
+            s.disableAllContentMenus();            
 
             PlayerSelectButton.SetActive(true);
             SpellTargetButton p = PlayerSelectButton.GetComponent<SpellTargetButton>();
@@ -197,5 +205,6 @@ public class BattleInterFaceManager : MonoBehaviour
         }
     }
 
+    public void AddMessage(string message) => messageDisplayer.AddMessage(message);
 
 }

@@ -19,12 +19,17 @@ public class BattleManager : MonoBehaviour
 
     bool death;
 
+    bool battleOver;
+
+
+
     void Awake()
     {
         monsterAction = null;
         playerAction = null;
         roundNumber = 0;
         death = false;
+        battleOver = false;
     }
 
     // Start is called before the first frame update
@@ -37,7 +42,10 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         
+        if (battleOver == true)
+        {
 
+        }
 
 
     }
@@ -57,8 +65,11 @@ public class BattleManager : MonoBehaviour
 
         
         StartCoroutine(ChooseActions()); //Run after 1 second
+
+       interfaceManager.AddMessage($"A {monster.EntityName} Attacked!");
     }
 
+    //Start Choice Of Action from the Player (Ran by this script)
     IEnumerator ChooseActions()
     {
         yield return new WaitForSeconds(1); //Wait for 1 second
@@ -72,6 +83,7 @@ public class BattleManager : MonoBehaviour
 
     }
 
+    //Receives the Actions From the player and Monster (Ran by the entities) Comes after ChooseAction()
     public void ReceiveActions(BattleAction action, Entity actor)
     {
         if (actor is Player) playerAction = action;
@@ -81,7 +93,7 @@ public class BattleManager : MonoBehaviour
         if (playerAction != null && monsterAction != null) StartTurn();
     }
 
-
+    //Started the Turn (Run by ReceiveActions() after both actions have been received
     void StartTurn()
     {
         if (playerAction.speed > monsterAction.speed)
@@ -96,16 +108,19 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    void ContinueTurn()
+    //Continue Turn (Called After someone has attacked)
+    IEnumerator ContinueTurn(float time)
     {
+        yield return new WaitForSeconds(time);
+
         if (playerAction != null) PerformPlayerAction();
 
         else if (monsterAction != null) PerformMonsterAction();
 
         else EndTurn();
-
     }
 
+    //Perform the Player's Action
     void PerformPlayerAction()
     {
         Debug.Log("player is attacking");
@@ -113,9 +128,10 @@ public class BattleManager : MonoBehaviour
         monster.ReceiveAction(playerAction);
 
         playerAction = null;
-        ConfirmStatus();
+        StartCoroutine(ConfirmStatus(1));
     }
 
+    //Perform the Monster's Action
     void PerformMonsterAction()
     {
         Debug.Log("Monster is Attacking");
@@ -123,16 +139,20 @@ public class BattleManager : MonoBehaviour
         player.ReceiveAction(monsterAction);
 
         monsterAction = null;
-        ConfirmStatus();
+        StartCoroutine(ConfirmStatus(1));
     }
 
-    public void ConfirmStatus()
+    //Confirm the Status of who was attacked, Called After Someone is attacked (Check for Deaths)
+    public IEnumerator ConfirmStatus(float time)
     {
-        if (!death) ContinueTurn();
+        yield return new WaitForSeconds(time);
+
+        if (!death) StartCoroutine(ContinueTurn(0.3f));
 
         else if (death) EndBattle();
     }
 
+    //Ends the Turn and Allows Participants to choose Actions Again
     void EndTurn()
     {
 
@@ -143,16 +163,17 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(ChooseActions()); //Run after 1 second
     }
 
+    //Ends the Battle After Someone has Died
     void EndBattle()
     {
         if (player.dead)
         {
             Debug.Log("Player Died");
+            interfaceManager.AddMessage("You Have Died a tragic death in the dungeon. another adventure's body to zombify");
         }
         else if (monster.dead)
         {
-            MonsterRoomManager.inst.EndBattle();
-            interfaceManager.EndBattle();            
+            StartCoroutine(FinishBattle(1));
 
             Debug.Log("Player has Won the battle!");
         }
@@ -175,6 +196,14 @@ public class BattleManager : MonoBehaviour
     {
         death = true;        
         MonsterRoomManager.inst.MonsterDeath();
+    }
+
+    IEnumerator FinishBattle(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        MonsterRoomManager.inst.EndBattle();
+        interfaceManager.EndBattle();
     }
 
 }

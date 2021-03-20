@@ -177,6 +177,7 @@ public class Player : Entity
 
         int ammount = (int)(baseExp + (baseExp * multiplier) * Mathf.Log(Elevel, 2));
         Debug.Log($"Gained {ammount} exp!");
+        battleInterface.AddMessage($"I gained {ammount} experience Point!");
 
         currentExperience += ammount;
         totalExperience += ammount;
@@ -216,7 +217,8 @@ public class Player : Entity
         currentHealth -= attackPower;
 
         Debug.Log($"Player Received {attackPower} damage!");
-        Debug.Log($"current health is {currentHealth}");
+
+        battleInterface.AddMessage($"Ouch! I was attacked for {attackPower} damage!");
 
         sendUpdateHealth();
 
@@ -224,7 +226,6 @@ public class Player : Entity
         {
             battleManager.PlayerDeath();
             battleInterface.PlayerDeath();
-           // Debug.Log($"Player Died!");
             dead = true;
         }
     }

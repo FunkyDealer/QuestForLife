@@ -141,12 +141,19 @@ public class Entity : MonoBehaviour
 
         Debug.Log($"Monster Received {attackPower} damage!");
 
+
+
         if (currentHealth <= 0)
         {
             battleManager.MonsterDeath();
             battleInterface.MonsterDeath();
             Debug.Log($"Monster Died!");
+            battleInterface.AddMessage($"The {this.EntityName} Died!");
             dead = true;
+        }
+        else
+        {
+            HealthMessage();
         }
     }
 
@@ -154,8 +161,8 @@ public class Entity : MonoBehaviour
     {
         if (type == Global.Type.NONE) return 1;
 
-        if (Weakness == type) { Debug.Log("Super Effective Move!"); return 2; }
-        else if (Resistence == type) return 0.5f;
+        if (Weakness == type) { battleInterface.AddMessage("That attack looks like it really hurt!"); Debug.Log("Super Effective Move!"); ; return 2; }
+        else if (Resistence == type) { battleInterface.AddMessage("that Attacks seems to have had little effect!"); return 0.5f; }
         else return 1;
     }
 
@@ -184,6 +191,11 @@ public class Entity : MonoBehaviour
     }
 
     public virtual void EndBattle()
+    {
+
+    }
+
+    public virtual void HealthMessage()
     {
 
     }

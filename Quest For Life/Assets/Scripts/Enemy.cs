@@ -72,4 +72,32 @@ public class Enemy : Entity
         return AttackAction;
     }
 
+
+    public override void HealthMessage()
+    {
+        base.HealthMessage();
+
+        float healthPercentage = currentHealth / maxHealth;
+        healthPercentage *= 100;
+
+        switch (healthPercentage)
+        {
+            case var expression when healthPercentage < 80:
+                battleInterface.AddMessage($"The {EntityName} looks slightly hurt.");
+                break;
+            case var expression when healthPercentage < 50:
+                battleInterface.AddMessage($"The {EntityName} looks hurt.");
+                break;
+            case var expression when healthPercentage < 30:
+                battleInterface.AddMessage($"The {EntityName} looks really really hurt.");
+                break;
+            case var expression when healthPercentage < 10:
+                battleInterface.AddMessage($"The {EntityName} looks like he's on the brink of death!");
+                break;
+            default:
+                battleInterface.AddMessage($"The {EntityName} doesn't look hurt at all...");
+                break;
+        }
+
+    }
 }
