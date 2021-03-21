@@ -147,7 +147,7 @@ public class Entity : MonoBehaviour
         {
             battleManager.MonsterDeath();
             battleInterface.MonsterDeath();
-            Debug.Log($"Monster Died!");
+            //Debug.Log($"Monster Died!");
             battleInterface.AddMessage($"The {this.EntityName} Died!");
             dead = true;
         }

@@ -87,7 +87,7 @@ public class DataBase : MonoBehaviour
            // Debug.Log($"Adding new Spell: {spell.Name}, {spell.Id}, {spell.type}, {spell.Power},  {spell.Cost}, {spell.Accuracy},  {spell.effect}");
         }
 
-        Debug.Log("Spells Database Finished");
+       // Debug.Log("Spells Database Finished");
     }
 
     Global.Type ConvertStringToType(string t)
@@ -181,7 +181,7 @@ public class DataBase : MonoBehaviour
            // else Debug.Log($"Adding new monster: {monster.Name}, {monster.id}, {monster.Weakness}, no spells");
         }
 
-        Debug.Log("Monsters Database Finished");
+       // Debug.Log("Monsters Database Finished");
     }
 
     Global.Spell convertToSpell(int i)

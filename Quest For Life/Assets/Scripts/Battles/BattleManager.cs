@@ -76,7 +76,6 @@ public class BattleManager : MonoBehaviour
 
         roundNumber++;
         interfaceManager.StartChoice();
-        Debug.Log("Choose your Action! (Enter)");
 
 
          monsterAction = monster.ChooseAction(player);
@@ -123,7 +122,7 @@ public class BattleManager : MonoBehaviour
     //Perform the Player's Action
     void PerformPlayerAction()
     {
-        Debug.Log("player is attacking");
+        //Debug.Log("player is attacking");
         player.PerformAction(playerAction);
         monster.ReceiveAction(playerAction);
 
@@ -134,7 +133,7 @@ public class BattleManager : MonoBehaviour
     //Perform the Monster's Action
     void PerformMonsterAction()
     {
-        Debug.Log("Monster is Attacking");
+        //Debug.Log("Monster is Attacking");
         monster.PerformAction(monsterAction);
         player.ReceiveAction(monsterAction);
 
@@ -158,7 +157,7 @@ public class BattleManager : MonoBehaviour
 
         playerAction = null;
         monsterAction = null;
-        Debug.Log("Turn Ending");
+       // Debug.Log("Turn Ending");
 
         StartCoroutine(ChooseActions()); //Run after 1 second
     }

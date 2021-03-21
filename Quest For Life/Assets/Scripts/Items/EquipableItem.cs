@@ -8,9 +8,6 @@ public class EquipableItem : Item
     public int DefenceBonus;
     public int ManaBonus;
 
-    public EquipableItem(int id) 
-    {
-        ID = id;
-    }
+
 
 }

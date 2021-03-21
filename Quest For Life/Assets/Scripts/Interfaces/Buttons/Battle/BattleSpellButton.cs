@@ -9,7 +9,9 @@ public class BattleSpellButton : BattleButton
     public Global.Spell assignedSpell;
     [HideInInspector]
     public bool target;
-    
+
+    [HideInInspector]
+    public SpellMenuManager spellMenuManager;
 
     // Start is called before the first frame update
     void Start()
@@ -31,8 +33,12 @@ public class BattleSpellButton : BattleButton
     {
         base.Activate();
 
-        if (!target) battleManager.CastSpell(assignedSpell, battleManager.enemy);
-        else battleManager.ChooseTarget(assignedSpell);
+        bool cast = false;
+
+        if (!target) cast = battleManager.CastSpell(assignedSpell, battleManager.enemy);
+        else cast = battleManager.ChooseTarget(assignedSpell);
+
+        if (cast) spellMenuManager.disableAllContentMenus();
     }
 
     

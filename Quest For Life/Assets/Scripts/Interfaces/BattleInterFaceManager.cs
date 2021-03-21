@@ -128,7 +128,7 @@ public class BattleInterFaceManager : MonoBehaviour
         }
     }
 
-    public void CastSpell(Global.Spell spell, Entity target)
+    public bool CastSpell(Global.Spell spell, Entity target)
     {
         if (canAct && player.currentMana >= spell.Cost)
         {
@@ -144,14 +144,16 @@ public class BattleInterFaceManager : MonoBehaviour
 
             Debug.Log($"Choosing to do {action.spell.Name}");
             
-
+            
 
             battleManager.ReceiveActions(action, player);
             selectingTarget = false;
 
             PlayerSelectButton.SetActive(false);
             EnemySelectButton.SetActive(false);
+            return true;
         }
+        return false;
     }
 
     public void ItemMenu()
@@ -187,8 +189,8 @@ public class BattleInterFaceManager : MonoBehaviour
     }
     
 
-    public void ChooseTarget(Global.Spell spell)
-    {
+    public bool ChooseTarget(Global.Spell spell)
+    {        
         if (canAct && player.currentMana >= spell.Cost)
         {
             SpellMenuManager s = SpellSelector.GetComponent<SpellMenuManager>();
@@ -202,7 +204,9 @@ public class BattleInterFaceManager : MonoBehaviour
             SpellTargetButton e = EnemySelectButton.GetComponent<SpellTargetButton>();
             e.assignedSpell = spell;
             selectingTarget = true;
+            return true;
         }
+        return false;
     }
 
     public void AddMessage(string message) => messageDisplayer.AddMessage(message);

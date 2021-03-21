@@ -62,6 +62,8 @@ public class Player : Entity
     public delegate void UpdateManaEvent(int e, int maxE);
     public static event UpdateManaEvent onManaUpdate;
 
+    public Inventory Inventory;
+
     void Awake()
     {
         this.Weakness = Global.Type.NONE;
@@ -79,6 +81,8 @@ public class Player : Entity
         knownSpells = new List<Global.Spell>();
 
         getAllSpells();
+
+        Inventory = new Inventory(10);
     }
 
     void getAllSpells()
@@ -216,7 +220,7 @@ public class Player : Entity
     {
         currentHealth -= attackPower;
 
-        Debug.Log($"Player Received {attackPower} damage!");
+        //Debug.Log($"Player Received {attackPower} damage!");
 
         battleInterface.AddMessage($"Ouch! I was attacked for {attackPower} damage!");
 

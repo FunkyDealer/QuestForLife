@@ -215,7 +215,7 @@ public class DungeonManager : MonoBehaviour
     void InitiateBattle()
     {
         //START ENCOUNTER
-        Debug.Log("Encounter Starting");        
+        //Debug.Log("Encounter Starting");        
 
         MonsterGenerator mg = gameObject.AddComponent(typeof(MonsterGenerator)) as MonsterGenerator;
         mg.Initiate(this, manager.player, currentFloor);
