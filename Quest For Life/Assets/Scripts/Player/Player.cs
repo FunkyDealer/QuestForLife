@@ -9,7 +9,7 @@ public class Player : Entity
     GameObject BattleInterfacePrefab;
 
     [HideInInspector]
-    NaviagationInterfaceManager navigationInterFace;
+    NavigationInterfaceManager navigationInterFace;
 
     [HideInInspector]
     public GameManager gameManager;
@@ -74,8 +74,8 @@ public class Player : Entity
 
         EntityName = "Mage";
 
-        navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NaviagationInterfaceManager>();
-        navigationInterFace.getInformation(this, dungeonManager);
+        navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
+        navigationInterFace.getInformation(this, movementManager, dungeonManager);
 
         BaseAttackPower = 40;
         knownSpells = new List<Global.Spell>();
@@ -105,8 +105,8 @@ public class Player : Entity
     {
         navigationInterFace.gameObject.SetActive(false);
 
-        battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();
-        
+        battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();       
+
         return battleInterface;
     }
 
@@ -246,6 +246,8 @@ public class Player : Entity
     {
         currentHealth = maxHealth;
         currentMana = maxMana;
+        sendUpdateHealth();
+        sendUpdateMana();
     }
 
     public override void PerformAction(BattleAction action)
@@ -309,5 +311,10 @@ public class Player : Entity
         {
 
         }
+    }
+
+    public void OpenInventory()
+    {      
+        navigationInterFace.OpenInventory();
     }
 }

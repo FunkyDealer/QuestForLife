@@ -82,13 +82,13 @@ public class Enemy : Entity
 
         switch (healthPercentage)
         {
-            case var expression when healthPercentage < 80:
+            case var expression when healthPercentage < 80 && healthPercentage > 50:
                 battleInterface.AddMessage($"The {EntityName} looks slightly hurt.");
                 break;
-            case var expression when healthPercentage < 50:
+            case var expression when healthPercentage < 50 && healthPercentage > 30:
                 battleInterface.AddMessage($"The {EntityName} looks hurt.");
                 break;
-            case var expression when healthPercentage < 30:
+            case var expression when healthPercentage < 30 && healthPercentage > 10:
                 battleInterface.AddMessage($"The {EntityName} looks really really hurt.");
                 break;
             case var expression when healthPercentage < 10:

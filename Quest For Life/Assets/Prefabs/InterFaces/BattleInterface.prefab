@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
+  m_Color: {r: 0, g: 0.56207436, b: 0.65900004, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1211,11 +1211,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  StatsManager: {fileID: 8894577564927072360}
   battleManager: {fileID: 0}
   enemy: {fileID: 0}
   canAct: 0
   SpellSelector: {fileID: 8097331209246629366}
-  StatsManager: {fileID: 8894577564927072360}
   PlayerSelectButton: {fileID: 5571217103595381206}
   EnemySelectButton: {fileID: 834642165400832716}
   selectingTarget: 0
@@ -1577,6 +1577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cea7ac218f7ab5e4990f77c41d05dbb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Messages: []
   messageBox: {fileID: 5988470806953517139}
   manager: {fileID: 7374667595527254495}
   textMessagePrefab: {fileID: 8978923674107517622, guid: caa74108c57a6704b98460b279c360d3,
@@ -2186,7 +2187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
+  m_Color: {r: 0, g: 0.56207436, b: 0.65900004, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4279,7 +4280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.29803923}
+  m_Color: {r: 0, g: 0.56207436, b: 0.65900004, a: 0.53333336}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4735,7 +4736,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 105.1, y: -222}
+  m_AnchoredPosition: {x: 167.7, y: -258.2}
   m_SizeDelta: {x: 570.1897, y: 122.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4325952764069582097

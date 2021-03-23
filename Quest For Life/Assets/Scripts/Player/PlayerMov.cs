@@ -40,8 +40,7 @@ public class PlayerMov : MonoBehaviour
         inputTimer = 0;
         player = GetComponent<Player>();
         movementState = MovementState.WAITINGINPUT;
-        inBattle = false;
-      
+        inBattle = false;      
     }
 
     void Start()
@@ -126,6 +125,13 @@ public class PlayerMov : MonoBehaviour
 
     void input()
     {
+        if (Input.GetButtonDown("Inventory")) {
+            
+            player.OpenInventory();
+            movementState = MovementState.FROZEN;
+            return;
+        }
+
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
@@ -272,6 +278,11 @@ public class PlayerMov : MonoBehaviour
     void UseFountain()
     {
         player.UseFountain();
+        movementState = MovementState.COOLDOWN;
+    }
+
+    public void ResumeMovement()
+    {
         movementState = MovementState.COOLDOWN;
     }
 }

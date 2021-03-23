@@ -205,8 +205,13 @@ MonoBehaviour:
   Accuracy: 0
   Dodge: 0
   Speed: 0
+  BaseAttackPower: 0
   battleManager: {fileID: 0}
-  NavigationInterFacePrefab: {fileID: 7367118153519915494, guid: a067b6cf7c0d843458a2176acb0c944a,
+  Resistence: 0
+  Weakness: 0
+  battleInterface: {fileID: 0}
+  dead: 0
+  NavigationInterFacePrefab: {fileID: 3834117360486242830, guid: c79b9f47bd82ef44ba47565bc711aa35,
     type: 3}
   BattleInterfacePrefab: {fileID: 1920330424229684931, guid: 0dda8a5e43c87a54abf1b5fce3c9090a,
     type: 3}

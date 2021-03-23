@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleInterFaceManager : MonoBehaviour
+public class BattleInterFaceManager : HudManager
 {
-    [HideInInspector]
-    public Player player;
     [HideInInspector]
     public BattleManager battleManager;
 
@@ -16,9 +14,6 @@ public class BattleInterFaceManager : MonoBehaviour
 
     [SerializeField]
     GameObject SpellSelector;
-
-    [SerializeField]
-    BattlePlayerStatsManager StatsManager;
 
     [SerializeField]
     GameObject PlayerSelectButton;

@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// 
+/// Inventory Slot Data type, contains a Item stack and is contained in the Inventory
+/// 
+/// </summary>
 public class InventorySlot
 {
     ItemStack currentStack;
@@ -51,5 +57,15 @@ public class InventorySlot
         this.currentStack = null;
     }
 
+    public void Discard()
+    {
+
+    }
+
+
+    public Item getItem()
+    {
+        return currentStack.item;
+    }
 
 }

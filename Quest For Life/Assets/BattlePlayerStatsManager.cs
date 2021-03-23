@@ -13,7 +13,7 @@ public class BattlePlayerStatsManager : MonoBehaviour
     Text Name;
 
     [SerializeField]
-    BattleInterFaceManager manager;
+    HudManager manager;
 
     [SerializeField]
     Text HealthText;
