@@ -1211,5 +1211,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: DataBase
       objectReference: {fileID: 0}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: ConsumableInfoFile
+      value: 
+      objectReference: {fileID: 4900000, guid: a09a7293714065349acd5877b618ce58, type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: GearInfoFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 657950de5f7120e438bf74f63ff399e0, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79a1a056e28e2724eb83e4a4ffa53258, type: 3}

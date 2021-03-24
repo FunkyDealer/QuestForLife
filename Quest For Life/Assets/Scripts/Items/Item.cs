@@ -6,7 +6,7 @@ public class Item
 {
     public int Cost;
     public int ID;
-    
+    public string Name;
 
 
 

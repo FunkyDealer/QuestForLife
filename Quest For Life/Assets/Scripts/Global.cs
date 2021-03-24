@@ -32,7 +32,8 @@ public class Global
    public enum HealType
     {
         HEALTH,
-        MANA
+        MANA,
+        BOTH
     }
 
     public enum GearType
@@ -40,7 +41,8 @@ public class Global
         HAT,
         RING,
         BODYCLOTHING,
-        BELT       
+        BELT ,
+        WEAPON
     }
 
 
