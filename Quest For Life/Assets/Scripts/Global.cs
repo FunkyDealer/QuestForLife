@@ -41,7 +41,7 @@ public class Global
         HAT,
         RING,
         BODYCLOTHING,
-        BELT ,
+        BELT,
         WEAPON
     }
 

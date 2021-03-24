@@ -16,7 +16,8 @@ public class InventoryIFManager : MonoBehaviour
     [SerializeField]
     List<InventorySlotIF> interfaceSlots;
 
-    Inventory inventory;
+   // Inventory inventory;
+    public Inventory Inventory => navigationInterface.player.Inventory;
 
     [HideInInspector]
     public List<GameObject> menus;
@@ -27,14 +28,13 @@ public class InventoryIFManager : MonoBehaviour
         menus = new List<GameObject>();
         
 
-
     }
 
     // Start is called before the first frame update
     void Start()
     {
 
-        inventory = navigationInterface.player.Inventory;
+      // inventory = navigationInterface.player.Inventory;
 
 
     }

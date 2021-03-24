@@ -11,15 +11,27 @@ using UnityEngine;
 public class InventorySlot
 {
     ItemStack currentStack;
+    int id;
 
-    public InventorySlot()
+    public delegate void NewItem(int id);
+    public static event NewItem onSlotNewItem;
+
+    public InventorySlot(int id)
     {
         this.currentStack = null;
+        this.id = id;
     }
 
     public void PlaceItem(ItemStack i) //Place a Stack in the this Slot
     {
         this.currentStack = i;
+        onSlotNewItem(id);
+    }
+
+    public void AddQuantity(int Quantity)
+    {
+        currentStack.quantity += Quantity;
+        if (currentStack.quantity > 99) currentStack.quantity = 99;
     }
 
     public ItemStack TakeItem() //Take the Stack From the this Slot
@@ -29,6 +41,8 @@ public class InventorySlot
         {
             ItemStack i = currentStack;
             this.currentStack = null;
+
+
             return i;
         }
     }
@@ -54,6 +68,9 @@ public class InventorySlot
         ItemStack s = currentStack;
         s.currentSlot = i;
         i.currentStack = s;
+
+        onSlotNewItem(i.id);
+
         this.currentStack = null;
     }
 
@@ -65,7 +82,24 @@ public class InventorySlot
 
     public Item getItem()
     {
-        return currentStack.item;
+        if (currentStack.item != null) return currentStack.item;
+        else return null;
+    }
+
+    public void GetID(int i)
+    {
+        this.id = i;
+    }
+
+    public bool IsFull()
+    {
+        if (isEmpty()) return false;
+        else return currentStack.quantity == 99;
+    }
+
+    public int LeftQuantity()
+    {
+        return 99 - currentStack.quantity;
     }
 
 }

@@ -5,12 +5,16 @@ using UnityEngine;
 public class EquipableItem : Item
 {
     public Global.GearType GearType;
-  //  public int DefenceBonus;
-  //  public int ManaBonus;
-    public List<int> Boosts;
+    public int HealthBonus;
+    public int ManaBonus;
 
-    public EquipableItem() 
-    {
-        Boosts = new List<int>();
-    }
+    public int PowerBonus;
+    public int DefenceBonus;
+    public int AccuracyBonus;
+    public int DodgeBonus;
+    public int SpeedBonus;
+
+
+
+
 }

@@ -74,15 +74,23 @@ public class Player : Entity
 
         EntityName = "Mage";
 
-        navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
-        navigationInterFace.getInformation(this, movementManager, dungeonManager);
+
 
         BaseAttackPower = 40;
         knownSpells = new List<Global.Spell>();
 
         getAllSpells();
 
+
         Inventory = new Inventory(10);
+
+        navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
+        navigationInterFace.getInformation(this, movementManager, dungeonManager);
+
+
+
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 1);
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1);
     }
 
     void getAllSpells()

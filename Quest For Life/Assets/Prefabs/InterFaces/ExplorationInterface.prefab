@@ -643,7 +643,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -725,10 +725,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 8
 --- !u!1 &4741772401982564160
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,7 +942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1023,10 +1024,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 4
 --- !u!1 &5035037288213248790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1087,7 +1089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1169,10 +1171,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 7
 --- !u!1 &6010612920086126296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,7 +1236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1315,10 +1318,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 6
 --- !u!1 &6028191247638826170
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,7 +1539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1617,10 +1621,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 9
 --- !u!1 &7408838778942515172
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,7 +1686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1763,10 +1768,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 5
 --- !u!1 &7817858782332404286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,7 +1833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1909,10 +1915,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 2
 --- !u!1 &7966508660570035621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,7 +1980,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2055,10 +2062,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 0
 --- !u!1 &8056904492436222316
 GameObject:
   m_ObjectHideFlags: 0
@@ -2119,7 +2127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2201,10 +2209,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 3
 --- !u!1 &8086826573779180533
 GameObject:
   m_ObjectHideFlags: 0
@@ -2339,7 +2348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.7354884, a: 1}
+  m_Color: {r: 1, g: 0.4575472, b: 0.8574733, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2421,10 +2430,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a375e9794a371ff40a668e95744deddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryIFManager: {fileID: 4620200824798768187}
+  manager: {fileID: 4620200824798768187}
   InventoryManagerMenuPrefab: {fileID: 1227844141349562161, guid: 4abe456683ab3df46885e86486a3656d,
     type: 3}
   navigationInterface: {fileID: 8052880128032198092}
+  id: 1
 --- !u!1 &8712656663003357889
 GameObject:
   m_ObjectHideFlags: 0

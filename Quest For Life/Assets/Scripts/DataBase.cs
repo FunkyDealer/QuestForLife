@@ -22,6 +22,11 @@ public class DataBase : MonoBehaviour
     [SerializeField]
     List<GameObject> MPrefabs;
 
+    [HideInInspector]
+    public Dictionary<int, GameObject> ItemsPrefabs;
+    [SerializeField]
+    List<GameObject> IPrefrabs;
+
     [SerializeField]
     TextAsset MonsterInfoFile;
     [SerializeField]
@@ -51,6 +56,16 @@ public class DataBase : MonoBehaviour
             i++;
         }
 
+        ItemsPrefabs = new Dictionary<int, GameObject>();
+        i = 1;
+
+        foreach (var it in IPrefrabs)
+        {
+            ItemsPrefabs.Add(i, it);
+            i++;
+        }
+        
+
     }
 
 
@@ -61,12 +76,13 @@ public class DataBase : MonoBehaviour
         ReadMonsters(MonsterInfoFile);
         ReadConsumable(ConsumableInfoFile);
         ReadGears(GearInfoFile);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     void readSpells(TextAsset file)
@@ -92,10 +108,10 @@ public class DataBase : MonoBehaviour
             spell.effect = ConvertToAttackEffect(int.Parse(data[6]));
 
             Spells.Add(spell.Id, spell);
-            // Debug.Log($"Adding new Spell: {spell.Name}, {spell.Id}, {spell.type}, {spell.Power},  {spell.Cost}, {spell.Accuracy},  {spell.effect}");
+           // Debug.Log($"Adding new Spell: {spell.Name}, {spell.Id}, {spell.type}, {spell.Power},  {spell.Cost}, {spell.Accuracy},  {spell.effect}");
         }
 
-        // Debug.Log("Spells Database Finished");
+       // Debug.Log("Spells Database Finished");
     }
 
     Global.Type ConvertStringToType(string t)
@@ -120,11 +136,11 @@ public class DataBase : MonoBehaviour
     Global.AttackEffect ConvertToAttackEffect(int i)
     {
         switch (i)
-        {
+        {                
             case 1:
-                return Global.AttackEffect.HEAL;
+                return Global.AttackEffect.HEAL;               
             case 2:
-                return Global.AttackEffect.DEATH;
+                return Global.AttackEffect.DEATH;                
             default:
                 return Global.AttackEffect.NONE;
         }
@@ -134,62 +150,62 @@ public class DataBase : MonoBehaviour
     {
         Monsters = new Dictionary<int, Global.DungeonMonsterInfo>();
 
-        string[] lines = file.text.Split(new string[] { "\n" }, StringSplitOptions.None);
-        int lineCount = lines.Length;
+         string[] lines = file.text.Split(new string[] { "\n" }, StringSplitOptions.None);
+            int lineCount = lines.Length;
         Debug.Log($"{lineCount - 2} Monsters found");
 
         for (int i = 1; i < lineCount - 1; i++)
-        {
+            {
             string[] data = (lines[i].Trim()).Split(","[0]);
             Global.DungeonMonsterInfo monster = new Global.DungeonMonsterInfo();
 
-            monster.Name = data[0];
-            monster.minFloor = int.Parse(data[1]);
-            monster.maxFloor = int.Parse(data[2]);
-            monster.id = int.Parse(data[3]);
-            monster.BaseHealth = int.Parse(data[4]);
-            monster.HealthGainPerLevel = int.Parse(data[5]);
-            monster.BaseMana = int.Parse(data[6]);
-            monster.ManaGainPerLevel = int.Parse(data[7]);
-            monster.BasePower = int.Parse(data[8]);
-            monster.PowerGainPerLevel = int.Parse(data[9]);
-            monster.BaseDefence = int.Parse(data[10]);
-            monster.DefenceGainPerLevel = int.Parse(data[11]);
-            monster.BaseAccuracy = int.Parse(data[12]);
-            monster.AccuracyGainPerLevel = int.Parse(data[13]);
-            monster.BaseDodge = int.Parse(data[14]);
-            monster.DodgeGainPerLevel = int.Parse(data[15]);
-            monster.BaseSpeed = int.Parse(data[16]);
-            monster.SpeedGainPerLevel = int.Parse(data[17]);
-            monster.BaseAttackPower = int.Parse(data[18]);
-            monster.BaseReward = int.Parse(data[19]);
-            monster.BaseExpReward = int.Parse(data[20]);
+                monster.Name = data[0];
+                monster.minFloor = int.Parse(data[1]);
+                monster.maxFloor = int.Parse(data[2]);
+                monster.id = int.Parse(data[3]);
+                monster.BaseHealth = int.Parse(data[4]);
+                monster.HealthGainPerLevel = int.Parse(data[5]);
+                monster.BaseMana = int.Parse(data[6]);
+                monster.ManaGainPerLevel = int.Parse(data[7]);
+                monster.BasePower = int.Parse(data[8]);
+                monster.PowerGainPerLevel = int.Parse(data[9]);
+                monster.BaseDefence = int.Parse(data[10]);
+                monster.DefenceGainPerLevel = int.Parse(data[11]);
+                monster.BaseAccuracy = int.Parse(data[12]);
+                monster.AccuracyGainPerLevel = int.Parse(data[13]);
+                monster.BaseDodge = int.Parse(data[14]);
+                monster.DodgeGainPerLevel = int.Parse(data[15]);
+                monster.BaseSpeed = int.Parse(data[16]);
+                monster.SpeedGainPerLevel = int.Parse(data[17]);
+                monster.BaseAttackPower = int.Parse(data[18]);
+                monster.BaseReward = int.Parse(data[19]);
+                monster.BaseExpReward = int.Parse(data[20]);
 
-            monster.Resistence = ConvertStringToType(data[21]);
-            monster.Weakness = ConvertStringToType(data[22]);
+                monster.Resistence = ConvertStringToType(data[21]);
+                monster.Weakness = ConvertStringToType(data[22]);
 
-            int[] spellIds = new int[3];
-            int spellCounter = 0;
-            for (int s = 0; s < 3; s++)
-            {
-                spellIds[s] = int.Parse(data[23 + s]);
+                int[] spellIds = new int[3];
+                int spellCounter = 0;
+                for (int s = 0; s < 3; s++)
+                 {
+                    spellIds[s] = int.Parse(data[23 + s]);
                 if (spellIds[s] != 0) spellCounter++;
-            }
+                 }
 
-            monster.spells = new Global.Spell[spellCounter];
+                monster.spells = new Global.Spell[spellCounter];
 
-            spellCounter = 0;
-            for (int S = 0; S < 3; S++)
-            {
-                if (spellIds[S] != 0) { monster.spells[spellCounter] = convertToSpell(spellIds[S]); spellCounter++; }
-            }
+                spellCounter = 0;
+                for (int S = 0; S < 3; S++)
+                {
+                     if (spellIds[S] != 0) { monster.spells[spellCounter] = convertToSpell(spellIds[S]); spellCounter++; }           
+                }
 
             Monsters.Add(monster.id, monster);
-            // if (monster.spells.Length > 0) Debug.Log($"Adding new monster: {monster.Name}, {monster.id}, {monster.Weakness}, {monster.spells[monster.spells.Length-1].Name}");
-            // else Debug.Log($"Adding new monster: {monster.Name}, {monster.id}, {monster.Weakness}, no spells");
+           // if (monster.spells.Length > 0) Debug.Log($"Adding new monster: {monster.Name}, {monster.id}, {monster.Weakness}, {monster.spells[monster.spells.Length-1].Name}");
+           // else Debug.Log($"Adding new monster: {monster.Name}, {monster.id}, {monster.Weakness}, no spells");
         }
 
-        // Debug.Log("Monsters Database Finished");
+       // Debug.Log("Monsters Database Finished");
     }
 
     Global.Spell convertToSpell(int i)
@@ -203,7 +219,7 @@ public class DataBase : MonoBehaviour
         {
             Debug.Log($"Trying to return an empty Spell - Spell ID: {i}");
             return new Global.Spell();
-        }
+        }        
     }
 
     void ReadConsumable(TextAsset file)
@@ -238,7 +254,7 @@ public class DataBase : MonoBehaviour
             item.Cost = int.Parse(data[4]);
 
             Consumables.Add(item.ID, item);
-            //Debug.Log($"ADD {item.Name} , {item.ID} , {item.HealAmmount} , {item.HealType} , {item.Cost}");
+           // Debug.Log($"ADD {item.Name} , {item.ID} , {item.HealAmmount} , {item.HealType} , {item.Cost}");
         }
     }
 
@@ -260,41 +276,37 @@ public class DataBase : MonoBehaviour
 
             item.GearType = GearConvert(int.Parse(data[2]));
 
-            for (int j = 3; j < 10; j++)
-            {
-                item.Boosts.Add(int.Parse(data[j]));
-            }
+            item.HealthBonus = int.Parse(data[3]);
+            item.ManaBonus = int.Parse(data[4]);
+
+            item.PowerBonus = int.Parse(data[5]);
+            item.DefenceBonus = int.Parse(data[6]);
+            item.AccuracyBonus = int.Parse(data[7]);
+            item.DodgeBonus = int.Parse(data[8]);
+            item.SpeedBonus = int.Parse(data[9]);
+
             item.Cost = int.Parse(data[10]);
 
             Gears.Add(item.ID, item);
-            // Debug.Log($"ADD {item.Name} , {item.ID} , {item.Boosts[0]} ,{ item.Boosts[1]}, { item.Boosts[2]}, { item.Boosts[3]}, { item.Boosts[4]}, {item.Boosts[5]}, { item.Boosts[6]} , {item.Cost}");
+            //Debug.Log($"ADD {item.Name} , {item.ID} , { item.HealthBonus}, { item.ManaBonus}, {item.PowerBonus} ,{ item.DefenceBonus}, { item.ManaBonus} , {item.Cost}");
         }
     }
 
     Global.GearType GearConvert(int i)
     {
-
-        if (i == 1)
+        switch (i)
         {
-            return Global.GearType.HAT;
+            case 1:
+                return Global.GearType.HAT;
+            case 2:
+                return Global.GearType.RING;
+            case 3:
+                return Global.GearType.BELT;
+            case 4:
+                return Global.GearType.BODYCLOTHING;
+            default:
+                return Global.GearType.WEAPON;
         }
-        else if (i == 2)
-        {
-            return Global.GearType.RING;
-        }
-        else if (i == 3)
-        {
-            return Global.GearType.BELT;
-        }
-        else if (i == 4)
-        {
-            return Global.GearType.BODYCLOTHING;
-        }
-        else
-        {
-            return Global.GearType.WEAPON;
-        }
-
     }
-}
 
+}

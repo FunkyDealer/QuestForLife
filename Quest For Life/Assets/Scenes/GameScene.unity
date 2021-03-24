@@ -1213,13 +1213,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
         type: 3}
+      propertyPath: IPrefrabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: IPrefrabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4108385147297716221, guid: f20f90a476b09ab4fb7a0b824094f015,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: IPrefrabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 5259298085213454498, guid: 6451597dc0858d94db3dd8e43bd99307,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
       propertyPath: ConsumableInfoFile
       value: 
-      objectReference: {fileID: 4900000, guid: a09a7293714065349acd5877b618ce58, type: 3}
+      objectReference: {fileID: 4900000, guid: 8819bc65fc9ac8f4c976abfd573917c1, type: 3}
     - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
         type: 3}
       propertyPath: GearInfoFile
       value: 
-      objectReference: {fileID: 4900000, guid: 657950de5f7120e438bf74f63ff399e0, type: 3}
+      objectReference: {fileID: 4900000, guid: 07a1886269090984983450cdebe07333, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79a1a056e28e2724eb83e4a4ffa53258, type: 3}

@@ -13,7 +13,7 @@ public class InventorySlotIF : MonoBehaviour
     RectTransform rectTransform;
 
     [SerializeField]
-    InventoryIFManager inventoryIFManager;
+    InventoryIFManager manager;
 
     [SerializeField]
     GameObject InventoryManagerMenuPrefab;
@@ -21,10 +21,23 @@ public class InventorySlotIF : MonoBehaviour
     [SerializeField]
     NavigationInterfaceManager navigationInterface;
 
+    GameObject itemImage;
+
+    [SerializeField]
+    int id;
+
     void Awake()
     {
         
-        rectTransform = GetComponent<RectTransform>();        
+        rectTransform = GetComponent<RectTransform>();
+
+        InventorySlot.onSlotNewItem += newItem;
+
+    }
+
+    void OnDestroy()
+    {
+        InventorySlot.onSlotNewItem -= newItem;
 
     }
 
@@ -43,11 +56,11 @@ public class InventorySlotIF : MonoBehaviour
 
     public void openMenu()
     {
-        inventoryIFManager.Close();
+        manager.Close();
 
 
         GameObject o = Instantiate(InventoryManagerMenuPrefab, rectTransform.position, Quaternion.identity, navigationInterface.gameObject.transform);
-        inventoryIFManager.menus.Add(o);    
+        manager.menus.Add(o);    
 
         
 
@@ -56,6 +69,26 @@ public class InventorySlotIF : MonoBehaviour
     public void CloseMenu()
     {
 
+    }
+
+    void newItem(int i)
+    {
+        if (this.id == i)
+        {
+
+            InventorySlot s = manager.Inventory.getSlot(i);
+
+            GameObject imgPrefab = DataBase.inst.ItemsPrefabs[s.getItem().ID];
+            itemImage = Instantiate(imgPrefab, this.gameObject.transform);
+
+
+
+
+
+
+
+
+        }
     }
 
 }
