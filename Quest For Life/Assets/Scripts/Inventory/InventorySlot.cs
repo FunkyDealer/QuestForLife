@@ -16,6 +16,12 @@ public class InventorySlot
     public delegate void NewItem(int id);
     public static event NewItem onSlotNewItem;
 
+    public delegate void ClearItem(int id);
+    public static event ClearItem onSlotClearItem;
+
+    public delegate void UpdateItem(int id, int newQuantity);
+    public static event UpdateItem onSlotUpdateItem;
+
     public InventorySlot(int id)
     {
         this.currentStack = null;
@@ -31,6 +37,8 @@ public class InventorySlot
     public void AddQuantity(int Quantity)
     {
         currentStack.quantity += Quantity;
+        onSlotUpdateItem(id, currentStack.quantity);
+
         if (currentStack.quantity > 99) currentStack.quantity = 99;
     }
 
@@ -69,20 +77,47 @@ public class InventorySlot
         s.currentSlot = i;
         i.currentStack = s;
 
+        onSlotClearItem(id);
         onSlotNewItem(i.id);
 
         this.currentStack = null;
     }
 
-    public void Discard()
+    public int PlaceQuantityTo(InventorySlot target)
     {
+        int spaceAvailable = target.LeftQuantity();
 
+        if (currentStack.quantity <= target.LeftQuantity())
+        {
+            int quantityPut = currentStack.quantity;
+            target.AddQuantity(currentStack.quantity);
+
+            Discard();
+
+            return quantityPut;
+        }
+        else
+        {
+            int quantityThatCanBePut = target.LeftQuantity();
+            target.AddQuantity(quantityThatCanBePut);
+            currentStack.quantity -= quantityThatCanBePut;
+
+            onSlotUpdateItem(id, CurrentQuantity());
+
+            return quantityThatCanBePut;
+        }
+        return 0;
     }
 
+    public void Discard()
+    {
+        this.currentStack = null;
+        onSlotClearItem(id);
+    }
 
     public Item getItem()
     {
-        if (currentStack.item != null) return currentStack.item;
+        if (currentStack != null) return currentStack.item;
         else return null;
     }
 
@@ -101,5 +136,7 @@ public class InventorySlot
     {
         return 99 - currentStack.quantity;
     }
+
+
 
 }

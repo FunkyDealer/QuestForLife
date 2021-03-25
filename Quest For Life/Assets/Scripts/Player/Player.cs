@@ -89,8 +89,11 @@ public class Player : Entity
 
 
 
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 1);
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 99);
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1);
+
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 50);
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 10);
     }
 
     void getAllSpells()

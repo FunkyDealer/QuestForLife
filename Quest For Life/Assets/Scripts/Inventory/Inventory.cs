@@ -16,8 +16,40 @@ public class Inventory
             slots[i] = new InventorySlot(i);
             //slots[i].GetID(i);
         }
-
     }
+
+    public bool tryToSwitchToSlot(int Origin, int target) //Major function that Tries to Move Item Quantities to Another slot
+    {
+        if (slots[Origin].getItem() is HealItem) //if the Item is an Consumable
+        {
+            if (slots[target].isEmpty()) //If the Target is completely Empty, Place All of Origin Slot on the new Slot
+            {
+                slots[Origin].ChangeStackTo(slots[target]);
+
+                return true;
+            }
+            else
+            {
+                if (slots[target].getItem().ID == slots[Origin].getItem().ID && !slots[target].IsFull()) //Else if the target is not empty, but not full either
+                {
+                    int quantityPut = slots[Origin].PlaceQuantityTo(slots[target]); //Try to place as much quantity as it can on the target
+
+                    return true;  //quantity Put is the ammount that was put, if all quantity was put, the origin slots will now be empty
+                }
+            }
+        }
+        else if (slots[Origin].getItem() is EquipableItem) //if the origin's item is a Equipable item (That can't stack)
+        {
+            if (slots[target].isEmpty()) //it can only be switched to slots that are empty
+            {                
+                slots[Origin].ChangeStackTo(slots[target]);
+                return true;
+            }
+        }    
+        return false; //if everything fails, Send that the switch was a fail
+    }
+
+
 
     public bool TryToAddToInventory(Item i, int Quantity) //Major Function that tries to add item to inventory
     {
@@ -52,7 +84,6 @@ public class Inventory
                 return true;
             }
         }
-
         return false; //if everything fails, returns that the Inventory
     }
 

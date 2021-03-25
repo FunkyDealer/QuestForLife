@@ -25,7 +25,7 @@ public class NavigationInterfaceManager : HudManager
     float inputDelayTime = 0.1f;
 
     [SerializeField]
-    InventoryIFManager InventoryIFManager;
+    InventoryIFManager inventoryIFManager;
 
 
     public void getInformation(Player player, PlayerMov playerMov, DungeonManager dungeonManager) 
@@ -47,7 +47,6 @@ public class NavigationInterfaceManager : HudManager
     // Update is called once per frame
     void Update()
     {
-
         if (inventoryOn)
         {
             if (inputDelayTimer < inputDelayTime) inputDelayTimer += Time.deltaTime;
@@ -59,8 +58,6 @@ public class NavigationInterfaceManager : HudManager
                 }
             }
         }
-
-
     }
 
    public void OpenInventory()
@@ -73,15 +70,18 @@ public class NavigationInterfaceManager : HudManager
    void CloseInventory()
     {
         CloseAllLooseMenus();
+
+        inventoryIFManager.StopItemSwitch();
+
         inputDelayTimer = 0;
         inventoryOn = false;
         inventory.SetActive(false);
+
         playerMov.ResumeMovement();
     }
 
-
     void CloseAllLooseMenus()
     {
-        InventoryIFManager.Close();
+        inventoryIFManager.CloseAllMenus();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 /// <summary>
 /// 
@@ -26,19 +26,34 @@ public class InventorySlotIF : MonoBehaviour
     [SerializeField]
     int id;
 
+    public int ID => id;
+
+    [SerializeField]
+    GameObject QuantityDisplayer;
+
+    Text QuantityText;
+
+    bool InItemSwitch;
+
     void Awake()
     {
-        
+        InItemSwitch = false;
+
         rectTransform = GetComponent<RectTransform>();
 
         InventorySlot.onSlotNewItem += newItem;
+        InventorySlot.onSlotClearItem += ClearItem;
+        InventorySlot.onSlotUpdateItem += UpdateQuantity;
 
+        QuantityText = QuantityDisplayer.GetComponentInChildren<Text>();
+        QuantityDisplayer.SetActive(false);
     }
 
     void OnDestroy()
     {
         InventorySlot.onSlotNewItem -= newItem;
-
+        InventorySlot.onSlotClearItem -= ClearItem;
+        InventorySlot.onSlotUpdateItem -= UpdateQuantity;
     }
 
     // Start is called before the first frame update
@@ -53,17 +68,24 @@ public class InventorySlotIF : MonoBehaviour
         
     }
 
-
     public void openMenu()
     {
-        manager.Close();
+        if (!InItemSwitch)
+        {
+            manager.CloseAllMenus();
 
-
-        GameObject o = Instantiate(InventoryManagerMenuPrefab, rectTransform.position, Quaternion.identity, navigationInterface.gameObject.transform);
-        manager.menus.Add(o);    
-
-        
-
+            if (getItem() != null)
+            {
+                GameObject o = Instantiate(InventoryManagerMenuPrefab, rectTransform.position, Quaternion.identity, navigationInterface.gameObject.transform);
+                SlotManagementMenu s = o.GetComponent<SlotManagementMenu>();
+                manager.menus.Add(o);
+                s.inventorySlotIF = this;
+                s.inventoryIFManager = manager;
+            }
+        } else
+        {
+            manager.PerformItemSwitch(ID);
+        }
     }
 
     public void CloseMenu()
@@ -75,20 +97,66 @@ public class InventorySlotIF : MonoBehaviour
     {
         if (this.id == i)
         {
-
             InventorySlot s = manager.Inventory.getSlot(i);
 
             GameObject imgPrefab = DataBase.inst.ItemsPrefabs[s.getItem().ID];
             itemImage = Instantiate(imgPrefab, this.gameObject.transform);
+            itemImage.transform.SetAsFirstSibling();
 
-
-
-
-
-
-
+            QuantityDisplayer.SetActive(true);
+            UpdateQuantity(i, s.CurrentQuantity());
 
         }
     }
+
+    public void ClearItem(int i)
+    {
+        if (this.id == i)
+        {
+            Destroy(itemImage.gameObject);
+            QuantityDisplayer.SetActive(false);
+        }
+    }
+
+    public void UpdateQuantity(int i, int newQuantity)
+    {
+        if (this.id == i) QuantityText.text = newQuantity.ToString();
+
+    }
+
+    public void UseItem()
+    {
+
+    }
+
+    public void MoveItem()
+    {
+
+    }
+
+
+    public void DiscardItem()
+    {
+        manager.Inventory.getSlot(id).Discard();
+    }
+
+    public Item getItem()
+    {
+        return manager.Inventory.getSlot(id).getItem();
+    }
+
+    public void StartItemSwitch()
+    {
+        InItemSwitch = true;
+    }
+
+    public void EndItemSwitch()
+    {
+        InItemSwitch = false;
+    }
+
+
+
+
 
 }

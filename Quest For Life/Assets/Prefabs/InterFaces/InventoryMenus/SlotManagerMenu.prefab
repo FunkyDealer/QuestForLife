@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySlotIF: {fileID: 0}
-  UseButtonText: {fileID: 0}
+  UseButtonText: {fileID: 5104233647198924658}
 --- !u!1 &2225151092413906526
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,7 +327,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 425898335487226559}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 248607212112143962}
+        m_MethodName: useButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5062892073221703225
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +535,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8611020057977047183}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 248607212112143962}
+        m_MethodName: MoveStack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8370065222994831625
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,4 +743,15 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8191285265746438652}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 248607212112143962}
+        m_MethodName: DiscardStack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

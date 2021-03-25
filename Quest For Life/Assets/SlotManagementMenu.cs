@@ -12,9 +12,9 @@ using UnityEngine.UI;
 public class SlotManagementMenu : MonoBehaviour
 {
     [HideInInspector]
-    public InventorySlot slot;
-    [HideInInspector]
     public InventorySlotIF inventorySlotIF;
+    [HideInInspector]
+    public InventoryIFManager inventoryIFManager;
 
     [SerializeField]
     Text UseButtonText;
@@ -24,13 +24,18 @@ public class SlotManagementMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //if (slot.getItem() is HealItem)
-        //{
-        //    Consumable = true;
-        //    UseButtonText.text = "Use";
-        //}
+        if (inventorySlotIF.getItem() is HealItem)
+        {
+            Consumable = true;
+            UseButtonText.text = "Use";
+        }
 
 
+    }
+
+    void OnDestroy()
+    {
+       // inventoryIFManager.
     }
 
     // Update is called once per frame
@@ -41,11 +46,9 @@ public class SlotManagementMenu : MonoBehaviour
 
     public void useButton()
     {
-
-
+        
 
     }
-
 
     void UseItem()
     {
@@ -57,15 +60,22 @@ public class SlotManagementMenu : MonoBehaviour
 
     }
 
-
     public void MoveStack()
     {
+        inventoryIFManager.InitiateItemSwitch(inventorySlotIF.ID);
 
+        CloseMenu();
     }
 
     public void DiscardStack()
     {
+        inventorySlotIF.DiscardItem();
+        CloseMenu();
+    }
 
+    void CloseMenu()
+    {
+        inventoryIFManager.CloseAllMenus();
     }
 
 }
