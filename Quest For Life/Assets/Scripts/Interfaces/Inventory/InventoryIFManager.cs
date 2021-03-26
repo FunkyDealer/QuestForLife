@@ -92,4 +92,13 @@ public class InventoryIFManager : MonoBehaviour
         
     }
 
+
+    public bool ConsumeItem(int slot)
+    {
+        return Inventory.ConsumeItem(slot);
+
+
+        return false;
+    }
+
 }

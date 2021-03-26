@@ -107,16 +107,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityName: Red Slime
-  Level: 6
-  maxHealth: 86
-  currentHealth: 86
-  maxMana: 86
-  currentMana: 86
-  Power: 30
-  Defence: 25
-  Accuracy: 28
-  Dodge: 17
-  Speed: 25
+  Level: 5
+  maxHealth: 80
+  currentHealth: 80
+  maxMana: 80
+  currentMana: 80
+  Power: 26
+  Defence: 22
+  Accuracy: 25
+  Dodge: 15
+  Speed: 22
   BaseAttackPower: 40
   battleManager: {fileID: 0}
   Resistence: 0

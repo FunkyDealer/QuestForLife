@@ -62,6 +62,9 @@ public class Player : Entity
     public delegate void UpdateManaEvent(int e, int maxE);
     public static event UpdateManaEvent onManaUpdate;
 
+    public delegate void onLevelUpEvent(int newLevel);
+    public static event onLevelUpEvent onLevelUp;
+
     public Inventory Inventory;
 
     void Awake()
@@ -82,7 +85,7 @@ public class Player : Entity
         getAllSpells();
 
 
-        Inventory = new Inventory(10);
+        Inventory = new Inventory(10, this);
 
         navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
         navigationInterFace.getInformation(this, movementManager, dungeonManager);
@@ -223,6 +226,11 @@ public class Player : Entity
         Dodge += Random.Range(1, 6);
         Speed += Random.Range(1, 6);
 
+        try
+        {
+            onLevelUp(Level);
+        }
+        catch { }
 
         RecoverAll();
     }
@@ -328,4 +336,32 @@ public class Player : Entity
     {      
         navigationInterFace.OpenInventory();
     }
+
+    public void HealHealth(int ammount)
+    {
+        currentHealth += ammount; //Health
+        if (currentHealth > maxHealth) currentHealth = maxHealth;
+        onHealthUpdate(currentHealth, maxHealth);
+    }
+
+    public void RestoreMana(int ammount)
+    {
+        currentMana += ammount; //mana
+        if (currentMana > maxMana) currentMana = maxMana;
+        onManaUpdate(currentMana, maxMana);
+
+    }
+
+    public void RestoreHealthAndMana(int ammount)
+    {
+        currentHealth += ammount; //Health
+        if (currentHealth > maxHealth) currentHealth = maxHealth;
+
+        currentMana += ammount; //mana
+        if (currentMana > maxMana) currentMana = maxMana;
+
+        onHealthUpdate(currentHealth, maxHealth);
+        onManaUpdate(currentMana, maxMana);
+    }
+
 }

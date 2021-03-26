@@ -21,8 +21,6 @@ public class BattleManager : MonoBehaviour
 
     bool battleOver;
 
-
-
     void Awake()
     {
         monsterAction = null;
@@ -60,7 +58,6 @@ public class BattleManager : MonoBehaviour
         player.battleManager = this;
         monster.battleManager = this;
 
-
         interfaceManager.getInformation(player, monster, this);
 
         
@@ -77,9 +74,7 @@ public class BattleManager : MonoBehaviour
         roundNumber++;
         interfaceManager.StartChoice();
 
-
          monsterAction = monster.ChooseAction(player);
-
     }
 
     //Receives the Actions From the player and Monster (Ran by the entities) Comes after ChooseAction()
@@ -172,7 +167,7 @@ public class BattleManager : MonoBehaviour
         }
         else if (monster.dead)
         {
-            StartCoroutine(FinishBattle(1));
+            StartCoroutine(FinishBattle(2));
 
             Debug.Log("Player has Won the battle!");
         }

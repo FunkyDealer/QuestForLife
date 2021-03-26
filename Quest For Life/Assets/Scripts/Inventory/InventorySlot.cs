@@ -109,19 +109,15 @@ public class InventorySlot
         return 0;
     }
 
-    public void Discard()
-    {
-        this.currentStack = null;
-        onSlotClearItem(id);
-    }
+ 
 
-    public Item getItem()
+    public Item getItem() //get the Item type in this slot
     {
         if (currentStack != null) return currentStack.item;
         else return null;
     }
 
-    public void GetID(int i)
+    public void GetID(int i) //get this slot's ID
     {
         this.id = i;
     }
@@ -136,7 +132,27 @@ public class InventorySlot
     {
         return 99 - currentStack.quantity;
     }
+       
+
+    public void ConsumeOne() //Consume 1 of the item
+    {
+        currentStack.quantity -= 1;
+        if (currentStack.quantity <= 0)
+        {
+            Discard();
+        }
+        else
+        {
+            onSlotUpdateItem(id, currentStack.quantity);
+        }
 
 
+    }
+
+    public void Discard() //discard item, removing it
+    {
+        this.currentStack = null;
+        onSlotClearItem(id);
+    }
 
 }

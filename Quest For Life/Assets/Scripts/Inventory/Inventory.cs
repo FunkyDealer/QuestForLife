@@ -5,10 +5,11 @@ using UnityEngine;
 public class Inventory
 {
     InventorySlot[] slots;
+    Player player;
 
-
-    public Inventory(int capacity)
+    public Inventory(int capacity, Player p)
     {
+        this.player = p;
         slots = new InventorySlot[capacity];
         
         for (int i = 0; i < slots.Length; i++)
@@ -189,7 +190,42 @@ public class Inventory
         return false;
     }
 
+    public bool ConsumeItem(int slot)
+    {
+        HealItem i = (HealItem)slots[slot].getItem();
+
+        switch (i.HealType)
+        {
+            case Global.HealType.HEALTH:
+                if (player.currentHealth < player.maxHealth) //if current health is not maxed
+                {
+                    player.HealHealth(i.HealAmmount);
+                    slots[slot].ConsumeOne();
+                    return true; //success
+                }
+                break;
+            case Global.HealType.MANA:
+                if (player.currentMana < player.maxMana) //if current mana is not maxed
+                {
+                    player.RestoreMana(i.HealAmmount);
+                    slots[slot].ConsumeOne();
+                    return true; //success
+                }
+                break;
+            case Global.HealType.BOTH:
+                if (player.currentMana < player.maxMana || player.currentHealth < player.maxHealth) //if current mana or health are not maxed
+                {
+                    player.RestoreHealthAndMana(i.HealAmmount);
+                    slots[slot].ConsumeOne();
+                    return true; //success
+                }
+                break;
+            default:
+                break;
+        }
 
 
-    
+        return false; //Failed at consuming the item
+    }
+
 }

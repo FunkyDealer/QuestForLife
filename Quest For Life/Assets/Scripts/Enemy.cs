@@ -65,7 +65,7 @@ public class Enemy : Entity
 
     public override BattleAction ChooseAction(Entity enemy)
     {
-        AttackAction AttackAction = new AttackAction(this, enemy, this.BaseAttackPower, Global.Type.NONE);
+        AttackAction AttackAction = new AttackAction(this, enemy, this.BaseAttackPower, 100, Global.Type.NONE);
 
         Debug.Log("the Monster Chose to do a normal Attack");
 

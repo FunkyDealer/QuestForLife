@@ -104,7 +104,7 @@ public class BattleInterFaceManager : HudManager
         if (canAct && !selectingTarget)
         {
             EndChoice();
-            AttackAction a = new AttackAction(player, enemy, player.BaseAttackPower, Global.Type.LIGHT);
+            AttackAction a = new AttackAction(player, enemy, player.BaseAttackPower, 100, Global.Type.LIGHT);
             battleManager.ReceiveActions(a, player);
 
             Debug.Log("the Player Chose to do a normal Attack");

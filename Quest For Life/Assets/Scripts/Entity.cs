@@ -111,16 +111,33 @@ public class Entity : MonoBehaviour
         {
             case AttackAction a:
 
-                int attackDamage = (( (int) (a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1) );
+                float tohit = (a.user.Accuracy * a.AttackAccuracy / a.Target.Dodge);
+                int ToHit = (int)tohit;
 
-                ReceiveDamage(attackDamage);
+                if (Random.Range(0, 100) < ToHit)
+                {
+                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
 
+                    ReceiveDamage(attackDamage);
+                } else
+                {
+                    battleInterface.AddMessage($"The {a.user}'s Attack Missed!");
+                }
 
                 break;
             case CastSpellAction b:
 
-                ReceiveSpellAttack(b);
+                float tohit2 = (b.user.Accuracy * b.spell.Accuracy / b.Target.Dodge);
+                int ToHit2 = (int)tohit2;
 
+                if (Random.Range(0, 100) < ToHit2)
+                {
+                    ReceiveSpellAttack(b);
+                }
+                else
+                 {
+                    battleInterface.AddMessage($"The {b.user}'s Attack Missed!");
+                 }
 
                 break;
             case ItemUseAction c:
@@ -140,8 +157,6 @@ public class Entity : MonoBehaviour
         currentHealth -= attackPower;
 
         Debug.Log($"Monster Received {attackPower} damage!");
-
-
 
         if (currentHealth <= 0)
         {
