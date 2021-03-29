@@ -1218,6 +1218,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
         type: 3}
+      propertyPath: ConsumablePrefrabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: GearPrefrabs.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
       propertyPath: IPrefrabs.Array.data[0]
       value: 
       objectReference: {fileID: 4108385147297716221, guid: f20f90a476b09ab4fb7a0b824094f015,
@@ -1237,6 +1247,54 @@ PrefabInstance:
         type: 3}
       propertyPath: GearInfoFile
       value: 
-      objectReference: {fileID: 4900000, guid: 07a1886269090984983450cdebe07333, type: 3}
+      objectReference: {fileID: 4900000, guid: 416c9e4307d73494a9bf1ee0eda2278d, type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: ConsumablePrefrabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4108385147297716221, guid: f20f90a476b09ab4fb7a0b824094f015,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: ConsumablePrefrabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 5259298085213454498, guid: 6451597dc0858d94db3dd8e43bd99307,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: GearPrefrabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4266233680165781666, guid: b7f8287607ea57349b4ba915c5b71733,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: GearPrefrabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 4732913377445683671, guid: 4bd68d9b6bd6e7745ac86fa8c3263110,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: GearPrefrabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 4860736849968165056, guid: f121f8d8ebe4e1d46bac99c011fbc730,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: GearPrefrabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 2870897314308961820, guid: 851de8e1d4d45b647b00a3236e517d08,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: GearPrefrabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 2468539570185645162, guid: e95db2f3fb953ac47b9880caf08b1c44,
+        type: 3}
+    - target: {fileID: 9197465484787223353, guid: 79a1a056e28e2724eb83e4a4ffa53258,
+        type: 3}
+      propertyPath: GearPrefrabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 7044179615400987690, guid: c3e164ba07708b7489ced8d21ed1627d,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79a1a056e28e2724eb83e4a4ffa53258, type: 3}

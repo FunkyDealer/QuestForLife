@@ -8,10 +8,9 @@ using UnityEngine;
 /// Inventory Slot Data type, contains a Item stack and is contained in the Inventory
 /// 
 /// </summary>
-public class InventorySlot
+public class InventorySlot : Slot
 {
     ItemStack currentStack;
-    int id;
 
     public delegate void NewItem(int id);
     public static event NewItem onSlotNewItem;
@@ -108,8 +107,7 @@ public class InventorySlot
         }
         return 0;
     }
-
- 
+     
 
     public Item getItem() //get the Item type in this slot
     {
@@ -117,10 +115,7 @@ public class InventorySlot
         else return null;
     }
 
-    public void GetID(int i) //get this slot's ID
-    {
-        this.id = i;
-    }
+
 
     public bool IsFull()
     {

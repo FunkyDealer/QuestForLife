@@ -66,6 +66,13 @@ public class Player : Entity
     public static event onLevelUpEvent onLevelUp;
 
     public Inventory Inventory;
+    public GearSlot HatSlot;
+    public GearSlot BodySlot;
+    public GearSlot BeltSlot;
+    public GearSlot RingSlot1;
+    public GearSlot RingSlot2;
+    public GearSlot WeaponSlot;
+
 
     void Awake()
     {
@@ -84,19 +91,33 @@ public class Player : Entity
 
         getAllSpells();
 
-
         Inventory = new Inventory(10, this);
+
+        HatSlot = new GearSlot(Global.GearType.HAT, 1, this);
+        BodySlot = new GearSlot(Global.GearType.BODYCLOTHING, 2, this);      
+        RingSlot1 = new GearSlot(Global.GearType.RING, 3, this);
+        RingSlot2 = new GearSlot(Global.GearType.RING, 4, this);
+        BeltSlot = new GearSlot(Global.GearType.BELT, 5, this);
+        WeaponSlot = new GearSlot(Global.GearType.WEAPON, 6, this);
 
         navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
         navigationInterFace.getInformation(this, movementManager, dungeonManager);
 
-
-
+        //Inventory
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 99);
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1);
 
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 50);
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 10);
+
+        HatSlot.AttemptToPlaceItem(DataBase.inst.Gears[1]);
+        BodySlot.AttemptToPlaceItem(DataBase.inst.Gears[2]);
+        WeaponSlot.AttemptToPlaceItem(DataBase.inst.Gears[3]);
+
+        RingSlot1.AttemptToPlaceItem(DataBase.inst.Gears[4]);
+        RingSlot2.AttemptToPlaceItem(DataBase.inst.Gears[5]);
+
+        Inventory.TryToAddToInventory(DataBase.inst.Gears[6], 1);
     }
 
     void getAllSpells()
@@ -362,6 +383,55 @@ public class Player : Entity
 
         onHealthUpdate(currentHealth, maxHealth);
         onManaUpdate(currentMana, maxMana);
+    }
+
+
+    public void AddStatsFromItem(EquipableItem i)
+    {
+        int h = maxHealth;
+        int m = maxMana;
+
+        maxHealth += i.HealthBonus;
+        maxMana += i.ManaBonus;
+
+        int hDif = maxHealth - h;
+        currentHealth += hDif;
+        onHealthUpdate(currentHealth, maxHealth);
+
+        int mDif = maxMana - m;
+        currentMana += mDif;
+        onManaUpdate(currentMana, maxMana);
+
+        
+        Power += i.PowerBonus;
+        Defence += i.DefenceBonus;
+        Accuracy += i.AccuracyBonus;
+        Dodge += i.DodgeBonus;
+        Speed += i.SpeedBonus;
+    }
+
+    public void RemoveStatsFromItem(EquipableItem i)
+    {
+        int h = maxHealth;
+        int m = maxMana;
+
+        maxHealth -= i.HealthBonus;
+        maxMana -= i.ManaBonus;
+
+        int hDif = h - maxHealth;
+        currentHealth -= hDif;
+        onHealthUpdate(currentHealth, maxHealth);
+
+        int mDif = m - maxMana;
+        currentMana -= mDif;
+        onManaUpdate(currentMana, maxMana);
+
+
+        Power -= i.PowerBonus;
+        Defence -= i.DefenceBonus;
+        Accuracy -= i.AccuracyBonus;
+        Dodge -= i.DodgeBonus;
+        Speed -= i.SpeedBonus;
     }
 
 }

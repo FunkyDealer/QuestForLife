@@ -98,14 +98,27 @@ public class InventorySlotIF : MonoBehaviour
         if (this.id == i)
         {
             InventorySlot s = manager.Inventory.getSlot(i);
+            Item t = s.getItem();
 
-            GameObject imgPrefab = DataBase.inst.ItemsPrefabs[s.getItem().ID];
-            itemImage = Instantiate(imgPrefab, this.gameObject.transform);
-            itemImage.transform.SetAsFirstSibling();
+            if (t is HealItem)
+            {
+                GameObject imgPrefab = DataBase.inst.consumablePrefabs[s.getItem().ID];
+                itemImage = Instantiate(imgPrefab, this.gameObject.transform);
+                itemImage.transform.SetAsFirstSibling();
 
-            QuantityDisplayer.SetActive(true);
-            UpdateQuantity(i, s.CurrentQuantity());
+                QuantityDisplayer.SetActive(true);
+                UpdateQuantity(i, s.CurrentQuantity());
+            }
+            else if (t is EquipableItem)
+            {
+                GameObject imgPrefab = DataBase.inst.gearPrefabs[s.getItem().ID];
+                itemImage = Instantiate(imgPrefab, this.gameObject.transform);
+                itemImage.transform.SetAsFirstSibling();
 
+                QuantityDisplayer.SetActive(false);
+                UpdateQuantity(i, s.CurrentQuantity());
+
+            }
         }
     }
 
@@ -133,7 +146,6 @@ public class InventorySlotIF : MonoBehaviour
     {
 
     }
-
 
     public void DiscardItem()
     {

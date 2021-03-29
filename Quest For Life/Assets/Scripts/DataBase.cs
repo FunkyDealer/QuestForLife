@@ -23,9 +23,13 @@ public class DataBase : MonoBehaviour
     List<GameObject> MPrefabs;
 
     [HideInInspector]
-    public Dictionary<int, GameObject> ItemsPrefabs;
+    public Dictionary<int, GameObject> consumablePrefabs;
+    [HideInInspector]
+    public Dictionary<int, GameObject> gearPrefabs;
     [SerializeField]
-    List<GameObject> IPrefrabs;
+    List<GameObject> ConsumablePrefrabs;
+    [SerializeField]
+    List<GameObject> GearPrefrabs;
 
     [SerializeField]
     TextAsset MonsterInfoFile;
@@ -56,15 +60,23 @@ public class DataBase : MonoBehaviour
             i++;
         }
 
-        ItemsPrefabs = new Dictionary<int, GameObject>();
+        consumablePrefabs = new Dictionary<int, GameObject>();
         i = 1;
 
-        foreach (var it in IPrefrabs)
+        foreach (var it in ConsumablePrefrabs)
         {
-            ItemsPrefabs.Add(i, it);
+            consumablePrefabs.Add(i, it);
             i++;
         }
-        
+
+        gearPrefabs = new Dictionary<int, GameObject>();
+        i = 1;
+
+        foreach (var it in GearPrefrabs)
+        {
+            gearPrefabs.Add(i, it);
+            i++;
+        }
 
     }
 
@@ -267,7 +279,7 @@ public class DataBase : MonoBehaviour
 
         for (int i = 1; i < lineCount - 1; i++)
         {
-            string[] data = (lines[i].Trim()).Split(";"[0]);
+            string[] data = (lines[i].Trim()).Split(","[0]);
 
             EquipableItem item = new EquipableItem();
 
@@ -296,14 +308,14 @@ public class DataBase : MonoBehaviour
     {
         switch (i)
         {
-            case 1:
+            case 0:
                 return Global.GearType.HAT;
-            case 2:
+            case 1:
                 return Global.GearType.RING;
+            case 2:
+                return Global.GearType.BODYCLOTHING;              
             case 3:
                 return Global.GearType.BELT;
-            case 4:
-                return Global.GearType.BODYCLOTHING;
             default:
                 return Global.GearType.WEAPON;
         }

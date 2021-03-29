@@ -65,7 +65,7 @@ public class SlotManagementMenu : MonoBehaviour
         }
         else
         {
-            //Warn the player that action couldn't be completed
+            //Warn the player that the action couldn't be completed
 
 
         }
@@ -75,7 +75,16 @@ public class SlotManagementMenu : MonoBehaviour
 
     void EquipItem()
     {
+        if (inventoryIFManager.EquipItem(inventorySlotIF.ID))
+        {
+            CloseMenu();
+        }
+        else
+        {
+            //Warn the player that the action couldn't be completed
 
+
+        }
 
 
     }
