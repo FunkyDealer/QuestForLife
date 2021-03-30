@@ -179,7 +179,13 @@ public class BattleInterFaceManager : HudManager
     {
         if (canAct && !selectingTarget)
         {
+            battleManager.CleanUp();
 
+            player.gameManager.MonsterCamera.SetActive(false);
+
+            player.EndBattle();
+
+            Destroy(this.gameObject);
         }
     }
     
