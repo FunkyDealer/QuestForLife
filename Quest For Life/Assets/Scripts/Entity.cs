@@ -54,13 +54,13 @@ public class Entity : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public virtual BattleAction ChooseAction(Entity enemy)
@@ -101,6 +101,7 @@ public class Entity : MonoBehaviour
             case InvestigationAction d:
                 break;
             case RunAction e:
+               
                 break;
         }
     }
@@ -119,7 +120,8 @@ public class Entity : MonoBehaviour
                     int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
 
                     ReceiveDamage(attackDamage);
-                } else
+                }
+                else
                 {
                     battleInterface.AddMessage($"The {a.user}'s Attack Missed!");
                 }
@@ -135,9 +137,9 @@ public class Entity : MonoBehaviour
                     ReceiveSpellAttack(b);
                 }
                 else
-                 {
+                {
                     battleInterface.AddMessage($"The {b.user}'s Attack Missed!");
-                 }
+                }
 
                 break;
             case ItemUseAction c:
@@ -147,9 +149,9 @@ public class Entity : MonoBehaviour
 
                 break;
             case RunAction e:
-
-                break;             
-        }      
+               
+                break;
+        }
     }
 
     protected virtual void ReceiveDamage(int attackPower)

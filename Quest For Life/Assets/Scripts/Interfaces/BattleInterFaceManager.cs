@@ -28,7 +28,7 @@ public class BattleInterFaceManager : HudManager
     [SerializeField]
     GameObject blockers;
 
-    public void getInformation(Entity player, Entity enemy,  BattleManager battleManager)
+    public void getInformation(Entity player, Entity enemy, BattleManager battleManager)
     {
         this.player = (Player)player;
         this.enemy = (Enemy)enemy;
@@ -37,7 +37,7 @@ public class BattleInterFaceManager : HudManager
 
         canAct = false;
         selectingTarget = false;
-       
+
     }
 
     // Start is called before the first frame update
@@ -53,7 +53,7 @@ public class BattleInterFaceManager : HudManager
     {
         if (canAct && Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            AttackAction();            
+            AttackAction();
         }
 
 
@@ -64,7 +64,7 @@ public class BattleInterFaceManager : HudManager
         canAct = true;
         blockers.SetActive(!canAct);
         selectingTarget = false;
-        
+
     }
 
     public void EndChoice()
@@ -138,8 +138,8 @@ public class BattleInterFaceManager : HudManager
             action.user = player;
 
             Debug.Log($"Choosing to do {action.spell.Name}");
-            
-            
+
+
 
             battleManager.ReceiveActions(action, player);
             selectingTarget = false;
@@ -179,23 +179,36 @@ public class BattleInterFaceManager : HudManager
     {
         if (canAct && !selectingTarget)
         {
-            battleManager.CleanUp();
+            RunAction run = new RunAction();
+            Debug.Log(run.canRun);
 
-            player.gameManager.MonsterCamera.SetActive(false);
+            if (run.canRun > 5)
+            {
+                battleManager.ReceiveActions(run,player);
 
-            player.EndBattle();
+                battleManager.CleanUp();
 
-            Destroy(this.gameObject);
+                player.gameManager.MonsterCamera.SetActive(false);
+
+                player.EndBattle();
+
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                battleManager.ReceiveActions(run, player);
+            }
+            
         }
     }
-    
+
 
     public bool ChooseTarget(Global.Spell spell)
-    {        
+    {
         if (canAct && player.currentMana >= spell.Cost)
         {
             SpellMenuManager s = SpellSelector.GetComponent<SpellMenuManager>();
-            s.disableAllContentMenus();            
+            s.disableAllContentMenus();
 
             PlayerSelectButton.SetActive(true);
             SpellTargetButton p = PlayerSelectButton.GetComponent<SpellTargetButton>();

@@ -325,6 +325,14 @@ public class Player : Entity
             case InvestigationAction d:
                 break;
             case RunAction e:
+                if (e.canRun > 5)
+                {
+                    Debug.Log("Saiu com sucesso");
+                }
+                else
+                {
+                    Debug.Log("Nao saiu");
+                }
                 break;
         }
     }
