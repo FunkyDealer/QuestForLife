@@ -54,13 +54,13 @@ public class Entity : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public virtual BattleAction ChooseAction(Entity enemy)
@@ -82,26 +82,11 @@ public class Entity : MonoBehaviour
                 break;
             case ItemUseAction c:
 
-                HealItem item = (HealItem)c.itemToUse;
 
-                switch (item.HealType)
-                {
-                    case Global.HealType.HEALTH:
-                        currentHealth += item.HealAmmount;
-                        if (currentHealth > maxHealth) currentHealth = maxHealth;
-                        break;
-                    case Global.HealType.MANA:
-                        currentMana += item.HealAmmount;
-                        if (currentMana > maxMana) currentMana = maxMana;
-                        break;
-                    default:
-                        break;
-                }
                 break;
             case InvestigationAction d:
                 break;
             case RunAction e:
-               
                 break;
         }
     }
@@ -115,13 +100,16 @@ public class Entity : MonoBehaviour
                 float tohit = (a.user.Accuracy * a.AttackAccuracy / a.Target.Dodge);
                 int ToHit = (int)tohit;
 
-                if (Random.Range(0, 100) < ToHit)
+                if (ToHit > 100)
                 {
                     int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
-
                     ReceiveDamage(attackDamage);
                 }
-                else
+                else if (ToHit > Random.Range(0, 100))
+                {
+                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    ReceiveDamage(attackDamage);
+                } else
                 {
                     battleInterface.AddMessage($"The {a.user}'s Attack Missed!");
                 }
@@ -132,15 +120,9 @@ public class Entity : MonoBehaviour
                 float tohit2 = (b.user.Accuracy * b.spell.Accuracy / b.Target.Dodge);
                 int ToHit2 = (int)tohit2;
 
-                if (Random.Range(0, 100) < ToHit2)
-                {
-                    ReceiveSpellAttack(b);
-                }
-                else
-                {
-                    battleInterface.AddMessage($"The {b.user}'s Attack Missed!");
-                }
-
+                if (tohit2 > 100) ReceiveSpellAttack(b);
+                else if (ToHit2 > Random.Range(0, 100)) ReceiveSpellAttack(b);
+                else battleInterface.AddMessage($"The {b.user}'s Attack Missed!");
                 break;
             case ItemUseAction c:
 
@@ -149,9 +131,19 @@ public class Entity : MonoBehaviour
 
                 break;
             case RunAction e:
-               
-                break;
-        }
+
+                float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
+                Debug.Log($"Chance to escape: {chanceToEscape}");
+                if (chanceToEscape > 100) { battleManager.RunAway(); }
+                else if (chanceToEscape > Random.Range(0, 100)) {
+                    battleManager.RunAway();
+                } else
+                {
+                    battleInterface.AddMessage($"You Failed at running away!");
+                }
+
+                break;             
+        }      
     }
 
     protected virtual void ReceiveDamage(int attackPower)

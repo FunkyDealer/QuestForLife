@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemUseAction : BattleAction
-{
-    public Item itemToUse;
+{    
+    public int slot;
 
 
 }

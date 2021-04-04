@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject MonsterCamera;
 
+    [SerializeField]
+    CompassController compassController;
 
     void Awake()
     {
@@ -49,6 +51,8 @@ public class GameManager : MonoBehaviour
 
     }
 
+
+
     public void SpawnPlayer(Vector3 WorldPosition, Vector2 MapPosition, Tile[,] map)
     {
         if (player == null)
@@ -56,7 +60,7 @@ public class GameManager : MonoBehaviour
             GameObject o = Instantiate(playerObj, WorldPosition, Quaternion.identity);
 
             player = o.GetComponent<Player>();
-
+            player.compass = compassController;
             
         }
 

@@ -9,12 +9,8 @@ using UnityEngine.UI;
 /// Controller for the Menu that appears when clicking the individual Inventory Slot
 /// 
 /// </summary>
-public class SlotManagementMenu : MonoBehaviour
+public class SlotManagementMenu : ItemManagementMenu
 {
-    [HideInInspector]
-    public InventorySlotIF inventorySlotIF;
-    [HideInInspector]
-    public InventoryIFManager inventoryIFManager;
 
     [SerializeField]
     Text UseButtonText;

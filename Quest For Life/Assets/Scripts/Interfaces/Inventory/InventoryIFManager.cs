@@ -11,13 +11,13 @@ using UnityEngine;
 public class InventoryIFManager : MonoBehaviour
 {    
     [SerializeField]
-    NavigationInterfaceManager navigationInterface;
+    HudManager HudManager;
 
     [SerializeField]
     List<InventorySlotIF> interfaceSlots;
 
    // Inventory inventory;
-    public Inventory Inventory => navigationInterface.player.Inventory;
+    public Inventory Inventory => HudManager.player.Inventory;
 
     [HideInInspector]
     public List<GameObject> menus;
@@ -51,6 +51,11 @@ public class InventoryIFManager : MonoBehaviour
 
     }
 
+    void OnDisable()
+    {
+        CloseAllMenus();
+    }
+
     public void CloseAllMenus()
     {
         foreach (var m in menus) Destroy(m);
@@ -60,12 +65,12 @@ public class InventoryIFManager : MonoBehaviour
 
     public bool EquipItem(int OriginSlot)
     {
-        EquipableItem e = (EquipableItem)navigationInterface.player.Inventory.getSlot(OriginSlot).getItem();
+        EquipableItem e = (EquipableItem)HudManager.player.Inventory.getSlot(OriginSlot).getItem();
 
         if (TryToEquip(e))
         {
             //Success
-            navigationInterface.player.Inventory.getSlot(OriginSlot).Discard();
+            HudManager.player.Inventory.getSlot(OriginSlot).Discard();
             return true;
         }       
 
@@ -112,11 +117,25 @@ public class InventoryIFManager : MonoBehaviour
         return false;
     }
 
+    public bool canConsumeItem(int slot)
+    {
+        return Inventory.canConsumeItem(slot);
+
+        return false;
+    }
+
+    public void BattleUseItem(int slot)
+    {
+        HudManager.UseItemAction(slot);       
+    }
+
+
+
     public bool UnequipItem(int ID)
     {
         GearSlot slot = GetGearSlot(ID);
 
-        if (slot.unequip(navigationInterface.player.Inventory)) return true;
+        if (slot.unequip(HudManager.player.Inventory)) return true;
 
         return false;
     }
@@ -133,17 +152,17 @@ public class InventoryIFManager : MonoBehaviour
         switch (id)
         {
             case 1:
-                return navigationInterface.player.HatSlot;
+                return HudManager.player.HatSlot;
             case 2:
-                return navigationInterface.player.BodySlot;
+                return HudManager.player.BodySlot;
             case 3:
-                return navigationInterface.player.RingSlot1;
+                return HudManager.player.RingSlot1;
             case 4:
-                return navigationInterface.player.RingSlot2;
+                return HudManager.player.RingSlot2;
             case 5:
-                return navigationInterface.player.BeltSlot;
+                return HudManager.player.BeltSlot;
             default:
-                return navigationInterface.player.WeaponSlot;
+                return HudManager.player.WeaponSlot;
         }
     }
 
@@ -152,17 +171,17 @@ public class InventoryIFManager : MonoBehaviour
         switch (i.GearType)
         {
             case Global.GearType.HAT:
-                return navigationInterface.player.HatSlot.AttemptToPlaceItem(i);
+                return HudManager.player.HatSlot.AttemptToPlaceItem(i);
             case Global.GearType.RING:
-                bool Success = navigationInterface.player.RingSlot1.AttemptToPlaceItem(i);
-                if (!Success) return navigationInterface.player.RingSlot2.AttemptToPlaceItem(i);
+                bool Success = HudManager.player.RingSlot1.AttemptToPlaceItem(i);
+                if (!Success) return HudManager.player.RingSlot2.AttemptToPlaceItem(i);
                 else return true;
             case Global.GearType.BODYCLOTHING:
-                return navigationInterface.player.BodySlot.AttemptToPlaceItem(i);
+                return HudManager.player.BodySlot.AttemptToPlaceItem(i);
             case Global.GearType.BELT:
-                return navigationInterface.player.BeltSlot.AttemptToPlaceItem(i);              
+                return HudManager.player.BeltSlot.AttemptToPlaceItem(i);              
             default:
-                return navigationInterface.player.WeaponSlot.AttemptToPlaceItem(i);
+                return HudManager.player.WeaponSlot.AttemptToPlaceItem(i);
         }
     }
 

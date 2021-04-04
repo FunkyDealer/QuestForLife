@@ -55,25 +55,20 @@ MonoBehaviour:
     type: 3}
   EntranceTileObj: {fileID: 4305351633049835609, guid: e019fa9ace6cc174fb0d500ee39abc7c,
     type: 3}
-  ExitTileObj: {fileID: 5352125047789940246, guid: bb33cfd3364d3894d8c8861b11a65da7,
+  ExitTileObj: {fileID: 980647247257783327, guid: e1d8e09cda80e284f81fc81a525444d0,
     type: 3}
   ShopTileObj: {fileID: 8626401485566072793, guid: 73a2c1653a21ea64f98ff5d6926cd237,
     type: 3}
-  ChestTileObj: {fileID: 7181777340757903058, guid: 1dac99a9426bb3c459af85b883fb80c3,
+  ChestTileObj: {fileID: 2226530630327528651, guid: 428eb3302c2ceb64ca880d989f9ba70d,
     type: 3}
-  fountainTileObj: {fileID: 8507400267005278429, guid: 1c43dd9b16c4d354a99031a6606f95ae,
+  fountainTileObj: {fileID: 3183003937755952124, guid: 93e1ab05cf68b904d9524e653aa7fe8a,
     type: 3}
-  lockedStairsObj: {fileID: 6041432630883975932, guid: 890d77ff6ef77d84f9eeb4e429eb2ba7,
+  lockedStairsObj: {fileID: 980647247257783327, guid: e1d8e09cda80e284f81fc81a525444d0,
     type: 3}
   keysObj:
-  - {fileID: 7882561287122699064, guid: 954b347684822cf438ea6a9a68b27b25, type: 3}
-  - {fileID: 2218526636505523049, guid: 3541d530aec50ab4a92e48d3d5336fc5, type: 3}
-  - {fileID: 506773101568427789, guid: 089f326c686987f4a99a6c36b2ad08e6, type: 3}
-  - {fileID: 5705270227842899175, guid: 95192888db65b9e47a9f005d46e56ab8, type: 3}
-  mapWidth: 50
-  mapLength: 50
+  - {fileID: 8827677277831787542, guid: fd1ca8fc55487f94fa79888c4dea030e, type: 3}
+  - {fileID: 8198024696696950838, guid: 1b44ef27585214c41b11ee160001ef93, type: 3}
+  - {fileID: 1869920726326590418, guid: 390a051175c4e6940a638595627b06a8, type: 3}
+  - {fileID: 5899208644910193143, guid: 1fdc00fc60f59d14598fce4f0d5450ef, type: 3}
   manager: {fileID: 0}
-  Finished: 0
-  MAX_LEAF_SIZE: 20
-  MIN_LEAF_SIZE: 6
   parent: 1

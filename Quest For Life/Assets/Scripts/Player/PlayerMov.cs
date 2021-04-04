@@ -177,6 +177,7 @@ public class PlayerMov : MonoBehaviour
         Quaternion r90 = Quaternion.AngleAxis(90 * dir, Vector3.up);
         nextRotation = transform.localRotation * r90;
         movementState = MovementState.TURNING;
+        player.rotateCompass(dir);
     }
 
     void CheckNewPos(float i)

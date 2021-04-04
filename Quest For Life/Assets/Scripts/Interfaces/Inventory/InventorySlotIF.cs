@@ -19,7 +19,7 @@ public class InventorySlotIF : MonoBehaviour
     GameObject InventoryManagerMenuPrefab;
 
     [SerializeField]
-    NavigationInterfaceManager navigationInterface;
+    HudManager navigationInterface;
 
     GameObject itemImage;
 
@@ -59,7 +59,32 @@ public class InventorySlotIF : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (navigationInterface is BattleInterFaceManager) { 
+        InventorySlot s = manager.Inventory.getSlot(ID);
+        Item t = s.getItem();
+        if (t != null)
+        {
+            if (t is HealItem)
+            {
+                GameObject imgPrefab = DataBase.inst.consumablePrefabs[s.getItem().ID];
+                itemImage = Instantiate(imgPrefab, this.gameObject.transform);
+                itemImage.transform.SetAsFirstSibling();
+
+                QuantityDisplayer.SetActive(true);
+                UpdateQuantity(ID, s.CurrentQuantity());
+            }
+            else if (t is EquipableItem)
+            {
+                GameObject imgPrefab = DataBase.inst.gearPrefabs[s.getItem().ID];
+                itemImage = Instantiate(imgPrefab, this.gameObject.transform);
+                itemImage.transform.SetAsFirstSibling();
+
+                QuantityDisplayer.SetActive(false);
+                UpdateQuantity(ID, s.CurrentQuantity());
+            }
+        }
+        }
+
     }
 
     // Update is called once per frame
@@ -77,7 +102,7 @@ public class InventorySlotIF : MonoBehaviour
             if (getItem() != null)
             {
                 GameObject o = Instantiate(InventoryManagerMenuPrefab, rectTransform.position, Quaternion.identity, navigationInterface.gameObject.transform);
-                SlotManagementMenu s = o.GetComponent<SlotManagementMenu>();
+                ItemManagementMenu s = o.GetComponent<ItemManagementMenu>();
                 manager.menus.Add(o);
                 s.inventorySlotIF = this;
                 s.inventoryIFManager = manager;
@@ -88,12 +113,26 @@ public class InventorySlotIF : MonoBehaviour
         }
     }
 
+    public void openBattleMenu()
+    {
+        manager.CloseAllMenus();
+        Item i = getItem();
+        if (i != null && i is HealItem)
+        {            
+            GameObject o = Instantiate(InventoryManagerMenuPrefab, rectTransform.position, Quaternion.identity, navigationInterface.gameObject.transform);
+            ItemManagementMenu s = o.GetComponent<ItemManagementMenu>();
+            manager.menus.Add(o);
+            s.inventorySlotIF = this;
+            s.inventoryIFManager = manager;
+        }
+    }
+
     public void CloseMenu()
     {
 
     }
 
-    void newItem(int i)
+    protected void newItem(int i)
     {
         if (this.id == i)
         {

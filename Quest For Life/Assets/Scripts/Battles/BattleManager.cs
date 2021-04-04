@@ -167,10 +167,16 @@ public class BattleManager : MonoBehaviour
         }
         else if (monster.dead)
         {
-            StartCoroutine(FinishBattle(2));
+            StartCoroutine(FinishBattle(2, false));
 
             Debug.Log("Player has Won the battle!");
         }
+    }
+
+    public void RunAway()
+    {
+        StartCoroutine(FinishBattle(2, true));
+        interfaceManager.AddMessage("You Successefully Ran Away!");
     }
 
     public void CleanUp()
@@ -192,12 +198,12 @@ public class BattleManager : MonoBehaviour
         MonsterRoomManager.inst.MonsterDeath();
     }
 
-    IEnumerator FinishBattle(float time)
+    IEnumerator FinishBattle(float time, bool ranAway)
     {
         yield return new WaitForSeconds(time);
 
         MonsterRoomManager.inst.EndBattle();
-        interfaceManager.EndBattle();
+        interfaceManager.EndBattle(ranAway);
     }
 
 }

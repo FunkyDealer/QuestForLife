@@ -536,6 +536,7 @@ public class DungeonGenerator : MonoBehaviour
                                     InstantiateObj(lockedStairsObj, position);
                                     break;
                                 case Tile.Feature.Fountain:
+                                    position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
                                     InstantiateObj(fountainTileObj, position);
                                     break;
                                 default:
@@ -550,7 +551,8 @@ public class DungeonGenerator : MonoBehaviour
                                     InstantiateObj(ShopTileObj, position);
                                     break;
                                 case Tile.Feature.Chest:
-                                    InstantiateObj(ChestTileObj, position);
+                                    GameObject o = InstantiateObj(ChestTileObj, position);
+                                    rotateObj(o, map[x, y].facing);
                                     break;
                                 case Tile.Feature.None:
                                     InstantiateObj(WallTileObj, position);
@@ -581,6 +583,7 @@ public class DungeonGenerator : MonoBehaviour
                                     break;
                                 case Tile.Feature.Key:
                                     InstantiateFreeObj(RoomTileObj, position, x, y);
+                                    position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
                                     InstantiateObj(keysObj[placedKey], position);
                                     placedKey++;
                                     break;
@@ -629,36 +632,59 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    void InstantiateObj(GameObject o, Vector3 pos)
+    GameObject InstantiateObj(GameObject o, Vector3 pos)
     {
         if (parent)
         {
-            Instantiate(o, pos, Quaternion.identity, this.gameObject.transform);
+           return Instantiate(o, pos, Quaternion.identity, this.gameObject.transform);
         }
         else
         {
-            Instantiate(o, pos, Quaternion.identity);
+            return Instantiate(o, pos, Quaternion.identity);
         }
 
     }
 
-    void InstantiateFreeObj(GameObject o, Vector3 pos, int x, int y)
+    GameObject InstantiateFreeObj(GameObject o, Vector3 pos, int x, int y)
     {
         if (parent)
         {
             GameObject O = Instantiate(o, pos, Quaternion.identity, this.gameObject.transform);
             manager.AddFreeTile(x, y, O);
+            return O;
         }
         else
         {
             GameObject O = Instantiate(o, pos, Quaternion.identity);
             manager.AddFreeTile(x, y, O);
+            return O;
         }
 
 
     }
 
+    void rotateObj(GameObject o , Tile.Facing facing)
+    {
 
+        switch (facing)
+        {
+            case Tile.Facing.north:
+                o.transform.Rotate(0, -90, 0);
+                break;
+            case Tile.Facing.west:
+                o.transform.Rotate(0, 180, 0);
+                break;
+            case Tile.Facing.east:
+                o.transform.Rotate(0, 0, 0);
+                break;
+            case Tile.Facing.south:
+                o.transform.Rotate(0, 90, 0);
+                break;
+            case Tile.Facing.none:
+                o.transform.Rotate(0, 0, 0);
+                break;
+        }
+    }
 
 
     #endregion

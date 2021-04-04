@@ -19,7 +19,7 @@ public class Player : Entity
 
     [HideInInspector]
     public Tile currentTile;
-    [HideInInspector]
+   // [HideInInspector]
     public Global.FacingDirection direction;
     PlayerMov movementManager;
 
@@ -73,6 +73,8 @@ public class Player : Entity
     public GearSlot RingSlot2;
     public GearSlot WeaponSlot;
 
+    
+    public CompassController compass;
 
     void Awake()
     {
@@ -80,11 +82,9 @@ public class Player : Entity
         this.Resistence = Global.Type.NONE;
 
         movementManager = GetComponent<PlayerMov>();
-        direction = Global.FacingDirection.EAST;
+        direction = Global.FacingDirection.EAST;        
 
         EntityName = "Mage";
-
-
 
         BaseAttackPower = 40;
         knownSpells = new List<Global.Spell>();
@@ -122,18 +122,16 @@ public class Player : Entity
 
     void getAllSpells()
     {
-
         foreach (var s in DataBase.inst.Spells)
         {
             knownSpells.Add(s.Value);
         }
-
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        compass.Initiate(this, direction);
     }
 
     public BattleInterFaceManager StartBattle()
@@ -303,36 +301,15 @@ public class Player : Entity
                 sendUpdateHealth();
                 break;
             case ItemUseAction c:
+                Item i = Inventory.getSlot(c.slot).getItem();
 
-                HealItem item = (HealItem)c.itemToUse;
+                Inventory.ConsumeItem(c.slot);
+                battleInterface.AddMessage($"The mage used a {i.Name}");
 
-                switch (item.HealType)
-                {
-                    case Global.HealType.HEALTH:
-                        currentHealth += item.HealAmmount;
-                        if (currentHealth > maxHealth) currentHealth = maxHealth;
-                        sendUpdateMana();
-                        break;
-                    case Global.HealType.MANA:
-                        currentMana += item.HealAmmount;
-                        if (currentMana > maxMana) currentMana = maxMana;
-                        sendUpdateMana();
-                        break;
-                    default:
-                        break;
-                }
                 break;
             case InvestigationAction d:
                 break;
             case RunAction e:
-                if (e.canRun > 5)
-                {
-                    Debug.Log("Saiu com sucesso");
-                }
-                else
-                {
-                    Debug.Log("Nao saiu");
-                }
                 break;
         }
     }
@@ -441,5 +418,7 @@ public class Player : Entity
         Dodge -= i.DodgeBonus;
         Speed -= i.SpeedBonus;
     }
+
+    public void rotateCompass(float dir) => compass.rotate(dir);
 
 }

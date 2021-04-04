@@ -21,4 +21,9 @@ public class HudManager : MonoBehaviour
     {
         
     }
+
+    public virtual void UseItemAction(int slot)
+    {
+
+    }
 }

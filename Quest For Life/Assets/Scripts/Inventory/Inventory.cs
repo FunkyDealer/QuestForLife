@@ -190,7 +190,7 @@ public class Inventory
         return false;
     }
 
-    public bool ConsumeItem(int slot)
+    public bool ConsumeItem(int slot) //tried to consume item
     {
         HealItem i = (HealItem)slots[slot].getItem();
 
@@ -226,6 +226,36 @@ public class Inventory
 
 
         return false; //Failed at consuming the item
+    }
+
+    public bool canConsumeItem(int slot) //returns wether or not item can be consumed
+    {
+        HealItem i = (HealItem)slots[slot].getItem();
+
+        switch (i.HealType)
+        {
+            case Global.HealType.HEALTH:
+                if (player.currentHealth < player.maxHealth) //if current health is not maxed
+                {
+                    return true; //success
+                }
+                break;
+            case Global.HealType.MANA:
+                if (player.currentMana < player.maxMana) //if current mana is not maxed
+                {
+                    return true; //success
+                }
+                break;
+            case Global.HealType.BOTH:
+                if (player.currentMana < player.maxMana || player.currentHealth < player.maxHealth) //if current mana or health are not maxed
+                {
+                    return true; //success
+                }
+                break;
+            default:
+                break;
+        }
+        return false; //cannot consume Item
     }
 
 }
