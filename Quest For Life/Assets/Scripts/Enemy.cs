@@ -20,6 +20,12 @@ public class Enemy : Entity
 
     Global.Spell[] KnownSpells;
 
+    Animator animator;
+
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -100,4 +106,98 @@ public class Enemy : Entity
         }
 
     }
+
+    protected override void ReceiveDamage(int attackPower)
+    {
+        base.ReceiveDamage(attackPower);
+
+        animator.SetTrigger("TakeDmg");
+
+    }
+
+    protected override void castSpell(CastSpellAction b)
+    {
+        base.castSpell(b);
+
+        animator.SetTrigger("Cast");
+    }
+
+    public override void PerformAction(BattleAction action)
+    {
+        switch (action)
+        {
+            case AttackAction a:
+                animator.SetTrigger("Attack");
+                break;
+            case CastSpellAction b:
+                castSpell(b);
+                break;
+            case ItemUseAction c:
+                break;
+            case InvestigationAction d:
+                break;
+            case RunAction e:
+                break;
+        }
+    }
+
+    public override void ReceiveAction(BattleAction action)
+    {
+        switch (action)
+        {
+            case AttackAction a:
+
+                float tohit = (a.user.Accuracy * a.AttackAccuracy / a.Target.Dodge);
+                int ToHit = (int)tohit;
+
+                if (ToHit > 100)
+                {
+                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    ReceiveDamage(attackDamage);
+                }
+                else if (ToHit > Random.Range(0, 100))
+                {
+                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    ReceiveDamage(attackDamage);
+                }
+                else
+                {
+                    animator.SetTrigger("Dodge");
+                    battleInterface.AddMessage($"The {a.user}'s Attack Missed!");
+                }
+
+                break;
+            case CastSpellAction b:
+
+                float tohit2 = (b.user.Accuracy * b.spell.Accuracy / b.Target.Dodge);
+                int ToHit2 = (int)tohit2;
+
+                if (tohit2 > 100) ReceiveSpellAttack(b);
+                else if (ToHit2 > Random.Range(0, 100)) ReceiveSpellAttack(b);
+                else battleInterface.AddMessage($"The {b.user}'s Attack Missed!");
+                break;
+            case ItemUseAction c:
+
+                break;
+            case InvestigationAction d:
+
+                break;
+            case RunAction e:
+
+                float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
+                Debug.Log($"Chance to escape: {chanceToEscape}");
+                if (chanceToEscape > 100) { battleManager.RunAway(); }
+                else if (chanceToEscape > Random.Range(0, 100))
+                {
+                    battleManager.RunAway();
+                }
+                else
+                {
+                    battleInterface.AddMessage($"You Failed at running away!");
+                }
+
+                break;
+        }
+    }
+
 }

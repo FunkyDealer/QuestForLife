@@ -175,7 +175,7 @@ public class Entity : MonoBehaviour
         else return 1;
     }
 
-    protected void castSpell(CastSpellAction b)
+    protected virtual void castSpell(CastSpellAction b)
     {
         currentMana -= b.spell.Cost;
         if (b.Target == this)

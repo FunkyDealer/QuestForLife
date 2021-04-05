@@ -48,7 +48,7 @@ public class MonsterRoomManager : MonoBehaviour
 
     public void SpawnCurentMonster()
     {
-        GameObject m = Instantiate(currentMonster, spawner.transform.position, Quaternion.identity);
+        GameObject m = Instantiate(currentMonster, spawner.transform.position, spawner.transform.rotation);
         currentMonster = m;
     }
 
