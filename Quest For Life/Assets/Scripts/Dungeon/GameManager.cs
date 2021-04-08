@@ -51,8 +51,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-
-
     public void SpawnPlayer(Vector3 WorldPosition, Vector2 MapPosition, Tile[,] map)
     {
         if (player == null)
@@ -66,11 +64,5 @@ public class GameManager : MonoBehaviour
 
         if (startingNewGame) player.Spawn(WorldPosition, MapPosition, map, this, dungeonManager);
         else player.Move(WorldPosition, MapPosition, map);
-
     }
-
-
-
-
-
 }

@@ -69,8 +69,9 @@ public class Entity : MonoBehaviour
     }
 
 
-    public virtual void PerformAction(BattleAction action)
+    public virtual float PerformAction(BattleAction action)
     {
+        float animationTime = 1;
         switch (action)
         {
             case AttackAction a:
@@ -89,10 +90,12 @@ public class Entity : MonoBehaviour
             case RunAction e:
                 break;
         }
+        return animationTime;
     }
 
-    public virtual void ReceiveAction(BattleAction action)
+    public virtual float ReceiveAction(BattleAction action)
     {
+        float animationTime = 1;
         switch (action)
         {
             case AttackAction a:
@@ -143,7 +146,9 @@ public class Entity : MonoBehaviour
                 }
 
                 break;             
-        }      
+        }
+
+        return animationTime;
     }
 
     protected virtual void ReceiveDamage(int attackPower)

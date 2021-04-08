@@ -44,8 +44,6 @@ public class BattleManager : MonoBehaviour
         {
 
         }
-
-
     }
 
     public void StartBattle(Player p, BattleInterFaceManager m)
@@ -97,9 +95,7 @@ public class BattleManager : MonoBehaviour
         else
         {
             PerformMonsterAction();
-        }
-        
-
+        }       
     }
 
     //Continue Turn (Called After someone has attacked)
@@ -117,23 +113,25 @@ public class BattleManager : MonoBehaviour
     //Perform the Player's Action
     void PerformPlayerAction()
     {
+        float totalAnimationTime = 0;
         //Debug.Log("player is attacking");
-        player.PerformAction(playerAction);
-        monster.ReceiveAction(playerAction);
+        totalAnimationTime += player.PerformAction(playerAction);
+        totalAnimationTime += monster.ReceiveAction(playerAction);
 
         playerAction = null;
-        StartCoroutine(ConfirmStatus(1));
+        StartCoroutine(ConfirmStatus(totalAnimationTime));
     }
 
     //Perform the Monster's Action
     void PerformMonsterAction()
     {
+        float totalAnimationTime = 0;
         //Debug.Log("Monster is Attacking");
-        monster.PerformAction(monsterAction);
-        player.ReceiveAction(monsterAction);
+        totalAnimationTime += monster.PerformAction(monsterAction);
+        totalAnimationTime += player.ReceiveAction(monsterAction);
 
         monsterAction = null;
-        StartCoroutine(ConfirmStatus(1));
+        StartCoroutine(ConfirmStatus(totalAnimationTime));
     }
 
     //Confirm the Status of who was attacked, Called After Someone is attacked (Check for Deaths)
@@ -177,7 +175,7 @@ public class BattleManager : MonoBehaviour
     {
         StartCoroutine(FinishBattle(2, true));
         interfaceManager.AddMessage("You Successefully Ran Away!");
-    }
+    }    
 
     public void CleanUp()
     {
@@ -203,6 +201,7 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         MonsterRoomManager.inst.EndBattle();
+        if (ranAway) MonsterRoomManager.inst.RemoveMonster();
         interfaceManager.EndBattle(ranAway);
     }
 

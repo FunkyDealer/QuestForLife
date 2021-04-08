@@ -30,7 +30,6 @@ public class Player : Entity
 
     int experienceToNextLevel;
 
-
     int minHealthGain = 5;
     int maxHealthGain = 20;
 
@@ -65,6 +64,9 @@ public class Player : Entity
     public delegate void onLevelUpEvent(int newLevel);
     public static event onLevelUpEvent onLevelUp;
 
+    public delegate void OnStatsChange();
+    public static event OnStatsChange onStatsChange;
+
     public Inventory Inventory;
     public GearSlot HatSlot;
     public GearSlot BodySlot;
@@ -72,7 +74,6 @@ public class Player : Entity
     public GearSlot RingSlot1;
     public GearSlot RingSlot2;
     public GearSlot WeaponSlot;
-
     
     public CompassController compass;
 
@@ -103,21 +104,16 @@ public class Player : Entity
         navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
         navigationInterFace.getInformation(this, movementManager, dungeonManager);
 
-        //Inventory
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 99);
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1);
+      
+    }
 
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 50);
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 10);
 
-        HatSlot.AttemptToPlaceItem(DataBase.inst.Gears[1]);
-        BodySlot.AttemptToPlaceItem(DataBase.inst.Gears[2]);
-        WeaponSlot.AttemptToPlaceItem(DataBase.inst.Gears[3]);
+    // Start is called before the first frame update
+    void Start()
+    {
+        compass.Initiate(this, direction);
 
-        RingSlot1.AttemptToPlaceItem(DataBase.inst.Gears[4]);
-        RingSlot2.AttemptToPlaceItem(DataBase.inst.Gears[5]);
-
-        Inventory.TryToAddToInventory(DataBase.inst.Gears[6], 1);
+      
     }
 
     void getAllSpells()
@@ -128,11 +124,6 @@ public class Player : Entity
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        compass.Initiate(this, direction);
-    }
 
     public BattleInterFaceManager StartBattle()
     {
@@ -203,6 +194,22 @@ public class Player : Entity
 
         experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
+        //Inventory
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 99);
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1);
+
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 50);
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 10);
+
+        HatSlot.AttemptToPlaceItem(DataBase.inst.Gears[1]);
+        BodySlot.AttemptToPlaceItem(DataBase.inst.Gears[2]);
+        WeaponSlot.AttemptToPlaceItem(DataBase.inst.Gears[3]);
+
+        //RingSlot1.AttemptToPlaceItem(DataBase.inst.Gears[4]);
+        //RingSlot2.AttemptToPlaceItem(DataBase.inst.Gears[5]);
+
+        Inventory.TryToAddToInventory(DataBase.inst.Gears[6], 1);
+
         gameManager.startingNewGame = false;
     }
 
@@ -248,6 +255,7 @@ public class Player : Entity
         try
         {
             onLevelUp(Level);
+            onStatsChange();
         }
         catch { }
 
@@ -288,8 +296,9 @@ public class Player : Entity
         sendUpdateMana();
     }
 
-    public override void PerformAction(BattleAction action)
+    public override float PerformAction(BattleAction action)
     {
+        float animationTime = 0.3f;
         switch (action)
         {
             case AttackAction a:
@@ -312,6 +321,8 @@ public class Player : Entity
             case RunAction e:
                 break;
         }
+
+        return animationTime;
     }
 
     void sendUpdateHealth()
@@ -393,6 +404,15 @@ public class Player : Entity
         Accuracy += i.AccuracyBonus;
         Dodge += i.DodgeBonus;
         Speed += i.SpeedBonus;
+
+        try
+        {
+            onStatsChange();
+        }
+        catch 
+        {
+
+        }       
     }
 
     public void RemoveStatsFromItem(EquipableItem i)
@@ -417,6 +437,15 @@ public class Player : Entity
         Accuracy -= i.AccuracyBonus;
         Dodge -= i.DodgeBonus;
         Speed -= i.SpeedBonus;
+
+        try
+        {
+            onStatsChange();
+        }
+        catch
+        {
+
+        }
     }
 
     public void rotateCompass(float dir) => compass.rotate(dir);

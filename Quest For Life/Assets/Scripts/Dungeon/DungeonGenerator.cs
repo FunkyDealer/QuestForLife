@@ -101,7 +101,7 @@ public class DungeonGenerator : MonoBehaviour
 
             DrawFloor();
             DrawMap();
-            //DrawRoof();
+            DrawRoof();
 
             manager.StartFloor(this, spawn);
 

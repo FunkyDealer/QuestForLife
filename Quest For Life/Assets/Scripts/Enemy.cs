@@ -111,7 +111,7 @@ public class Enemy : Entity
     {
         base.ReceiveDamage(attackPower);
 
-        animator.SetTrigger("TakeDmg");
+        
 
     }
 
@@ -119,18 +119,22 @@ public class Enemy : Entity
     {
         base.castSpell(b);
 
-        animator.SetTrigger("Cast");
+        
     }
 
-    public override void PerformAction(BattleAction action)
+    public override float PerformAction(BattleAction action)
     {
+        float animationTime = 1;
         switch (action)
         {
             case AttackAction a:
                 animator.SetTrigger("Attack");
+                animationTime = 1.4f;
                 break;
             case CastSpellAction b:
                 castSpell(b);
+                animator.SetTrigger("Cast");
+                animationTime = 2;
                 break;
             case ItemUseAction c:
                 break;
@@ -139,14 +143,15 @@ public class Enemy : Entity
             case RunAction e:
                 break;
         }
+        return animationTime;
     }
 
-    public override void ReceiveAction(BattleAction action)
+    public override float ReceiveAction(BattleAction action)
     {
+        float animationTime = 1;
         switch (action)
         {
             case AttackAction a:
-
                 float tohit = (a.user.Accuracy * a.AttackAccuracy / a.Target.Dodge);
                 int ToHit = (int)tohit;
 
@@ -154,27 +159,30 @@ public class Enemy : Entity
                 {
                     int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
+                    animator.SetTrigger("TakeDmg");
+                    animationTime = 1.3f;
                 }
                 else if (ToHit > Random.Range(0, 100))
                 {
                     int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
+                    animator.SetTrigger("TakeDmg");
+                    animationTime = 1.3f;
                 }
                 else
                 {
                     animator.SetTrigger("Dodge");
+                    animationTime = 2.1f;
                     battleInterface.AddMessage($"The {a.user}'s Attack Missed!");
                 }
-
                 break;
             case CastSpellAction b:
-
                 float tohit2 = (b.user.Accuracy * b.spell.Accuracy / b.Target.Dodge);
                 int ToHit2 = (int)tohit2;
 
                 if (tohit2 > 100) ReceiveSpellAttack(b);
                 else if (ToHit2 > Random.Range(0, 100)) ReceiveSpellAttack(b);
-                else battleInterface.AddMessage($"The {b.user}'s Attack Missed!");
+                else { animator.SetTrigger("Dodge"); animationTime = 2.1f; battleInterface.AddMessage($"The {b.user}'s Attack Missed!"); }
                 break;
             case ItemUseAction c:
 
@@ -183,7 +191,6 @@ public class Enemy : Entity
 
                 break;
             case RunAction e:
-
                 float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
                 Debug.Log($"Chance to escape: {chanceToEscape}");
                 if (chanceToEscape > 100) { battleManager.RunAway(); }
@@ -198,6 +205,8 @@ public class Enemy : Entity
 
                 break;
         }
+
+        return animationTime;
     }
 
 }

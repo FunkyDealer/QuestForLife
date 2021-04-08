@@ -41,7 +41,7 @@ public class BattlePlayerStatsManager : MonoBehaviour
         
         Player.onHealthUpdate += UpdateHealth;
         Player.onManaUpdate += UpdateMana;
-        Player.onLevelUp += updatePlayerLevel;
+        Player.onLevelUp += updatePlayerLevel;        
         
     }
 
