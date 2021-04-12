@@ -12,7 +12,7 @@ public class PlayerMov : MonoBehaviour
     float nextRotationDir;
 
     [SerializeField]
-    float inputDelay = 0.1f;    
+    float inputDelay = 0.1f;
     [SerializeField]
     float velocity = 50f;
     [SerializeField]
@@ -40,7 +40,7 @@ public class PlayerMov : MonoBehaviour
         inputTimer = 0;
         player = GetComponent<Player>();
         movementState = MovementState.WAITINGINPUT;
-        inBattle = false;      
+        inBattle = false;
     }
 
     void Start()
@@ -104,14 +104,14 @@ public class PlayerMov : MonoBehaviour
                     else movementState = MovementState.COOLDOWN;
                 }
                 break;
-            case MovementState.TURNING:               
+            case MovementState.TURNING:
                 Vector3 targetForward = nextRotation * Vector3.forward;
-                
+
                 if (Vector3.Dot(transform.forward, targetForward) > 0.99995)
                 {
                     transform.localRotation = nextRotation;
                     movementState = MovementState.COOLDOWN;
-                }                
+                }
 
                 break;
             case MovementState.FROZEN:
@@ -125,8 +125,9 @@ public class PlayerMov : MonoBehaviour
 
     void input()
     {
-        if (Input.GetButtonDown("Inventory")) {
-            
+        if (Input.GetButtonDown("Inventory"))
+        {
+
             player.OpenInventory();
             movementState = MovementState.FROZEN;
             return;
@@ -209,7 +210,14 @@ public class PlayerMov : MonoBehaviour
                 CalculateNextPosition(newPos);
                 break;
             case Tile.Type.none:
-
+                break;
+            case Tile.Type.wall:
+                switch (player.dungeonManager.map[(int)newPos.x, (int)newPos.y].feature)
+                {
+                    case Tile.Feature.Chest:
+                        OpenChest(player.dungeonManager.map[(int)newPos.x, (int)newPos.y]);
+                        break;
+                }
                 break;
             case Tile.Type.room:
                 switch (player.dungeonManager.map[(int)newPos.x, (int)newPos.y].feature)
@@ -237,13 +245,14 @@ public class PlayerMov : MonoBehaviour
                     case Tile.Feature.Key:
                         CalculateNextPosition(newPos);
                         break;
+
                     case Tile.Feature.None:
-                        CalculateNextPosition(newPos);                        
+                        CalculateNextPosition(newPos);
                         break;
                     default:
                         break;
                 }
-                
+
                 break;
             default:
                 Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
@@ -269,7 +278,19 @@ public class PlayerMov : MonoBehaviour
         movementState = MovementState.COOLDOWN;
     }
 
-
+    void OpenChest(Tile tile)
+    {
+        if (!tile.chest.isOpen)
+        {
+            Debug.Log("Abrir" + player.currentMoney);
+            player.currentMoney += tile.chest.OpenChest(player.Level, dungeonManager.floor);
+            Debug.Log(player.currentMoney);
+        }
+        else
+        {
+            Debug.Log("Aberto");
+        }
+    }
     public void EndBattle()
     {
         inBattle = false;

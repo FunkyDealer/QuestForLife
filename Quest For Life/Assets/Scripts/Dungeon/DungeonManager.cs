@@ -36,7 +36,7 @@ public class DungeonManager : MonoBehaviour
 
     int times;
 
-    int floor;
+    public int floor;
 
     [SerializeField]
     bool genDemo = false;

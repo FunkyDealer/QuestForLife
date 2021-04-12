@@ -444,6 +444,7 @@ public class DungeonGenerator : MonoBehaviour
                 if (map[fX, fY].occupied && map[fX, fY].feature == Tile.Feature.None) //if the picked place is a wall(occupied) and has no feature, place the chest
                 {
                     map[fX, fY].feature = Tile.Feature.Chest;
+                    map[fX, fY].chest = new Chest();
                     map[fX, fY].facing = facing;
                     map[fX, fY].roomNumber = roomNumber;
                     currentRoom.chest = true;

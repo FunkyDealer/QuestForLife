@@ -50,6 +50,7 @@ public class Tile
     public Tile west;
     public Tile east;
 
+    public Chest chest;
 
     public Tile(bool occupied, int x, int y)
     {
