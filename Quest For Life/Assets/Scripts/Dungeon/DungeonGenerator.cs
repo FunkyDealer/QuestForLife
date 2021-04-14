@@ -61,6 +61,8 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField]
     bool parent = true;
 
+    [SerializeField]
+    Animator ChestAnim;
     void Awake()
     {
        
@@ -445,6 +447,7 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     map[fX, fY].feature = Tile.Feature.Chest;
                     map[fX, fY].chest = new Chest();
+                 //   map[fX, fY].chest.animator = ChestAnim;
                     map[fX, fY].facing = facing;
                     map[fX, fY].roomNumber = roomNumber;
                     currentRoom.chest = true;
@@ -553,6 +556,7 @@ public class DungeonGenerator : MonoBehaviour
                                     break;
                                 case Tile.Feature.Chest:
                                     GameObject o = InstantiateObj(ChestTileObj, position);
+                                    map[x, y].chest.animator = o.GetComponentInChildren<Animator>();
                                     rotateObj(o, map[x, y].facing);
                                     break;
                                 case Tile.Feature.None:
