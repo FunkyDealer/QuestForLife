@@ -67,6 +67,7 @@ public class Tile
         south = null;
         west = null;
         east = null;
+        
     }
 
     public void createConnections(Tile[,] map, int width, int length)

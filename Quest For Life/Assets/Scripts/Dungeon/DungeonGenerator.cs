@@ -47,6 +47,7 @@ public class DungeonGenerator : MonoBehaviour
 
     List<Room> rooms;
     List<Hall> halls;
+    List<Chest> chests;
 
     int keyNumber;
     bool fountain;
@@ -94,6 +95,7 @@ public class DungeonGenerator : MonoBehaviour
 
         rooms = new List<Room>();
         halls = new List<Hall>();
+        chests = new List<Chest>();
 
         //CreateBigEmptyRoom();
         if (!CreateNewMap()) { return false; }
@@ -446,8 +448,6 @@ public class DungeonGenerator : MonoBehaviour
                 if (map[fX, fY].occupied && map[fX, fY].feature == Tile.Feature.None) //if the picked place is a wall(occupied) and has no feature, place the chest
                 {
                     map[fX, fY].feature = Tile.Feature.Chest;
-                    map[fX, fY].chest = new Chest();
-                 //   map[fX, fY].chest.animator = ChestAnim;
                     map[fX, fY].facing = facing;
                     map[fX, fY].roomNumber = roomNumber;
                     currentRoom.chest = true;
@@ -556,7 +556,9 @@ public class DungeonGenerator : MonoBehaviour
                                     break;
                                 case Tile.Feature.Chest:
                                     GameObject o = InstantiateObj(ChestTileObj, position);
-                                    map[x, y].chest.animator = o.GetComponentInChildren<Animator>();
+                                    Chest chest = o.GetComponentInChildren<Chest>();
+                                    chests.Add(chest);
+                                    map[x, y].chest = chest;
                                     rotateObj(o, map[x, y].facing);
                                     break;
                                 case Tile.Feature.None:

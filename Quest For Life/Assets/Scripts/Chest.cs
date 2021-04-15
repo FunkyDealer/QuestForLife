@@ -10,6 +10,7 @@ public class Chest : MonoBehaviour
     void Start()
     {
         isOpen = false;
+        animator = GetComponent<Animator>();
     }
 
     public int OpenChest(int lvl, int floor)
