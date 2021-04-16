@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7422545362892136501}
   - component: {fileID: 5111675685022120768}
   m_Layer: 8
-  m_Name: entrance
+  m_Name: entrance Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4305351633049835609}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.8, y: 14.177, z: -22.65}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 4, y: 5, z: 4}
   m_Children: []
   m_Father: {fileID: 0}

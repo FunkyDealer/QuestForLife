@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    public Tile[,] currentMap;
+
     [SerializeField]
     GameObject NavigationInterFacePrefab;
     [SerializeField]
@@ -15,16 +17,22 @@ public class Player : Entity
     public GameManager gameManager;
 
     [HideInInspector]
-    public DungeonManager dungeonManager;
+    public MapManager mapManager;
 
     [HideInInspector]
     public Tile currentTile;
+
+    [SerializeField]
+    int x;
+    [SerializeField]
+    int y;
+
    // [HideInInspector]
     public Global.FacingDirection direction;
     PlayerMov movementManager;
+    public PlayerMov MovementManager => movementManager;
 
-    [HideInInspector]
-    public int currentMoney;
+    int currentMoney;
     int currentExperience;
     int totalExperience;
 
@@ -67,6 +75,12 @@ public class Player : Entity
     public delegate void OnStatsChange();
     public static event OnStatsChange onStatsChange;
 
+    public delegate void OnGoldChange(int newAmmount);
+    public static event OnGoldChange onGoldChange;
+
+    public delegate void OnPlayerMove(Vector2 newPos);
+    public static event OnPlayerMove onPlayerMove;
+
     public Inventory Inventory;
     public GearSlot HatSlot;
     public GearSlot BodySlot;
@@ -102,7 +116,7 @@ public class Player : Entity
         WeaponSlot = new GearSlot(Global.GearType.WEAPON, 6, this);
 
         navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
-        navigationInterFace.getInformation(this, movementManager, dungeonManager);
+        navigationInterFace.getInformation(this, movementManager, mapManager);
 
       
     }
@@ -124,10 +138,19 @@ public class Player : Entity
         }
     }
 
+    public void DeactiveNavigationInterface()
+    {
+        navigationInterFace.gameObject.SetActive(false);
+    }
+
+    public void ActivateNavigationInterface()
+    {
+        navigationInterFace.gameObject.SetActive(true);
+    }
 
     public BattleInterFaceManager StartBattle()
     {
-        navigationInterFace.gameObject.SetActive(false);
+        DeactiveNavigationInterface();
 
         battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();       
 
@@ -138,21 +161,24 @@ public class Player : Entity
     {   
         battleInterface = null;
 
-        navigationInterFace.gameObject.SetActive(true);
+        ActivateNavigationInterface();
         movementManager.EndBattle();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        x = currentTile.x;
+        y = currentTile.y;
+
     }
 
    
 
     public void EnterExit()
     {
-        dungeonManager.CreateNewFloor();
+        DungeonManager m = (DungeonManager)mapManager;
+        m.CreateNewFloor();
 
 
     }
@@ -160,16 +186,18 @@ public class Player : Entity
     public void Spawn(Vector3 worldPos, Vector3 mapPos, Tile[,] map, GameManager gameManager, DungeonManager dungeonManager)
     {
         gameObject.transform.position = worldPos;
+        currentMap = map;
         currentTile = map[(int)mapPos.x, (int)mapPos.y];
         this.gameManager = gameManager;
-        this.dungeonManager = dungeonManager;
+        this.mapManager = dungeonManager;
 
         StartNewPlayer();
     }
 
-    public void Move(Vector3 worldPos, Vector3 mapPos, Tile[,] map)
+    public void Move(Vector3 worldPos, Vector2 mapPos, Tile[,] map, MapManager mapManager)
     {
-
+        this.mapManager = mapManager;
+        currentMap = map;
         gameObject.transform.position = worldPos;
         currentTile = map[(int)mapPos.x, (int)mapPos.y];
     }
@@ -195,11 +223,11 @@ public class Player : Entity
         experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
         //Inventory
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 99);
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1);
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 3); //add Small health Potions
+        Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1); //add small mana Potion
 
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 50);
-        Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 10);
+      //  Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 50); //add 50 health potions
+      //  Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 10); //add 10 health potions
 
         HatSlot.AttemptToPlaceItem(DataBase.inst.Gears[1]);
         BodySlot.AttemptToPlaceItem(DataBase.inst.Gears[2]);
@@ -208,7 +236,7 @@ public class Player : Entity
         //RingSlot1.AttemptToPlaceItem(DataBase.inst.Gears[4]);
         //RingSlot2.AttemptToPlaceItem(DataBase.inst.Gears[5]);
 
-        Inventory.TryToAddToInventory(DataBase.inst.Gears[6], 1);
+        //Inventory.TryToAddToInventory(DataBase.inst.Gears[6], 1);
 
         gameManager.startingNewGame = false;
     }
@@ -284,7 +312,7 @@ public class Player : Entity
     {
         RecoverAll();
 
-        Debug.Log("Player Used fountain, health and mana restaured!");
+        Debug.Log("Player Used fountain, health and mana restored!");
     }
 
 
@@ -431,7 +459,6 @@ public class Player : Entity
         currentMana -= mDif;
         onManaUpdate(currentMana, maxMana);
 
-
         Power -= i.PowerBonus;
         Defence -= i.DefenceBonus;
         Accuracy -= i.AccuracyBonus;
@@ -449,5 +476,41 @@ public class Player : Entity
     }
 
     public void rotateCompass(float dir) => compass.rotate(dir);
+     
+    public void addGold(int ammount)
+    {
+        currentMoney += ammount;
+        updateGold();
+    }
 
+    public void spendGold(int ammount)
+    {
+        currentMoney -= ammount;
+        updateGold();
+    }
+
+    public int currentGold => currentMoney;
+
+    void updateGold()
+    {
+        try
+        {
+            onGoldChange(currentMoney);
+        } catch
+        {
+
+        }
+    }
+
+    public void AnnounceMove()
+    {
+        try
+        {
+            onPlayerMove(new Vector2(currentTile.x, currentTile.y));
+        }
+        catch
+        {
+
+        }
+    }
 }

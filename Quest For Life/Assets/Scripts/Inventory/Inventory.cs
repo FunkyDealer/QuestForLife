@@ -5,6 +5,7 @@ using UnityEngine;
 public class Inventory
 {
     InventorySlot[] slots;
+    public InventorySlot[] Slots => slots;
     Player player;
 
     public Inventory(int capacity, Player p)
@@ -49,8 +50,6 @@ public class Inventory
         }    
         return false; //if everything fails, Send that the switch was a fail
     }
-
-
 
     public bool TryToAddToInventory(Item i, int Quantity) //Major Function that tries to add item to inventory
     {

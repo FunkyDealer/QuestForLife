@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 /// <summary>
 /// 
@@ -27,20 +27,28 @@ public class InventoryIFManager : MonoBehaviour
 
     int? SlotBeingSwitched = null;
 
+    [SerializeField]
+    Text goldAmmountDisplay;
+
     void Awake()
     {
         menus = new List<GameObject>();
-        
 
+        Player.onGoldChange += updateGoldAmmount;
     }
 
     // Start is called before the first frame update
     void Start()
     {
 
-      // inventory = navigationInterface.player.Inventory;
+        // inventory = navigationInterface.player.Inventory;
+        goldAmmountDisplay.text = HudManager.player.currentGold.ToString();
 
+    }
 
+    void OnDestroy()
+    {
+        Player.onGoldChange -= updateGoldAmmount;
     }
 
     // Update is called once per frame
@@ -185,5 +193,9 @@ public class InventoryIFManager : MonoBehaviour
         }
     }
 
-    
+    void updateGoldAmmount(int newAmmount)
+    {
+        goldAmmountDisplay.text = newAmmount.ToString() + "g";
+    }
+
 }

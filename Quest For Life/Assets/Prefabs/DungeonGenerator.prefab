@@ -43,9 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302faed95149bc54f894593445f4f526, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FloorTileObj: {fileID: 1757188351475757774, guid: da91927c0204e8942a1473413bbf59dc,
+  FloorTileObj: {fileID: 7929138529763041991, guid: d7d0d0825a09df24ea13250ae6be03b8,
     type: 3}
-  RoofTileObj: {fileID: 5567033828480467614, guid: 6f30747357a560e498b460f63b4230c2,
+  RoofTileObj: {fileID: 2603693724652270748, guid: 7065da36b200f544e9b7d2dcc380c85c,
     type: 3}
   WallTileObj: {fileID: 1251282748155956737, guid: 7b6ed0393ae98894e8eaa4a3ddbd6a5c,
     type: 3}
@@ -57,7 +57,7 @@ MonoBehaviour:
     type: 3}
   ExitTileObj: {fileID: 980647247257783327, guid: e1d8e09cda80e284f81fc81a525444d0,
     type: 3}
-  ShopTileObj: {fileID: 8626401485566072793, guid: 73a2c1653a21ea64f98ff5d6926cd237,
+  ShopTileObj: {fileID: 7443498148233012296, guid: 921de7e2904dc964c9b92cb19185e34e,
     type: 3}
   ChestTileObj: {fileID: 2226530630327528651, guid: 428eb3302c2ceb64ca880d989f9ba70d,
     type: 3}

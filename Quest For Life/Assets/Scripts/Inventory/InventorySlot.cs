@@ -115,7 +115,11 @@ public class InventorySlot : Slot
         else return null;
     }
 
-
+    public ItemStack GetStack()
+    {
+        if (currentStack != null) return currentStack;
+        else return null;
+    }
 
     public bool IsFull()
     {
@@ -140,14 +144,24 @@ public class InventorySlot : Slot
         {
             onSlotUpdateItem(id, currentStack.quantity);
         }
-
-
     }
 
     public void Discard() //discard item, removing it
     {
         this.currentStack = null;
         onSlotClearItem(id);
+    }
+
+    public void Discard(int Quantity)
+    {
+        this.currentStack.quantity -= Quantity;
+        if (currentStack.quantity <= 0)
+        {
+            Discard();
+        } else
+        {
+            onSlotUpdateItem(id, currentStack.quantity);
+        }
     }
 
 }

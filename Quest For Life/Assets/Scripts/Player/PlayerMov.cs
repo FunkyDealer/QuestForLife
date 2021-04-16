@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class PlayerMov : MonoBehaviour
     float nextRotationDir;
 
     [SerializeField]
-    float inputDelay = 0.1f;
+    float inputDelay = 0.1f;    
     [SerializeField]
     float velocity = 50f;
     [SerializeField]
@@ -20,7 +21,8 @@ public class PlayerMov : MonoBehaviour
     float inputTimer;
     bool inputDelayOn = false;
 
-    DungeonManager dungeonManager;
+    MapManager mapManager;
+
 
     enum MovementState
     {
@@ -34,18 +36,23 @@ public class PlayerMov : MonoBehaviour
     MovementState movementState;
 
     bool inBattle;
+    bool inDungeon;
 
     void Awake()
     {
+        //inDungeon = true;
+        //inDungeon = false;
+
+
         inputTimer = 0;
         player = GetComponent<Player>();
         movementState = MovementState.WAITINGINPUT;
-        inBattle = false;
+        inBattle = false;      
     }
 
     void Start()
     {
-        dungeonManager = player.dungeonManager;
+        mapManager = player.mapManager;
     }
 
     void Update()
@@ -87,7 +94,6 @@ public class PlayerMov : MonoBehaviour
             case MovementState.WAITINGINPUT:
                 break;
             case MovementState.MOVING:
-
                 //Direction to move
                 Vector3 dir = nextPosition - transform.position;
                 dir.Normalize();
@@ -98,21 +104,25 @@ public class PlayerMov : MonoBehaviour
                 if (mag < 0.1f)
                 {
                     this.transform.position = nextPosition;
+                    player.AnnounceMove();
 
-                    inBattle = dungeonManager.CheckForEncounter();
+                    if (inDungeon)
+                    {
+                        DungeonManager m = (DungeonManager)mapManager;
+                        inBattle = m.CheckForEncounter();
+                    }
                     if (inBattle) movementState = MovementState.IN_BATTLE;
                     else movementState = MovementState.COOLDOWN;
                 }
                 break;
-            case MovementState.TURNING:
+            case MovementState.TURNING:               
                 Vector3 targetForward = nextRotation * Vector3.forward;
-
+                
                 if (Vector3.Dot(transform.forward, targetForward) > 0.99995)
                 {
                     transform.localRotation = nextRotation;
                     movementState = MovementState.COOLDOWN;
-                }
-
+                }                
                 break;
             case MovementState.FROZEN:
                 break;
@@ -125,11 +135,15 @@ public class PlayerMov : MonoBehaviour
 
     void input()
     {
-        if (Input.GetButtonDown("Inventory"))
-        {
-
+        if (Input.GetButtonDown("Inventory")) {
+            
             player.OpenInventory();
             movementState = MovementState.FROZEN;
+            return;
+        }
+        if (Input.GetKeyDown("r"))
+        {
+            OpenShop();
             return;
         }
 
@@ -201,73 +215,138 @@ public class PlayerMov : MonoBehaviour
                 break;
         }
 
-        switch (player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type)
-        {
-            case Tile.Type.filling:
+            switch (player.currentMap[(int)newPos.x, (int)newPos.y].type)
+            {
+                case Tile.Type.filling:
 
-                break;
-            case Tile.Type.hall:
-                CalculateNextPosition(newPos);
-                break;
-            case Tile.Type.none:
-                break;
-            case Tile.Type.wall:
-                switch (player.dungeonManager.map[(int)newPos.x, (int)newPos.y].feature)
+                    break;
+                case Tile.Type.hall:
+                    CalculateNextPosition(newPos);
+                    break;
+                case Tile.Type.none:
+
+                    break;
+                case Tile.Type.wall:
+                switch (player.currentMap[(int)newPos.x, (int)newPos.y].feature)
                 {
                     case Tile.Feature.Chest:
-                        OpenChest(player.dungeonManager.map[(int)newPos.x, (int)newPos.y]);
+                        UseChest((int)newPos.x, (int)newPos.y);
+                        break;
+                    case Tile.Feature.ShopEntrance:
+                        UseShopEntrance((int)newPos.x, (int)newPos.y);     //Use shop Entrance                         
+                        break;
+                    case Tile.Feature.ShopExit:
+                        useShopExit((int)newPos.x, (int)newPos.y);      //Use Shop Exit                 
                         break;
                 }
                 break;
-            case Tile.Type.room:
-                switch (player.dungeonManager.map[(int)newPos.x, (int)newPos.y].feature)
-                {
-                    case Tile.Feature.Entrance:
-                        CalculateNextPosition(newPos);
-                        break;
-                    case Tile.Feature.Exit:
-                        MoveToNextFloor(newPos);
-                        Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
-                        break;
-                    case Tile.Feature.LockedExit:
-                        MoveToNextFloor(newPos);
-                        Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
-                        break;
+                case Tile.Type.room:
+                    switch (player.currentMap[(int)newPos.x, (int)newPos.y].feature)
+                    {
+                        case Tile.Feature.Entrance:
+                            CalculateNextPosition(newPos);
+                            break;
+                        case Tile.Feature.Exit:
+                            MoveToNextFloor(newPos);
+                            Debug.Log(player.currentMap[(int)newPos.x, (int)newPos.y].type);
+                            break;
+                        case Tile.Feature.LockedExit:
+                            MoveToNextFloor(newPos);
+                            Debug.Log(player.currentMap[(int)newPos.x, (int)newPos.y].type);
+                            break;
+                        case Tile.Feature.Fountain:
+                            UseFountain();
+                            break;
+                        case Tile.Feature.Chest:
+                        if (player.direction == player.currentMap[(int)newPos.x, (int)newPos.y].OppositeDirection())
+                        {
+
+                        }
+                            break;
                     case Tile.Feature.Shop:
-                        break;
-                    case Tile.Feature.Fountain:
-                        UseFountain();
-                        break;
-                    case Tile.Feature.Chest:
-                        break;
-                    case Tile.Feature.Boss:
-                        break;
-                    case Tile.Feature.Key:
-                        CalculateNextPosition(newPos);
-                        break;
+                        if (player.direction == player.currentMap[(int)newPos.x, (int)newPos.y].OppositeDirection()) //Use Shop
+                        {
+                            OpenShop();                           
 
-                    case Tile.Feature.None:
-                        CalculateNextPosition(newPos);
-                        break;
-                    default:
-                        break;
-                }
+                        }
+                            break;
+                        case Tile.Feature.Boss:
+                            break;
+                        case Tile.Feature.Key:
+                            CalculateNextPosition(newPos);
+                            break;
+                        case Tile.Feature.None:
+                            CalculateNextPosition(newPos);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    Debug.Log(player.currentMap[(int)newPos.x, (int)newPos.y].type);
+                    break;
+            }
 
-                break;
-            default:
-                Debug.Log(player.dungeonManager.map[(int)newPos.x, (int)newPos.y].type);
-                break;
+
+    }
+
+    private void UseChest(int x, int y)
+    {
+        if (player.direction == player.currentMap[x, y].OppositeDirection())
+        {
+            DungeonManager DM = (DungeonManager)player.mapManager;
+            Chest c = DM.Chests[player.currentMap[x, y]].GetComponent<Chest>();
+            if (!c.isOpen) player.addGold(c.OpenChest(player.Level, player.currentMap[x, y].floor));
+
+        }
+     }
+
+    private void OpenShop()
+    {
+        movementState = MovementState.FROZEN;
+        player.DeactiveNavigationInterface();
+        player.gameManager.shopManager.UseShop(player);
+
+    }
+
+
+    private void useShopExit(int posX, int posY)
+    {
+        if (player.direction == player.currentMap[posX, posY].OppositeDirection()) 
+        {
+            //go to Dungeon
+            player.gameManager.MovePlayerToDungeon();
+            inDungeon = true;
+            DungeonManager d = (DungeonManager)player.mapManager; //set shop
+            d.currentShop = null;
+
+            movementState = MovementState.COOLDOWN;
+        }
+    }
+
+    private void UseShopEntrance(int posX, int posY)
+    {
+        if (player.direction == player.currentMap[posX, posY].OppositeDirection())
+        {
+            //go to Shop
+            DungeonManager e = (DungeonManager)player.mapManager; //set shop
+            e.currentShop = player.currentTile;
+
+            player.gameManager.MovePlayerToShop();
+
+            inDungeon = false;
+            movementState = MovementState.COOLDOWN;
         }
     }
 
     void CalculateNextPosition(Vector2 newPos)
     {
-        Vector3 targetPos = player.dungeonManager.FreeTiles[player.dungeonManager.map[(int)newPos.x, (int)newPos.y]].transform.position;
+        Vector3 targetPos = player.mapManager.FreeTiles[player.currentMap[(int)newPos.x, (int)newPos.y]].transform.position;
 
         targetPos = new Vector3(targetPos.x, player.gameObject.transform.position.y, targetPos.z);
 
         //this.transform.position = targetPos;
-        player.currentTile = player.dungeonManager.map[(int)newPos.x, (int)newPos.y];
+        player.currentTile = player.currentMap[(int)newPos.x, (int)newPos.y];
         nextPosition = targetPos;
         movementState = MovementState.MOVING;
     }
@@ -278,19 +357,7 @@ public class PlayerMov : MonoBehaviour
         movementState = MovementState.COOLDOWN;
     }
 
-    void OpenChest(Tile tile)
-    {
-        if (!tile.chest.isOpen)
-        {
-            Debug.Log("Abrir" + player.currentMoney);
-            player.currentMoney += tile.chest.OpenChest(player.Level, dungeonManager.floor);
-            Debug.Log(player.currentMoney);
-        }
-        else
-        {
-            Debug.Log("Aberto");
-        }
-    }
+
     public void EndBattle()
     {
         inBattle = false;
@@ -306,5 +373,16 @@ public class PlayerMov : MonoBehaviour
     public void ResumeMovement()
     {
         movementState = MovementState.COOLDOWN;
+    }
+
+
+    public void enterDungeon()
+    {
+        inDungeon = true;
+    }
+
+    public void leaveDungeon()
+    {
+        inDungeon = false;
     }
 }

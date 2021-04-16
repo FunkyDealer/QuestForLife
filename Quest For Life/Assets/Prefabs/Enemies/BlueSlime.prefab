@@ -256,21 +256,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3779362ef9e5ca74788dbab73267cbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntityName: Green Slime
-  Level: 1
-  maxHealth: 55
-  currentHealth: 55
-  maxMana: 55
-  currentMana: 55
-  Power: 6
-  Defence: 9
-  Accuracy: 13
-  Dodge: 7
-  Speed: 10
-  BaseAttackPower: 30
+  EntityName: Blue Slime
+  Level: 7
+  maxHealth: 92
+  currentHealth: 92
+  maxMana: 92
+  currentMana: 92
+  Power: 27
+  Defence: 35
+  Accuracy: 31
+  Dodge: 19
+  Speed: 28
+  BaseAttackPower: 40
   battleManager: {fileID: 0}
-  Resistence: 5
-  Weakness: 5
+  Resistence: 1
+  Weakness: 2
   battleInterface: {fileID: 0}
   dead: 0
   BaseMoneyReward: 20

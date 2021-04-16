@@ -1,12 +1,12 @@
-﻿Name;ItemId;HealType;Ammount;Cost
-Small Health Potion;1;1;30;10
-Small Mana Potion;2;2;20;10
-Medium Health Potion;3;1;100;20
-Medium Mana Potion;4;2;80;20
-Large Health Potion;5;1;200;50
-Large Mana Potion;6;2;140;50
-Potent Health Postion;7;1;500;70
-Potent Mana Postion;8;2;400;70
-Ultimate Health;9;1;1000;100
-Ultimate Mana;10;2;1000;100
-Elixer;11;3;1000;250
+﻿Name,ItemId,HealType,Ammount,Cost,Buyable,MinLevel,maxLevel
+Small Health Potion,1,1,30,10,1,1,15
+Small Mana Potion,2,2,20,10,1,1,15
+Medium Health Potion,3,1,100,20,1,10,26
+Medium Mana Potion,4,2,80,20,1,10,26
+Large Health Potion,5,1,200,50,1,20,36
+Large Mana Potion,6,2,140,50,1,20,36
+Potent Health Potion,7,1,500,70,1,30,50
+Potent Mana Postion,8,2,400,70,1,30,50
+Ultimate Healer,9,1,1000,100,1,40,999
+Ultimate Mana,10,2,1000,100,1,40,999
+Elixer,11,3,1000,250,0,38,999

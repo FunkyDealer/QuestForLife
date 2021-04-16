@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 /// <summary>
 /// 
 /// Controller for the Navigation Interface, Mother Controller for the while interface
@@ -12,7 +10,7 @@ using UnityEngine;
 public class NavigationInterfaceManager : HudManager
 {
     [HideInInspector]
-    public DungeonManager dungeonManager;
+    public MapManager mapManager;
 
     [SerializeField]
     GameObject inventory;
@@ -28,10 +26,11 @@ public class NavigationInterfaceManager : HudManager
     InventoryIFManager inventoryIFManager;
 
 
-    public void getInformation(Player player, PlayerMov playerMov, DungeonManager dungeonManager) 
+
+    public void getInformation(Player player, PlayerMov playerMov, MapManager mapmanager) 
     {
         this.player = player;
-        this.dungeonManager = dungeonManager;
+        this.mapManager = mapmanager;
         this.playerMov = playerMov;
 
         inventory.SetActive(false);
@@ -52,7 +51,7 @@ public class NavigationInterfaceManager : HudManager
             if (inputDelayTimer < inputDelayTime) inputDelayTimer += Time.deltaTime;
             else
             {
-                if (Input.GetButtonDown("Inventory"))
+                if (Input.GetButtonDown("Inventory") || Input.GetButtonDown("CloseMenu"))
                 {
                     CloseInventory();
                 }
@@ -84,4 +83,6 @@ public class NavigationInterfaceManager : HudManager
     {
         inventoryIFManager.CloseAllMenus();
     }
+
+
 }

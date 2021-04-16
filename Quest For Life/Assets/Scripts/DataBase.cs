@@ -243,7 +243,7 @@ public class DataBase : MonoBehaviour
 
         for (int i = 1; i < lineCount - 1; i++)
         {
-            string[] data = (lines[i].Trim()).Split(";"[0]);
+            string[] data = (lines[i].Trim()).Split(","[0]);
 
             HealItem item = new HealItem();
 
@@ -263,11 +263,22 @@ public class DataBase : MonoBehaviour
             }
 
             item.HealAmmount = int.Parse(data[3]);
+
+            //shop Data
             item.Cost = int.Parse(data[4]);
+            item.buyable = convertToBoolean(int.Parse(data[5]));
+            item.MinLevel = int.Parse(data[6]);
+            item.MaxLevel = int.Parse(data[7]);
 
             Consumables.Add(item.ID, item);
            // Debug.Log($"ADD {item.Name} , {item.ID} , {item.HealAmmount} , {item.HealType} , {item.Cost}");
         }
+    }
+
+    bool convertToBoolean(int i)
+    {
+        if (i == 0) return false;
+        else return true;
     }
 
     void ReadGears(TextAsset file)
@@ -297,7 +308,14 @@ public class DataBase : MonoBehaviour
             item.DodgeBonus = int.Parse(data[8]);
             item.SpeedBonus = int.Parse(data[9]);
 
+            //Shop Data
             item.Cost = int.Parse(data[10]);
+
+            item.buyable = convertToBoolean(int.Parse(data[11]));
+            item.Findable = convertToBoolean(int.Parse(data[12])); //For Chests
+
+            item.MinLevel = int.Parse(data[13]);
+            item.MaxLevel = int.Parse(data[14]);
 
             Gears.Add(item.ID, item);
             //Debug.Log($"ADD {item.Name} , {item.ID} , { item.HealthBonus}, { item.ManaBonus}, {item.PowerBonus} ,{ item.DefenceBonus}, { item.ManaBonus} , {item.Cost}");

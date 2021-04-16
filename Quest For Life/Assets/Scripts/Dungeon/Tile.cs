@@ -18,11 +18,13 @@ public class Tile
         Entrance,
         Exit,
         LockedExit,
-        Shop,
+        ShopEntrance,
         Fountain,
         Chest,
         Boss,
         Key,
+        ShopExit,
+        Shop,
         None
     }
 
@@ -50,7 +52,8 @@ public class Tile
     public Tile west;
     public Tile east;
 
-    public Chest chest;
+    public int floor;
+
 
     public Tile(bool occupied, int x, int y)
     {
@@ -67,7 +70,6 @@ public class Tile
         south = null;
         west = null;
         east = null;
-        
     }
 
     public void createConnections(Tile[,] map, int width, int length)
@@ -77,5 +79,21 @@ public class Tile
         if (y > 0) west = map[x - 1, y];
         if (y < width) east = map[x + 1, y];
 
+    }
+
+    public Global.FacingDirection OppositeDirection()
+    {
+        switch (facing)
+        {
+            case Facing.north:
+                return Global.FacingDirection.SOUTH;
+            case Facing.east:
+                return Global.FacingDirection.WEST;
+            case Facing.west:
+                return Global.FacingDirection.EAST;
+            case Facing.south:
+                return Global.FacingDirection.NORTH;
+        }
+        return Global.FacingDirection.NORTH;
     }
 }

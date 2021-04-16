@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     CompassController compassController;
 
+    [SerializeField]
+    public ShopManager shopManager;
+
     void Awake()
     {
         startingNewGame = true;
@@ -37,7 +40,7 @@ public class GameManager : MonoBehaviour
         GameObject o = Instantiate(dungeonManagerObj, Vector3.zero, Quaternion.identity);
         DungeonManager dm = o.GetComponent<DungeonManager>();        
         dungeonManager = dm;
-        dungeonManager.manager = this;
+        dungeonManager.gameManager = this;
         dungeonManager.CreateNewFloor();
         
     }
@@ -58,11 +61,27 @@ public class GameManager : MonoBehaviour
             GameObject o = Instantiate(playerObj, WorldPosition, Quaternion.identity);
 
             player = o.GetComponent<Player>();
-            player.compass = compassController;
-            
+            player.compass = compassController;           
         }
 
         if (startingNewGame) player.Spawn(WorldPosition, MapPosition, map, this, dungeonManager);
-        else player.Move(WorldPosition, MapPosition, map);
+        else player.Move(WorldPosition, MapPosition, map, dungeonManager);
     }
+
+
+    public void MovePlayerToShop()
+    {
+        player.Move(shopManager.SpawnPos3d(), shopManager.Spawn2d(), shopManager.map, shopManager);
+    }
+
+    public void MovePlayerToDungeon()
+    {
+        Vector3 pos3d = dungeonManager.FreeTiles[dungeonManager.currentShop].transform.position;
+        pos3d.y = 1;
+        Vector2 pos2d = new Vector2(dungeonManager.currentShop.x, dungeonManager.currentShop.y);
+
+        player.Move(pos3d, pos2d, dungeonManager.map, dungeonManager);
+    }
+
+
 }

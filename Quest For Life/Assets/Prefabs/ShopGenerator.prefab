@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7578289477671873975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7578289477671873961}
+  - component: {fileID: 7578289477671873960}
+  m_Layer: 0
+  m_Name: ShopGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7578289477671873961
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7578289477671873975}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.7318072, y: 11.544476, z: -39.26242}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7578289477671873960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7578289477671873975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64dedd8a30ee22a4e9e70534f2bcc7e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FloorTileObj: {fileID: 7929138529763041991, guid: d7d0d0825a09df24ea13250ae6be03b8,
+    type: 3}
+  RoofTileObj: {fileID: 2603693724652270748, guid: 7065da36b200f544e9b7d2dcc380c85c,
+    type: 3}
+  parent: 1
+  manager: {fileID: 0}
+  WallTileObj: {fileID: 1251282748155956737, guid: 7b6ed0393ae98894e8eaa4a3ddbd6a5c,
+    type: 3}
+  RoomTileObj: {fileID: 8749633959148235509, guid: 1f77c6a44e6fcf443b2f1d2c9cfe058e,
+    type: 3}
+  EntranceTileObj: {fileID: 4305351633049835609, guid: e019fa9ace6cc174fb0d500ee39abc7c,
+    type: 3}
+  ShopTileObj: {fileID: 7212308731172243743, guid: c5813afa3ff103d409a45fa6edb2aaad,
+    type: 3}
+  ExitTileObj: {fileID: 8066423899018996668, guid: 2ddfee7ffcb46db40b1dc3c21a944a56,
+    type: 3}
+  fountainTileObj: {fileID: 3183003937755952124, guid: 93e1ab05cf68b904d9524e653aa7fe8a,
+    type: 3}

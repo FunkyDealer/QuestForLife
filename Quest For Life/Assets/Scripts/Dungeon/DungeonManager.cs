@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DungeonManager : MonoBehaviour
+public class DungeonManager : MapManager
 {
 
     //Dungeon Generation start
@@ -10,12 +10,10 @@ public class DungeonManager : MonoBehaviour
     GameObject DungeonGeneratorObj;
     [SerializeField]
     GameObject BattleManagerObj;
+
     [HideInInspector]
-    public Tile[,] map;
-    [SerializeField]
-    public Dictionary<Tile, GameObject> FreeTiles;
-    [HideInInspector]
-    public GameManager manager;
+    public Dictionary<Tile, GameObject> Chests;
+
     [SerializeField]
     int MAX_LEAF_SIZE = 20;
     [SerializeField]
@@ -30,13 +28,10 @@ public class DungeonManager : MonoBehaviour
     DungeonGenPreset Hard = new DungeonGenPreset(40, 9, 50, 50);
     DungeonGenPreset custom;
     //Dungeon Generation end
-
     
     public List<GameObject> monsterPrefabs;
 
     int times;
-
-    public int floor;
 
     [SerializeField]
     bool genDemo = false;
@@ -50,11 +45,11 @@ public class DungeonManager : MonoBehaviour
     int currentThresHold = 10;
     int stepCounter;
 
-
+    public Tile currentShop;
 
     void Awake()
     {
-
+        currentShop = null;
         currentFloor = 0;
         stepCounter = 0;
 
@@ -64,8 +59,7 @@ public class DungeonManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        
+    {       
 
         times = 0;
         if (genDemo)
@@ -82,6 +76,8 @@ public class DungeonManager : MonoBehaviour
     {
         if (FreeTiles == null) FreeTiles = new Dictionary<Tile, GameObject>();
         FreeTiles.Clear();
+        if (Chests == null) Chests = new Dictionary<Tile, GameObject>();
+        Chests.Clear();
 
         if (currentFloorObject != null)
         {
@@ -101,10 +97,7 @@ public class DungeonManager : MonoBehaviour
 
     }
 
-    public void AddFreeTile(int x, int y, GameObject obj)
-    {
-        FreeTiles.Add(map[x, y], obj);
-    }
+
 
     IEnumerator StartFloorGenerationDelay(float time, int x, int y)
     {
@@ -124,7 +117,7 @@ public class DungeonManager : MonoBehaviour
         bool finished = false;
         while (!finished)
         {
-            if (!DG.Initiate(custom, true, true, 99, 5)) { Debug.Log("Floor had only 1 room"); }
+            if (!DG.Initiate(custom, true, true, 99, 5, currentFloor)) { Debug.Log("Floor had only 1 room"); }
             else finished = true;
             iterations++;
             if (iterations > 20) {
@@ -141,8 +134,6 @@ public class DungeonManager : MonoBehaviour
         DungeonGenerator DG = currentFloorObject.GetComponent<DungeonGenerator>();
         DG.manager = this;
 
-        GameObject o = DG.gameObject;
-
         bool fountain = Random.value > 0.5f;
         bool shop = Random.value > 0.5f;
 
@@ -150,7 +141,7 @@ public class DungeonManager : MonoBehaviour
         bool finished = false;
         while (!finished)
         {
-            if (!DG.Initiate(custom, true, true, 99, 5)) { Debug.Log("Floor had only 1 room"); }
+            if (!DG.Initiate(custom, true, true, 99, 5, currentFloor)) { Debug.Log("Floor had only 1 room"); }
             else finished = true;
             iterations++;
             if (iterations > 20)
@@ -162,7 +153,7 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
-    public void StartFloor(DungeonGenerator DG, Vector2 spawn)
+    public override void StartMap(MapGenerator DG, Vector2 spawn)
     {
         if (!genDemo) Destroy(DG);
         else StartCoroutine(DestroyFloor(1, DG.gameObject));
@@ -171,7 +162,7 @@ public class DungeonManager : MonoBehaviour
         spawnPos.y = 1f;
 
 
-        manager.SpawnPlayer(spawnPos, spawn, map);
+        gameManager.SpawnPlayer(spawnPos, spawn, map);
     }
 
     IEnumerator DestroyFloor(int time, GameObject o)
@@ -208,7 +199,6 @@ public class DungeonManager : MonoBehaviour
             }
         }
 
-
         return enemyEncounter;
     }
 
@@ -218,11 +208,11 @@ public class DungeonManager : MonoBehaviour
         //Debug.Log("Encounter Starting");        
 
         MonsterGenerator mg = gameObject.AddComponent(typeof(MonsterGenerator)) as MonsterGenerator;
-        mg.Initiate(this, manager.player, currentFloor);
+        mg.Initiate(this, gameManager.player, currentFloor);
 
         BattleManager bm = Instantiate(BattleManagerObj, Vector3.zero, Quaternion.identity).GetComponent<BattleManager>();
 
-        bm.StartBattle(manager.player, manager.player.StartBattle());
+        bm.StartBattle(gameManager.player, gameManager.player.StartBattle());
     }
 
 

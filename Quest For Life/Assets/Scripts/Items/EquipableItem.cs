@@ -5,6 +5,7 @@ using UnityEngine;
 public class EquipableItem : Item
 {
     public Global.GearType GearType;
+    public bool Findable;
     public int HealthBonus;
     public int ManaBonus;
 

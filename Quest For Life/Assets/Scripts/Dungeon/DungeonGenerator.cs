@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DungeonGenerator : MonoBehaviour
+public class DungeonGenerator : MapGenerator
 {
-    [SerializeField]
-    GameObject FloorTileObj; //Tiles for floor
-    [SerializeField]
-    GameObject RoofTileObj; //Tiles for Roof
-
     //These are the tiles that are placed on the map
     #region Placed Tiles
     [SerializeField]
@@ -32,22 +27,10 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField]
     List<GameObject> keysObj;
     #endregion
-
-
-    int mapWidth = 20;
-    int mapLength = 40;
-
-    [HideInInspector]
-    public Tile[,] map;
     
-    [HideInInspector]
-    public DungeonManager manager;
-
-    Vector2 spawn;
-
+       
     List<Room> rooms;
     List<Hall> halls;
-    List<Chest> chests;
 
     int keyNumber;
     bool fountain;
@@ -59,11 +42,8 @@ public class DungeonGenerator : MonoBehaviour
     [HideInInspector]
     int MIN_LEAF_SIZE = 6;
 
-    [SerializeField]
-    bool parent = true;
+    int floorNumber;
 
-    [SerializeField]
-    Animator ChestAnim;
     void Awake()
     {
        
@@ -79,12 +59,13 @@ public class DungeonGenerator : MonoBehaviour
         
     }
 
-    public bool Initiate(DungeonGenPreset preset, bool fountain, bool shop, int chestNumber, int keys)
+    public bool Initiate(DungeonGenPreset preset, bool fountain, bool shop, int chestNumber, int keys, int floorNumber)
     {
         this.mapWidth = preset.WIDTH;
         this.mapLength = preset.LENGTH;
         this.MAX_LEAF_SIZE = preset.MAX_LEAF_SIZE;
         this.MIN_LEAF_SIZE = preset.MIN_LEAF_SIZE;
+        this.floorNumber = floorNumber;
         this.fountain = fountain;
         this.shop = shop;
         this.chestNumber = chestNumber;
@@ -95,7 +76,6 @@ public class DungeonGenerator : MonoBehaviour
 
         rooms = new List<Room>();
         halls = new List<Hall>();
-        chests = new List<Chest>();
 
         //CreateBigEmptyRoom();
         if (!CreateNewMap()) { return false; }
@@ -107,7 +87,7 @@ public class DungeonGenerator : MonoBehaviour
             DrawMap();
             DrawRoof();
 
-            manager.StartFloor(this, spawn);
+            manager.StartMap(this, spawn);
 
             return true;
         }
@@ -166,7 +146,7 @@ public class DungeonGenerator : MonoBehaviour
             for (int y = 0; y < mapLength; y++)
             {
                 map[x, y] = new Tile(true, x, y);
-
+                map[x, y].floor = floorNumber;                
             }
         }
     }
@@ -338,11 +318,11 @@ public class DungeonGenerator : MonoBehaviour
                         fX = currentRoom.x + 1 + currentRoom.width;
                         fY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height);
                         break;
-                    case Tile.Facing.west: //Left
+                    case Tile.Facing.east: //Left
                         fX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width);
                         fY = currentRoom.y - 1;
                         break;
-                    case Tile.Facing.east: //Right
+                    case Tile.Facing.west: //Right
                         fX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width);
                         fY = currentRoom.y + 1 + currentRoom.height;
                         break;
@@ -350,6 +330,7 @@ public class DungeonGenerator : MonoBehaviour
                         fX = currentRoom.x - 1;
                         fY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height);
                         break;
+
                     default:
                         Debug.Log("SHOP FACING ERROR");
                         break;
@@ -357,7 +338,7 @@ public class DungeonGenerator : MonoBehaviour
 
                 if (map[fX, fY].occupied && map[fX, fY].feature == Tile.Feature.None)
                 { //if the picked place is a wall(occupied) and has no feature, place the Shop
-                    map[fX, fY].feature = Tile.Feature.Shop;
+                    map[fX, fY].feature = Tile.Feature.ShopEntrance;
                     map[fX, fY].facing = facing;
                     map[fX, fY].roomNumber = roomNumber;
                     currentRoom.shop = true;
@@ -509,7 +490,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             for (int y = 0; y < mapLength; y++)
             {
-                Vector3 position = new Vector3(x * 4 + 2, -0.1f, y * 4 + 2);
+                Vector3 position = new Vector3(x * 4 + 2, 0f, y * 4 + 2);
                 if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);            
 
             }
@@ -551,15 +532,17 @@ public class DungeonGenerator : MonoBehaviour
                         case Tile.Type.wall:
                             switch (map[x,y].feature)
                             {
-                                case Tile.Feature.Shop:
-                                    InstantiateObj(ShopTileObj, position);
+                                case Tile.Feature.ShopEntrance:
+                                    position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
+                                    GameObject s = InstantiateObj(ShopTileObj, position);
+                                    rotateObj(s, map[x, y].facing);
+                                    SetShopEntrance(s, map[x,y]);
                                     break;
                                 case Tile.Feature.Chest:
                                     GameObject o = InstantiateObj(ChestTileObj, position);
-                                    Chest chest = o.GetComponentInChildren<Chest>();
-                                    chests.Add(chest);
-                                    map[x, y].chest = chest;
                                     rotateObj(o, map[x, y].facing);
+                                    DungeonManager DM = (DungeonManager)manager;
+                                    DM.Chests.Add(map[x, y], o);
                                     break;
                                 case Tile.Feature.None:
                                     InstantiateObj(WallTileObj, position);
@@ -625,6 +608,14 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    private void SetShopEntrance(GameObject ShopEntranceObj, Tile tile)
+    {
+        ShopEntrance e = ShopEntranceObj.GetComponent<ShopEntrance>();
+        e.shopManager = manager.gameManager.shopManager;
+        e.tile = tile;
+        
+    }
+
     void DrawRoof()
     {
 
@@ -633,65 +624,19 @@ public class DungeonGenerator : MonoBehaviour
         {
             for (int y = 0; y < mapLength; y++)
             {
-                Vector3 position = new Vector3(x * 4 + 2, 5.1f, y * 4 + 2);
-                if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);
+                Vector3 position = new Vector3(x * 4 + 2, 5f, y * 4 + 2);
+                if (map[x, y].type != Tile.Type.filling)
+                {
+                   InstantiateObj(RoofTileObj, position);
+                    //Instantiate(FloorTileObj, position,FloorTileObj.transform.rotation);
+                }
             }
         }
     }
 
-    GameObject InstantiateObj(GameObject o, Vector3 pos)
-    {
-        if (parent)
-        {
-           return Instantiate(o, pos, Quaternion.identity, this.gameObject.transform);
-        }
-        else
-        {
-            return Instantiate(o, pos, Quaternion.identity);
-        }
-
-    }
-
-    GameObject InstantiateFreeObj(GameObject o, Vector3 pos, int x, int y)
-    {
-        if (parent)
-        {
-            GameObject O = Instantiate(o, pos, Quaternion.identity, this.gameObject.transform);
-            manager.AddFreeTile(x, y, O);
-            return O;
-        }
-        else
-        {
-            GameObject O = Instantiate(o, pos, Quaternion.identity);
-            manager.AddFreeTile(x, y, O);
-            return O;
-        }
 
 
-    }
 
-    void rotateObj(GameObject o , Tile.Facing facing)
-    {
-
-        switch (facing)
-        {
-            case Tile.Facing.north:
-                o.transform.Rotate(0, -90, 0);
-                break;
-            case Tile.Facing.west:
-                o.transform.Rotate(0, 180, 0);
-                break;
-            case Tile.Facing.east:
-                o.transform.Rotate(0, 0, 0);
-                break;
-            case Tile.Facing.south:
-                o.transform.Rotate(0, 90, 0);
-                break;
-            case Tile.Facing.none:
-                o.transform.Rotate(0, 0, 0);
-                break;
-        }
-    }
 
 
     #endregion
