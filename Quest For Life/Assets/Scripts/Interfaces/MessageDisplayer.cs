@@ -38,7 +38,7 @@ public class MessageDisplayer : MonoBehaviour
         
     }
 
-    public void AddMessage(string text)
+    public void AddMessage(string text, TextMessage.MessageSpeed speed)
     {
         if (Messages.Count == 0)
         {
@@ -46,14 +46,14 @@ public class MessageDisplayer : MonoBehaviour
 
             GameObject o = Instantiate(textMessagePrefab, messageBox.transform);
             TextMessage t = o.GetComponent<TextMessage>();
-            t.Init(text, new Vector2(200, 0), this, TextMessage.MessageStatus.READING);
+            t.Init(text, new Vector2(200, 0), this, TextMessage.MessageStatus.READING, speed);
             Messages.Add(t);
         }
         else
         {
             GameObject o = Instantiate(textMessagePrefab, messageBox.transform);
             TextMessage t = o.GetComponent<TextMessage>();
-            t.Init(text, new Vector2(200, 0), this, TextMessage.MessageStatus.WAITING);
+            t.Init(text, new Vector2(200, 0), this, TextMessage.MessageStatus.WAITING, speed);
             Messages.Add(t);
             o.SetActive(false);
         }

@@ -48,8 +48,10 @@ public class MonsterRoomManager : MonoBehaviour
 
     public void SpawnCurentMonster()
     {
-        GameObject m = Instantiate(currentMonster, spawner.transform.position, spawner.transform.rotation);
+        GameObject m = Instantiate(currentMonster, spawner.transform.position, spawner.transform.rotation, spawner.transform);
         currentMonster = m;
+        Enemy e = m.GetComponent<Enemy>();
+        e.SetMonsterAnimator(spawner.GetComponent<Animator>());
     }
 
 

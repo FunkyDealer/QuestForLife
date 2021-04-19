@@ -40,7 +40,7 @@ public class PlayerMov : MonoBehaviour
 
     void Awake()
     {
-        //inDungeon = true;
+        inDungeon = true;
         //inDungeon = false;
 
 
@@ -333,6 +333,7 @@ public class PlayerMov : MonoBehaviour
             e.currentShop = player.currentTile;
 
             player.gameManager.MovePlayerToShop();
+            
 
             inDungeon = false;
             movementState = MovementState.COOLDOWN;

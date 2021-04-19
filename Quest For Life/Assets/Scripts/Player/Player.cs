@@ -34,9 +34,11 @@ public class Player : Entity
 
     int currentMoney;
     int currentExperience;
+    public int Experience => currentExperience;
     int totalExperience;
 
     int experienceToNextLevel;
+    public int toNextLevelExp => experienceToNextLevel;
 
     int minHealthGain = 5;
     int maxHealthGain = 20;
@@ -81,6 +83,9 @@ public class Player : Entity
     public delegate void OnPlayerMove(Vector2 newPos);
     public static event OnPlayerMove onPlayerMove;
 
+    public delegate void onExperienceChange();
+    public static event onExperienceChange onExperience;
+
     public Inventory Inventory;
     public GearSlot HatSlot;
     public GearSlot BodySlot;
@@ -106,6 +111,10 @@ public class Player : Entity
 
         getAllSpells();
 
+
+        navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
+        navigationInterFace.getInformation(this, movementManager, mapManager);
+
         Inventory = new Inventory(10, this);
 
         HatSlot = new GearSlot(Global.GearType.HAT, 1, this);
@@ -115,8 +124,9 @@ public class Player : Entity
         BeltSlot = new GearSlot(Global.GearType.BELT, 5, this);
         WeaponSlot = new GearSlot(Global.GearType.WEAPON, 6, this);
 
-        navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
-        navigationInterFace.getInformation(this, movementManager, mapManager);
+        Debug.Log("Inventory and Hud Created");
+
+
 
       
     }
@@ -179,7 +189,7 @@ public class Player : Entity
     {
         DungeonManager m = (DungeonManager)mapManager;
         m.CreateNewFloor();
-
+        navigationInterFace.CreateNewMinimap();
 
     }
 
@@ -189,10 +199,12 @@ public class Player : Entity
         currentMap = map;
         currentTile = map[(int)mapPos.x, (int)mapPos.y];
         this.gameManager = gameManager;
-        this.mapManager = dungeonManager;
+        this.mapManager = dungeonManager;        
 
         StartNewPlayer();
     }
+
+
 
     public void Move(Vector3 worldPos, Vector2 mapPos, Tile[,] map, MapManager mapManager)
     {
@@ -200,6 +212,7 @@ public class Player : Entity
         currentMap = map;
         gameObject.transform.position = worldPos;
         currentTile = map[(int)mapPos.x, (int)mapPos.y];
+        navigationInterFace.CreateNewMinimap();
     }
 
 
@@ -219,15 +232,14 @@ public class Player : Entity
         Speed = 10;
 
         currentMoney = 100;
-
         experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
         //Inventory
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 3); //add Small health Potions
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1); //add small mana Potion
 
-      //  Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 50); //add 50 health potions
-      //  Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 10); //add 10 health potions
+        //  Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 50); //add 50 health potions
+        //  Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 10); //add 10 health potions
 
         HatSlot.AttemptToPlaceItem(DataBase.inst.Gears[1]);
         BodySlot.AttemptToPlaceItem(DataBase.inst.Gears[2]);
@@ -241,34 +253,42 @@ public class Player : Entity
         gameManager.startingNewGame = false;
     }
 
-    public void gainExp(Enemy enemy)
+    public bool gainExp(Enemy enemy)
     {
+        bool levelUp = false; ;
         int baseExp = enemy.BaseExpReward;
         int Elevel = enemy.Level;
         int multiplier = 3;
 
         int ammount = (int)(baseExp + (baseExp * multiplier) * Mathf.Log(Elevel, 2));
         Debug.Log($"Gained {ammount} exp!");
-        battleInterface.AddMessage($"I gained {ammount} experience Point!");
+        battleInterface.AddMessage($"I gained {ammount} experience Points!", TextMessage.MessageSpeed.NORMAL);
 
         currentExperience += ammount;
-        totalExperience += ammount;
+        totalExperience += ammount;            
 
-        if (currentExperience >= experienceToNextLevel)
+        levelUp = LevelUp();        
+
+        try
         {
-            int excessExp = currentExperience - experienceToNextLevel;
-            
+            onExperience();
+        } catch (System.NullReferenceException)
+        {
 
-            LevelUp(excessExp);
         }
+
+        return levelUp;
     }
 
-    public void LevelUp(int excessXp)
+    public bool LevelUp()
     {
-        Level ++;
-        currentExperience = excessXp;
+        if (currentExperience >= experienceToNextLevel)
+        {
+        battleInterface.AddMessage($"I'm feeling really confident after that battle, maybe I've gotten stronger...", TextMessage.MessageSpeed.VERYSLOW);
+            Level++;
+        currentExperience = currentExperience - experienceToNextLevel;
 
-        experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));        
+        experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
         //Stats up
         maxHealth += Random.Range(5, 21);
@@ -288,6 +308,11 @@ public class Player : Entity
         catch { }
 
         RecoverAll();
+
+            return true;
+        }
+
+        return false;
     }
 
     protected override void ReceiveDamage(int attackPower)
@@ -296,7 +321,7 @@ public class Player : Entity
 
         //Debug.Log($"Player Received {attackPower} damage!");
 
-        battleInterface.AddMessage($"Ouch! I was attacked for {attackPower} damage!");
+        battleInterface.AddMessage($"Ouch! I was attacked for {attackPower} damage!", TextMessage.MessageSpeed.NORMAL);
 
         sendUpdateHealth();
 
@@ -324,29 +349,123 @@ public class Player : Entity
         sendUpdateMana();
     }
 
-    public override float PerformAction(BattleAction action)
+    public override float PerformAction(BattleAction action, Entity enemy)
     {
-        float animationTime = 0.3f;
+        float animationTime = 0;
         switch (action)
         {
             case AttackAction a:
+                animationTime += 0.5f;
+                animationTime += enemy.ReceiveAction(action);
                 break;
             case CastSpellAction b:
 
                 castSpell(b);
                 sendUpdateMana();
                 sendUpdateHealth();
+
+                animationTime += 0.5f;
+                animationTime += enemy.ReceiveAction(action);
                 break;
             case ItemUseAction c:
                 Item i = Inventory.getSlot(c.slot).getItem();
 
                 Inventory.ConsumeItem(c.slot);
-                battleInterface.AddMessage($"The mage used a {i.Name}");
+                battleInterface.AddMessage($"The mage used a {i.Name}", TextMessage.MessageSpeed.FAST);
 
+                animationTime += 0.5f;
+                animationTime += enemy.ReceiveAction(action);
                 break;
             case InvestigationAction d:
+                animationTime += 0.5f;
+                animationTime += enemy.ReceiveAction(action);
                 break;
             case RunAction e:
+
+                animationTime += 0.5f;
+                animationTime += enemy.ReceiveAction(action);
+                break;
+        }
+
+        return animationTime;
+    }
+
+    public override float ReceiveAction(BattleAction action)
+    {
+        float animationTime = 0;
+        switch (action)
+        {
+            case AttackAction a:
+
+                float tohit = (a.user.Accuracy * a.AttackAccuracy / a.Target.Dodge);
+                int ToHit = (int)tohit;
+
+                if (ToHit > 100)
+                {
+                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    ReceiveDamage(attackDamage);
+                    animationTime += 1.3f;
+                }
+                else if (ToHit > Random.Range(0, 100))
+                {
+                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    ReceiveDamage(attackDamage);
+                    animationTime += 1.3f;
+                }
+                else
+                {
+                    battleInterface.AddMessage($"The {a.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
+                    animationTime += 1.3f;
+                }
+
+                break;
+            case CastSpellAction b:
+
+                float tohit2 = (b.user.Accuracy * b.spell.Accuracy / b.Target.Dodge);
+                int ToHit2 = (int)tohit2;
+
+                if (tohit2 > 100)
+                {
+                    ReceiveSpellAttack(b);
+                    animationTime += 1f;
+                }
+                else if (ToHit2 > Random.Range(0, 100))
+                {
+                    ReceiveSpellAttack(b);
+                    animationTime += 1f;
+                }
+                else
+                {
+                    battleInterface.AddMessage($"The {b.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
+                    animationTime += 1f;
+                }
+                break;
+            case ItemUseAction c:
+                animationTime += 1f;
+                break;
+            case InvestigationAction d:
+                animationTime += 1f;
+                break;
+            case RunAction e:
+
+                float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
+                Debug.Log($"Chance to escape: {chanceToEscape}");
+                if (chanceToEscape > 100)
+                {
+                    battleManager.RunAway();
+                    animationTime += 1f;
+                }
+                else if (chanceToEscape > Random.Range(0, 100))
+                {
+                    battleManager.RunAway();
+                    animationTime += 1f;
+                }
+                else
+                {
+                    battleInterface.AddMessage($"You Failed at running away!", TextMessage.MessageSpeed.NORMAL);
+                    animationTime += 1f;
+                }
+
                 break;
         }
 
@@ -513,4 +632,6 @@ public class Player : Entity
 
         }
     }
+
+
 }

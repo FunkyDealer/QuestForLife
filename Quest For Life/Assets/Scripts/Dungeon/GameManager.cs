@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 
     public void MovePlayerToShop()
     {
-        player.Move(shopManager.SpawnPos3d(), shopManager.Spawn2d(), shopManager.map, shopManager);
+        player.Move(shopManager.SpawnPos3d(), shopManager.Spawn2d(), shopManager.map, shopManager);        
     }
 
     public void MovePlayerToDungeon()

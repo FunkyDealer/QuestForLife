@@ -21,19 +21,37 @@ public class BattleStatsmenuManager : MonoBehaviour
     [SerializeField]
     Text SpeedNr;
 
+    [SerializeField]
+    Text Experience;
+    [SerializeField]
+    Text ExperienceToNextLevel;
+    
+    void Awake()
+    {
+        Player.onStatsChange += GetStatsFromPlayer;
+        Player.onExperience += GetExperienceFromPlayer;
+    }
+
      // Start is called before the first frame update
     void Start()
     {
         player = manager.player;
 
-        GetStatsFromPlayer();
+         GetStatsFromPlayer();
+         GetExperienceFromPlayer();
 
-        Player.onStatsChange += GetStatsFromPlayer;
+
+    }
+
+    void OnEnable()
+    {
+
     }
 
     void OnDestroy()
     {
         Player.onStatsChange -= GetStatsFromPlayer;
+        Player.onExperience -= GetExperienceFromPlayer;
     }
 
     // Update is called once per frame
@@ -50,5 +68,11 @@ public class BattleStatsmenuManager : MonoBehaviour
         AccuracyNr.text = player.Accuracy.ToString();
         DodgeNr.text = player.Dodge.ToString();
         SpeedNr.text = player.Speed.ToString();
+    }
+
+    void GetExperienceFromPlayer()
+    {
+        Experience.text = player.Experience.ToString();
+        ExperienceToNextLevel.text = player.toNextLevelExp.ToString();
     }
 }

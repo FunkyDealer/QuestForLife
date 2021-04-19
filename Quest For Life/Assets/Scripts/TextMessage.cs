@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +16,17 @@ public class TextMessage : MonoBehaviour
     }
     [HideInInspector]
     public MessageStatus messageStatus;
+
+    public enum MessageSpeed
+    {
+        VERYFAST,
+        FAST,
+        NORMAL,
+        SLOW,
+        VERYSLOW
+    }
+    [HideInInspector]
+    public MessageSpeed messageSpeed;
 
     [HideInInspector]
     public string Text;
@@ -38,7 +50,7 @@ public class TextMessage : MonoBehaviour
 
     int letterNum;
 
-    public void Init(string text, Vector2 SpawnPos, MessageDisplayer manager, MessageStatus status)
+    public void Init(string text, Vector2 SpawnPos, MessageDisplayer manager, MessageStatus status, MessageSpeed speed)
     {
         this.Text = text;
         this.SpawnPos = SpawnPos;
@@ -54,7 +66,30 @@ public class TextMessage : MonoBehaviour
         r.anchoredPosition = SpawnPos;
 
         DestroyTimer = 0;
-        NextLetterTimer = 0;
+        NextLetterTimer = 1;
+
+        TimeToDestroy = setSpeed(speed);
+    }
+
+    private float setSpeed(MessageSpeed speed)
+    {
+        switch (speed)
+        {
+            case MessageSpeed.VERYFAST:
+                return TimeToDestroy * 0.4f;
+            case MessageSpeed.FAST:
+                return TimeToDestroy * 0.7f;
+            case MessageSpeed.NORMAL:
+                return TimeToDestroy * 1.0f;
+            case MessageSpeed.SLOW:
+                return TimeToDestroy * 1.3f;
+            case MessageSpeed.VERYSLOW:
+                return TimeToDestroy * 1.6f;
+            default:
+                break;
+        }
+
+        return TimeToDestroy;
     }
 
     void OnEnable()

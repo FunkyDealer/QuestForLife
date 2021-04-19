@@ -26,7 +26,7 @@ public class GearSlot : Slot
     void placeItem(EquipableItem i) //Place a Stack in the this Slot
     {
         this.item = i;
-        player.AddStatsFromItem(item);
+        player.AddStatsFromItem(item);        
         onSlotNewItem(id);
     }
 

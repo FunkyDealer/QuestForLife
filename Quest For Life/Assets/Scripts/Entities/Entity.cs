@@ -45,10 +45,15 @@ public class Entity : MonoBehaviour
 
     public bool dead;
 
+    protected BattleAction _currentBattleAction;
+    public BattleAction currentBattleAction => _currentBattleAction;
+
+
     void Awake()
     {
         battleManager = null;
         dead = false;
+        _currentBattleAction = null;
     }
 
     // Start is called before the first frame update
@@ -69,12 +74,13 @@ public class Entity : MonoBehaviour
     }
 
 
-    public virtual float PerformAction(BattleAction action)
+    public virtual float PerformAction(BattleAction action, Entity enemy)
     {
         float animationTime = 1;
         switch (action)
         {
             case AttackAction a:
+
                 break;
             case CastSpellAction b:
 
@@ -90,6 +96,7 @@ public class Entity : MonoBehaviour
             case RunAction e:
                 break;
         }
+
         return animationTime;
     }
 
@@ -114,7 +121,7 @@ public class Entity : MonoBehaviour
                     ReceiveDamage(attackDamage);
                 } else
                 {
-                    battleInterface.AddMessage($"The {a.user}'s Attack Missed!");
+                    battleInterface.AddMessage($"The {a.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
                 }
 
                 break;
@@ -125,7 +132,7 @@ public class Entity : MonoBehaviour
 
                 if (tohit2 > 100) ReceiveSpellAttack(b);
                 else if (ToHit2 > Random.Range(0, 100)) ReceiveSpellAttack(b);
-                else battleInterface.AddMessage($"The {b.user}'s Attack Missed!");
+                else battleInterface.AddMessage($"The {b.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
                 break;
             case ItemUseAction c:
 
@@ -142,7 +149,7 @@ public class Entity : MonoBehaviour
                     battleManager.RunAway();
                 } else
                 {
-                    battleInterface.AddMessage($"You Failed at running away!");
+                    battleInterface.AddMessage($"You Failed at running away!", TextMessage.MessageSpeed.NORMAL);
                 }
 
                 break;             
@@ -162,7 +169,7 @@ public class Entity : MonoBehaviour
             battleManager.MonsterDeath();
             battleInterface.MonsterDeath();
             //Debug.Log($"Monster Died!");
-            battleInterface.AddMessage($"The {this.EntityName} Died!");
+            battleInterface.AddMessage($"The {this.EntityName} Died!", TextMessage.MessageSpeed.VERYFAST);
             dead = true;
         }
         else
@@ -175,8 +182,8 @@ public class Entity : MonoBehaviour
     {
         if (type == Global.Type.NONE) return 1;
 
-        if (Weakness == type) { battleInterface.AddMessage("That attack looks like it really hurt!"); Debug.Log("Super Effective Move!"); ; return 2; }
-        else if (Resistence == type) { battleInterface.AddMessage("that Attacks seems to have had little effect!"); return 0.5f; }
+        if (Weakness == type) { battleInterface.AddMessage("That attack looks like it really hurt!", TextMessage.MessageSpeed.FAST); ; return 2; }
+        else if (Resistence == type) { battleInterface.AddMessage("that Attacks seems to have had little effect!", TextMessage.MessageSpeed.NORMAL); return 0.5f; }
         else return 1;
     }
 
@@ -212,6 +219,12 @@ public class Entity : MonoBehaviour
     public virtual void HealthMessage()
     {
 
+    }
+
+
+    public virtual void SetBattleAction(BattleAction action)
+    {
+        this._currentBattleAction = action;
     }
 
 }

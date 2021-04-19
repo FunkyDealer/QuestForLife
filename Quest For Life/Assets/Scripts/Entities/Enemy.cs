@@ -21,6 +21,8 @@ public class Enemy : Entity
     Global.Spell[] KnownSpells;
 
     Animator animator;
+    Animator MonsterAnimator;
+
 
     void Awake()
     {
@@ -37,6 +39,11 @@ public class Enemy : Entity
     void Update()
     {
 
+    }
+
+    public void SetMonsterAnimator(Animator m)
+    {
+        this.MonsterAnimator = m;
     }
 
     public void getStats(Global.DungeonMonsterInfo info, int level)
@@ -75,6 +82,7 @@ public class Enemy : Entity
 
         Debug.Log("the Monster Chose to do a normal Attack");
 
+        this._currentBattleAction = AttackAction;
         return AttackAction;
     }
 
@@ -89,19 +97,19 @@ public class Enemy : Entity
         switch (healthPercentage)
         {
             case var expression when healthPercentage < 80 && healthPercentage > 50:
-                battleInterface.AddMessage($"The {EntityName} looks slightly hurt.");
+                battleInterface.AddMessage($"The {EntityName} looks slightly hurt.", TextMessage.MessageSpeed.NORMAL);
                 break;
             case var expression when healthPercentage < 50 && healthPercentage > 30:
-                battleInterface.AddMessage($"The {EntityName} looks hurt.");
+                battleInterface.AddMessage($"The {EntityName} looks hurt.", TextMessage.MessageSpeed.NORMAL);
                 break;
             case var expression when healthPercentage < 30 && healthPercentage > 10:
-                battleInterface.AddMessage($"The {EntityName} looks really really hurt.");
+                battleInterface.AddMessage($"The {EntityName} looks really really hurt.", TextMessage.MessageSpeed.FAST);
                 break;
             case var expression when healthPercentage < 10:
-                battleInterface.AddMessage($"The {EntityName} looks like he's on the brink of death!");
+                battleInterface.AddMessage($"The {EntityName} looks like he's on the brink of death!", TextMessage.MessageSpeed.FAST);
                 break;
             default:
-                battleInterface.AddMessage($"The {EntityName} doesn't look hurt at all...");
+                battleInterface.AddMessage($"The {EntityName} doesn't look hurt at all...", TextMessage.MessageSpeed.SLOW);
                 break;
         }
 
@@ -122,19 +130,21 @@ public class Enemy : Entity
         
     }
 
-    public override float PerformAction(BattleAction action)
+    public override float PerformAction(BattleAction action, Entity Enemy)
     {
-        float animationTime = 1;
+        float animationTime = 0;
         switch (action)
         {
             case AttackAction a:
                 animator.SetTrigger("Attack");
-                animationTime = 1.4f;
+                animationTime += Enemy.ReceiveAction(action);
+                animationTime += 1.4f;
                 break;
             case CastSpellAction b:
                 castSpell(b);
                 animator.SetTrigger("Cast");
-                animationTime = 2;
+                animationTime += Enemy.ReceiveAction(action);
+                animationTime += 2;
                 break;
             case ItemUseAction c:
                 break;
@@ -148,7 +158,7 @@ public class Enemy : Entity
 
     public override float ReceiveAction(BattleAction action)
     {
-        float animationTime = 1;
+        float animationTime = 0;
         switch (action)
         {
             case AttackAction a:
@@ -160,47 +170,66 @@ public class Enemy : Entity
                     int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
                     animator.SetTrigger("TakeDmg");
-                    animationTime = 1.3f;
+                    MonsterAnimator.SetTrigger("Damaged");
+                    animationTime += 1.3f;
                 }
                 else if (ToHit > Random.Range(0, 100))
                 {
                     int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
                     animator.SetTrigger("TakeDmg");
-                    animationTime = 1.3f;
+                    MonsterAnimator.SetTrigger("Damaged");
+                    animationTime += 1.3f;
                 }
                 else
                 {
                     animator.SetTrigger("Dodge");
-                    animationTime = 2.1f;
-                    battleInterface.AddMessage($"The {a.user}'s Attack Missed!");
+                    animationTime += 2.1f;
+                    battleInterface.AddMessage($"The {a.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
                 }
                 break;
             case CastSpellAction b:
                 float tohit2 = (b.user.Accuracy * b.spell.Accuracy / b.Target.Dodge);
                 int ToHit2 = (int)tohit2;
 
-                if (tohit2 > 100) ReceiveSpellAttack(b);
-                else if (ToHit2 > Random.Range(0, 100)) ReceiveSpellAttack(b);
-                else { animator.SetTrigger("Dodge"); animationTime = 2.1f; battleInterface.AddMessage($"The {b.user}'s Attack Missed!"); }
+                if (tohit2 > 100)
+                {
+                    ReceiveSpellAttack(b);
+                    animationTime += 1.3f;
+                }
+                else if (ToHit2 > Random.Range(0, 100))
+                {
+                    ReceiveSpellAttack(b);
+                    animationTime += 1.3f;
+                }
+                else {
+                    animator.SetTrigger("Dodge");
+                    animationTime += 2.1f;
+                    battleInterface.AddMessage($"The {b.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
+                }
                 break;
             case ItemUseAction c:
-
+                animationTime += 1;
                 break;
             case InvestigationAction d:
-
+                animationTime += 1;
                 break;
             case RunAction e:
                 float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
                 Debug.Log($"Chance to escape: {chanceToEscape}");
-                if (chanceToEscape > 100) { battleManager.RunAway(); }
+                if (chanceToEscape > 100) {
+                    battleManager.RunAway();
+                    animationTime += 1;
+                }
                 else if (chanceToEscape > Random.Range(0, 100))
                 {
                     battleManager.RunAway();
+                    animationTime += 1;
                 }
                 else
                 {
-                    battleInterface.AddMessage($"You Failed at running away!");
+                    battleInterface.AddMessage($"You Failed at running away!", TextMessage.MessageSpeed.NORMAL);
+                    animationTime += 1;
                 }
 
                 break;
@@ -208,5 +237,8 @@ public class Enemy : Entity
 
         return animationTime;
     }
+
+
+
 
 }

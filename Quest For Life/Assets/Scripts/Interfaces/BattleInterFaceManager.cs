@@ -96,9 +96,6 @@ public class BattleInterFaceManager : HudManager
 
         player.gameManager.MonsterCamera.SetActive(false);
 
-
-        if (!ranAway) player.gainExp(enemy);
-
         player.EndBattle();
 
         Destroy(this.gameObject);
@@ -109,7 +106,6 @@ public class BattleInterFaceManager : HudManager
         if (canAct && !selectingTarget)
         {
             CloseAllMenus();
-            EndChoice();
             AttackAction a = new AttackAction(player, enemy, player.BaseAttackPower, 100, Global.Type.LIGHT);
             battleManager.ReceiveActions(a, player);
 
@@ -135,7 +131,6 @@ public class BattleInterFaceManager : HudManager
         if (canAct && player.currentMana >= spell.Cost)
         {
             CloseAllMenus();
-            EndChoice();
             SpellMenu();
 
             CastSpellAction action = new CastSpellAction();
@@ -196,7 +191,6 @@ public class BattleInterFaceManager : HudManager
 
             battleManager.ReceiveActions(a, player);
             CloseAllMenus();
-            EndChoice();
         }
     }
 
@@ -231,12 +225,12 @@ public class BattleInterFaceManager : HudManager
         return false;
     }
 
-    void CloseAllMenus()
+    public void CloseAllMenus()
     {
        ItemMenuObj.SetActive(false);
        statsMenuManager.gameObject.SetActive(false);
     }
 
-    public void AddMessage(string message) => messageDisplayer.AddMessage(message);
+    public void AddMessage(string message, TextMessage.MessageSpeed speed) => messageDisplayer.AddMessage(message, speed);
 
 }

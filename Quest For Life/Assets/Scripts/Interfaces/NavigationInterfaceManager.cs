@@ -25,7 +25,8 @@ public class NavigationInterfaceManager : HudManager
     [SerializeField]
     InventoryIFManager inventoryIFManager;
 
-
+    [SerializeField]
+    MiniMapManager miniMapManager;
 
     public void getInformation(Player player, PlayerMov playerMov, MapManager mapmanager) 
     {
@@ -82,6 +83,11 @@ public class NavigationInterfaceManager : HudManager
     void CloseAllLooseMenus()
     {
         inventoryIFManager.CloseAllMenus();
+    }
+
+    public void CreateNewMinimap()
+    {
+        miniMapManager.GenerateNewMiniMap();
     }
 
 

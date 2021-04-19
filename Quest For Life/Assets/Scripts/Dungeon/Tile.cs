@@ -54,6 +54,7 @@ public class Tile
 
     public int floor;
 
+    public bool explored;
 
     public Tile(bool occupied, int x, int y)
     {

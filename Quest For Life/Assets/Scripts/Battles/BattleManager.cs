@@ -9,8 +9,8 @@ public class BattleManager : MonoBehaviour
     [HideInInspector]
     public Entity monster;
 
-    BattleAction monsterAction;
-    BattleAction playerAction;
+    //BattleAction monsterAction;
+    //BattleAction playerAction;
 
     [HideInInspector]
     public BattleInterFaceManager interfaceManager;
@@ -23,8 +23,6 @@ public class BattleManager : MonoBehaviour
 
     void Awake()
     {
-        monsterAction = null;
-        playerAction = null;
         roundNumber = 0;
         death = false;
         battleOver = false;
@@ -59,42 +57,42 @@ public class BattleManager : MonoBehaviour
         interfaceManager.getInformation(player, monster, this);
 
         
-        StartCoroutine(ChooseActions()); //Run after 1 second
+        StartCoroutine(ChooseActions(0.7f)); //Run after 1 second
 
-       interfaceManager.AddMessage($"A {monster.EntityName} Attacked!");
+       interfaceManager.AddMessage($"A {monster.EntityName} Attacked!", TextMessage.MessageSpeed.SLOW);
     }
 
     //Start Choice Of Action from the Player (Ran by this script)
-    IEnumerator ChooseActions()
+    IEnumerator ChooseActions(float time)
     {
-        yield return new WaitForSeconds(1); //Wait for 1 second
+        yield return new WaitForSeconds(time); //Wait for 1 second
 
         roundNumber++;
         interfaceManager.StartChoice();
 
-         monsterAction = monster.ChooseAction(player);
+        monster.ChooseAction(player);
     }
 
     //Receives the Actions From the player and Monster (Ran by the entities) Comes after ChooseAction()
     public void ReceiveActions(BattleAction action, Entity actor)
     {
-        if (actor is Player) playerAction = action;
+        if (actor is Player) player.SetBattleAction(action);
+        interfaceManager.EndChoice();
+        interfaceManager.CloseAllMenus();
 
-
-
-        if (playerAction != null && monsterAction != null) StartTurn();
+        if (player.currentBattleAction != null && monster.currentBattleAction != null) StartTurn();
     }
 
     //Started the Turn (Run by ReceiveActions() after both actions have been received
     void StartTurn()
     {
-        if (playerAction.speed > monsterAction.speed)
+        if (player.currentBattleAction.speed > monster.currentBattleAction.speed)
         {
-            PerformPlayerAction();
+            PerformAction(player, player.currentBattleAction, monster);
         }
         else
         {
-            PerformMonsterAction();
+            PerformAction(monster, monster.currentBattleAction, player);
         }       
     }
 
@@ -103,34 +101,20 @@ public class BattleManager : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        if (playerAction != null) PerformPlayerAction();
+        if (player.currentBattleAction != null) PerformAction(player, player.currentBattleAction, monster);
 
-        else if (monsterAction != null) PerformMonsterAction();
+        else if (monster.currentBattleAction != null) PerformAction(monster, monster.currentBattleAction, player);
 
         else EndTurn();
     }
 
-    //Perform the Player's Action
-    void PerformPlayerAction()
+    void PerformAction(Entity actor, BattleAction action, Entity target)
     {
         float totalAnimationTime = 0;
-        //Debug.Log("player is attacking");
-        totalAnimationTime += player.PerformAction(playerAction);
-        totalAnimationTime += monster.ReceiveAction(playerAction);
+        totalAnimationTime += actor.PerformAction(action, target);
 
-        playerAction = null;
-        StartCoroutine(ConfirmStatus(totalAnimationTime));
-    }
+        actor.SetBattleAction(null);
 
-    //Perform the Monster's Action
-    void PerformMonsterAction()
-    {
-        float totalAnimationTime = 0;
-        //Debug.Log("Monster is Attacking");
-        totalAnimationTime += monster.PerformAction(monsterAction);
-        totalAnimationTime += player.ReceiveAction(monsterAction);
-
-        monsterAction = null;
         StartCoroutine(ConfirmStatus(totalAnimationTime));
     }
 
@@ -147,25 +131,31 @@ public class BattleManager : MonoBehaviour
     //Ends the Turn and Allows Participants to choose Actions Again
     void EndTurn()
     {
+        player.SetBattleAction(null);
+        monster.SetBattleAction(null);
 
-        playerAction = null;
-        monsterAction = null;
-       // Debug.Log("Turn Ending");
-
-        StartCoroutine(ChooseActions()); //Run after 1 second
+        StartCoroutine(ChooseActions(0.3f)); //Run after 1 second
     }
 
     //Ends the Battle After Someone has Died
     void EndBattle()
     {
+        player.SetBattleAction(null);
+        monster.SetBattleAction(null);
+
         if (player.dead)
         {
             Debug.Log("Player Died");
-            interfaceManager.AddMessage("You Have Died a tragic death in the dungeon. another adventure's body to zombify");
+            interfaceManager.AddMessage("You Have Died a tragic death in the dungeon. another adventure's body to zombify", TextMessage.MessageSpeed.VERYSLOW);
         }
         else if (monster.dead)
         {
-            StartCoroutine(FinishBattle(2, false));
+            float TimeforFinish = 2;
+            Player p = (Player)player;
+            Enemy m = (Enemy)monster;
+            if (p.gainExp(m)) TimeforFinish += 4.5f;
+
+            StartCoroutine(FinishBattle(TimeforFinish, false));
 
             Debug.Log("Player has Won the battle!");
         }
@@ -174,7 +164,7 @@ public class BattleManager : MonoBehaviour
     public void RunAway()
     {
         StartCoroutine(FinishBattle(2, true));
-        interfaceManager.AddMessage("You Successefully Ran Away!");
+        interfaceManager.AddMessage("You Successefully Ran Away!", TextMessage.MessageSpeed.FAST);
     }    
 
     public void CleanUp()

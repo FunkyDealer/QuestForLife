@@ -45,3 +45,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TilePrefab: {fileID: 919428950011764405, guid: b5dfd889ef16a5545b81b5193fec8fc9,
     type: 3}
+  RoomColor: {r: 0, g: 0, b: 0, a: 0.5019608}
+  WallColor: {r: 0.28191984, g: 0, b: 0.3584906, a: 0.5019608}
+  chestColor: {r: 0.46268475, g: 0.4716981, b: 0, a: 0.5019608}
+  ShopColor: {r: 0.638, g: 0.3347921, b: 0, a: 0.5019608}
+  StairPrefab: {fileID: 4607490588708571573, guid: 7525d55e093f2a145899c8c9b21f971f,
+    type: 3}
