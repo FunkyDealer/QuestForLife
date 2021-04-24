@@ -27,7 +27,7 @@ public class Player : Entity
     [SerializeField]
     int y;
 
-   // [HideInInspector]
+    // [HideInInspector]
     public Global.FacingDirection direction;
     PlayerMov movementManager;
     public PlayerMov MovementManager => movementManager;
@@ -93,16 +93,16 @@ public class Player : Entity
     public GearSlot RingSlot1;
     public GearSlot RingSlot2;
     public GearSlot WeaponSlot;
-    
-    public CompassController compass;
 
+    public CompassController compass;
+    public List<int> keys;
     void Awake()
     {
         this.Weakness = Global.Type.NONE;
         this.Resistence = Global.Type.NONE;
 
         movementManager = GetComponent<PlayerMov>();
-        direction = Global.FacingDirection.EAST;        
+        direction = Global.FacingDirection.EAST;
 
         EntityName = "Mage";
 
@@ -118,7 +118,7 @@ public class Player : Entity
         Inventory = new Inventory(10, this);
 
         HatSlot = new GearSlot(Global.GearType.HAT, 1, this);
-        BodySlot = new GearSlot(Global.GearType.BODYCLOTHING, 2, this);      
+        BodySlot = new GearSlot(Global.GearType.BODYCLOTHING, 2, this);
         RingSlot1 = new GearSlot(Global.GearType.RING, 3, this);
         RingSlot2 = new GearSlot(Global.GearType.RING, 4, this);
         BeltSlot = new GearSlot(Global.GearType.BELT, 5, this);
@@ -128,7 +128,7 @@ public class Player : Entity
 
 
 
-      
+
     }
 
 
@@ -137,7 +137,7 @@ public class Player : Entity
     {
         compass.Initiate(this, direction);
 
-      
+
     }
 
     void getAllSpells()
@@ -162,13 +162,13 @@ public class Player : Entity
     {
         DeactiveNavigationInterface();
 
-        battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();       
+        battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();
 
         return battleInterface;
     }
 
     public override void EndBattle()
-    {   
+    {
         battleInterface = null;
 
         ActivateNavigationInterface();
@@ -183,7 +183,21 @@ public class Player : Entity
 
     }
 
-   
+    public void PickKey(int id)
+    {
+        if (keys == null)
+        {
+            keys = new List<int>(4);
+        }
+        keys.Add(id);
+        Debug.Log("Got a key " + id);
+    }
+
+    public bool SearchIfHasKey(int id)
+    {
+        return keys.Contains(id);
+    }
+
 
     public void EnterExit()
     {
@@ -274,6 +288,11 @@ public class Player : Entity
             onExperience();
         } catch (System.NullReferenceException)
         {
+<<<<<<< HEAD
+            int excessExp = currentExperience - experienceToNextLevel;
+
+=======
+>>>>>>> 8d6aa44a76ca7a75cf0572f3238b7d3585ddb5f7
 
         }
 
@@ -282,11 +301,16 @@ public class Player : Entity
 
     public bool LevelUp()
     {
+<<<<<<< HEAD
+        Level++;
+        currentExperience = excessXp;
+=======
         if (currentExperience >= experienceToNextLevel)
         {
         battleInterface.AddMessage($"I'm feeling really confident after that battle, maybe I've gotten stronger...", TextMessage.MessageSpeed.VERYSLOW);
             Level++;
         currentExperience = currentExperience - experienceToNextLevel;
+>>>>>>> 8d6aa44a76ca7a75cf0572f3238b7d3585ddb5f7
 
         experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
@@ -497,7 +521,7 @@ public class Player : Entity
     }
 
     public void OpenInventory()
-    {      
+    {
         navigationInterFace.OpenInventory();
     }
 
@@ -545,7 +569,7 @@ public class Player : Entity
         currentMana += mDif;
         onManaUpdate(currentMana, maxMana);
 
-        
+
         Power += i.PowerBonus;
         Defence += i.DefenceBonus;
         Accuracy += i.AccuracyBonus;
@@ -556,10 +580,10 @@ public class Player : Entity
         {
             onStatsChange();
         }
-        catch 
+        catch
         {
 
-        }       
+        }
     }
 
     public void RemoveStatsFromItem(EquipableItem i)
@@ -595,7 +619,7 @@ public class Player : Entity
     }
 
     public void rotateCompass(float dir) => compass.rotate(dir);
-     
+
     public void addGold(int ammount)
     {
         currentMoney += ammount;
@@ -615,7 +639,8 @@ public class Player : Entity
         try
         {
             onGoldChange(currentMoney);
-        } catch
+        }
+        catch
         {
 
         }
@@ -634,4 +659,8 @@ public class Player : Entity
     }
 
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 8d6aa44a76ca7a75cf0572f3238b7d3585ddb5f7
 }

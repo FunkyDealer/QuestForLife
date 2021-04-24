@@ -14,6 +14,8 @@ public class DungeonManager : MapManager
     [HideInInspector]
     public Dictionary<Tile, GameObject> Chests;
 
+    public LockedExit lockedExit;
+
     [SerializeField]
     int MAX_LEAF_SIZE = 20;
     [SerializeField]
@@ -28,7 +30,7 @@ public class DungeonManager : MapManager
     DungeonGenPreset Hard = new DungeonGenPreset(40, 9, 50, 50);
     DungeonGenPreset custom;
     //Dungeon Generation end
-    
+
     public List<GameObject> monsterPrefabs;
 
     int times;
@@ -59,17 +61,17 @@ public class DungeonManager : MapManager
 
     // Start is called before the first frame update
     void Start()
-    {       
+    {
 
         times = 0;
         if (genDemo)
-        { 
+        {
             for (int i = 0; i < 99; i++)
             {
                 StartCoroutine(StartFloorGenerationDelay(times, 0, i));
                 times++;
             }
-         }    
+        }
     }
 
     public void CreateNewFloor()
@@ -81,7 +83,7 @@ public class DungeonManager : MapManager
 
         if (currentFloorObject != null)
         {
-            DestroyCurrentFloor();            
+            DestroyCurrentFloor();
         }
 
         currentFloor++;
@@ -113,19 +115,24 @@ public class DungeonManager : MapManager
         bool fountain = Random.value > 0.5f;
         bool shop = Random.value > 0.5f;
 
+        int nKeys = Random.Range(1, 4);
+        Debug.Log("Numero de chaves " + nKeys);
+
         int iterations = 0;
         bool finished = false;
         while (!finished)
         {
-            if (!DG.Initiate(custom, true, true, 99, 5, currentFloor)) { Debug.Log("Floor had only 1 room"); }
+            if (!DG.Initiate(custom, true, true, 99, nKeys, currentFloor)) { Debug.Log("Floor had only 1 room"); }
             else finished = true;
             iterations++;
-            if (iterations > 20) {
+            if (iterations > 20)
+            {
                 finished = true; Debug.Log("Failed to create a floor after 20 attempts, giving up");
                 Destroy(DG.gameObject);
                 //DG.Initiate(Easy, true, true, 99, 5);
             }
         }
+        lockedExit.numKeys = nKeys;
     }
 
     void StartFloorGeneration()
@@ -137,11 +144,14 @@ public class DungeonManager : MapManager
         bool fountain = Random.value > 0.5f;
         bool shop = Random.value > 0.5f;
 
+        int nKeys = Random.Range(1, 4);
+        Debug.Log("Numero de chaves " + nKeys);
+
         int iterations = 0;
         bool finished = false;
         while (!finished)
         {
-            if (!DG.Initiate(custom, true, true, 99, 5, currentFloor)) { Debug.Log("Floor had only 1 room"); }
+            if (!DG.Initiate(custom, true, true, 99, nKeys, currentFloor)) { Debug.Log("Floor had only 1 room"); }
             else finished = true;
             iterations++;
             if (iterations > 20)
@@ -151,6 +161,7 @@ public class DungeonManager : MapManager
                 //DG.Initiate(Easy, true, true, 99, 5);
             }
         }
+        lockedExit.numKeys = nKeys;
     }
 
     public override void StartMap(MapGenerator DG, Vector2 spawn)
@@ -176,13 +187,13 @@ public class DungeonManager : MapManager
     {
         Destroy(currentFloorObject);
     }
-    
+
 
     public bool CheckForEncounter()
     {
         bool enemyEncounter = false;
         stepCounter++;
-        
+
         if (stepCounter > 10)
         {
             enemyEncounter = Random.Range(0, 100) < currentThresHold;

@@ -27,8 +27,8 @@ public class DungeonGenerator : MapGenerator
     [SerializeField]
     List<GameObject> keysObj;
     #endregion
-    
-       
+
+
     List<Room> rooms;
     List<Hall> halls;
 
@@ -46,7 +46,7 @@ public class DungeonGenerator : MapGenerator
 
     void Awake()
     {
-       
+
     }
 
 
@@ -54,9 +54,9 @@ public class DungeonGenerator : MapGenerator
     // Start is called before the first frame update
     void Start()
     {
-       
 
-        
+
+
     }
 
     public bool Initiate(DungeonGenPreset preset, bool fountain, bool shop, int chestNumber, int keys, int floorNumber)
@@ -146,7 +146,7 @@ public class DungeonGenerator : MapGenerator
             for (int y = 0; y < mapLength; y++)
             {
                 map[x, y] = new Tile(true, x, y);
-                map[x, y].floor = floorNumber;                
+                map[x, y].floor = floorNumber;
             }
         }
     }
@@ -281,9 +281,9 @@ public class DungeonGenerator : MapGenerator
         int entranceX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width);
         int entranceY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height);
 
-        map[entranceX, entranceY].feature = Tile.Feature.Entrance;         
+        map[entranceX, entranceY].feature = Tile.Feature.Entrance;
         map[entranceX, entranceY].occupied = false;
-       // Debug.Log($"Entrance: {map[entranceX, entranceY].roomNumber} at X: {map[entranceX, entranceY].x} Y: {map[entranceX, entranceY].y}");
+        // Debug.Log($"Entrance: {map[entranceX, entranceY].roomNumber} at X: {map[entranceX, entranceY].x} Y: {map[entranceX, entranceY].y}");
         spawn = new Vector2(entranceX, entranceY);
 
         currentRoom = rooms[rooms.Count - 1];
@@ -309,8 +309,8 @@ public class DungeonGenerator : MapGenerator
             while (!placed)
             {
                 int roomNumber = Random.Range(0, rooms.Count - 2);
-                currentRoom = rooms[roomNumber];               
-               
+                currentRoom = rooms[roomNumber];
+
                 Tile.Facing facing = (Tile.Facing)Random.Range(0, 4); //Select in which side of the squared room the shop will be
                 switch (facing)
                 {
@@ -364,7 +364,7 @@ public class DungeonGenerator : MapGenerator
                 fX = Random.Range(currentRoom.x + 1, currentRoom.x + currentRoom.width - 1);
                 fY = Random.Range(currentRoom.y + 1, currentRoom.y + currentRoom.height - 1);
 
-                if (!map[fX,fY].occupied && map[fX, fY].feature == Tile.Feature.None)
+                if (!map[fX, fY].occupied && map[fX, fY].feature == Tile.Feature.None)
                 {
                     map[fX, fY].feature = Tile.Feature.Fountain;
                     map[fX, fY].occupied = true;
@@ -374,7 +374,7 @@ public class DungeonGenerator : MapGenerator
                 if (iterations > 9) placed = true; //if it fails placing the fountain 9 times, it gives up
             }
 
-           // Debug.Log($"fountain is in room {map[fX, fY].roomNumber} at X: {map[fX, fY].x} Y: {map[fX, fY].y}");
+            // Debug.Log($"fountain is in room {map[fX, fY].roomNumber} at X: {map[fX, fY].x} Y: {map[fX, fY].y}");
         }
     }
 
@@ -448,13 +448,13 @@ public class DungeonGenerator : MapGenerator
 
         for (int i = 0; i < keyNumber; i++)
         {
-            Room currentRoom = rooms[rooms.Count-1];
+            Room currentRoom = rooms[rooms.Count - 1];
 
             bool FreeRoom = false;
             int roomNumber = 0;
             while (!FreeRoom)
             {
-                roomNumber = Random.Range(1, rooms.Count-1);
+                roomNumber = Random.Range(1, rooms.Count - 1);
                 currentRoom = rooms[roomNumber];
                 if (!currentRoom.key) FreeRoom = true;
             }
@@ -485,13 +485,13 @@ public class DungeonGenerator : MapGenerator
     /// </summary>
     #region Map Drawing
     void DrawFloor() //Draw Floor
-    {        
+    {
         for (int x = 0; x < mapWidth; x++)
         {
             for (int y = 0; y < mapLength; y++)
             {
                 Vector3 position = new Vector3(x * 4 + 2, 0f, y * 4 + 2);
-                if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);            
+                if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);
 
             }
         }
@@ -500,7 +500,7 @@ public class DungeonGenerator : MapGenerator
     void DrawMap() //Draws the Map
     {
         int placedKey = 0;
-        
+
         for (int x = 0; x < mapWidth; x++)
         {
             for (int y = 0; y < mapLength; y++)
@@ -509,16 +509,18 @@ public class DungeonGenerator : MapGenerator
 
                 if (map[x, y].occupied == true) //Occupied Tiles
                 {
-                    switch (map[x,y].type)
+                    switch (map[x, y].type)
                     {
                         case Tile.Type.room:
-                            switch (map[x,y].feature)
+                            switch (map[x, y].feature)
                             {
                                 case Tile.Feature.Exit:
                                     InstantiateObj(ExitTileObj, position);
                                     break;
                                 case Tile.Feature.LockedExit:
-                                    InstantiateObj(lockedStairsObj, position);
+                                    GameObject o = InstantiateObj(lockedStairsObj, position);
+                                    DungeonManager dm = (DungeonManager)manager;
+                                    dm.lockedExit = o.GetComponent<LockedExit>();
                                     break;
                                 case Tile.Feature.Fountain:
                                     position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
@@ -530,13 +532,13 @@ public class DungeonGenerator : MapGenerator
                             }
                             break;
                         case Tile.Type.wall:
-                            switch (map[x,y].feature)
+                            switch (map[x, y].feature)
                             {
                                 case Tile.Feature.ShopEntrance:
                                     position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
                                     GameObject s = InstantiateObj(ShopTileObj, position);
                                     rotateObj(s, map[x, y].facing);
-                                    SetShopEntrance(s, map[x,y]);
+                                    SetShopEntrance(s, map[x, y]);
                                     break;
                                 case Tile.Feature.Chest:
                                     GameObject o = InstantiateObj(ChestTileObj, position);
@@ -553,8 +555,8 @@ public class DungeonGenerator : MapGenerator
                             }
                             break;
                         case Tile.Type.filling:
-                           // Instantiate(WallTileObj, position, Quaternion.identity);
-                           // InstantiateObj(WallTileObj, position);
+                            // Instantiate(WallTileObj, position, Quaternion.identity);
+                            // InstantiateObj(WallTileObj, position);
                             break;
                         default:
                             Debug.Log($"Error drawing a Occupied tile at X: {x} Y: {y}");
@@ -563,11 +565,11 @@ public class DungeonGenerator : MapGenerator
                 }
                 else //Unnocupied Tiles
                 {
-                    switch (map[x,y].type)
+                    switch (map[x, y].type)
                     {
                         case Tile.Type.room:
-                            switch (map[x,y].feature)
-                            {                               
+                            switch (map[x, y].feature)
+                            {
                                 case Tile.Feature.Entrance:
                                     InstantiateFreeObj(EntranceTileObj, position, x, y);
                                     break;
@@ -586,7 +588,7 @@ public class DungeonGenerator : MapGenerator
                             }
                             break;
                         case Tile.Type.hall:
-                            switch (map[x,y].feature)
+                            switch (map[x, y].feature)
                             {
                                 case Tile.Feature.None:
                                     InstantiateFreeObj(HallTileObj, position, x, y);
@@ -600,7 +602,7 @@ public class DungeonGenerator : MapGenerator
                             Debug.Log($"Error drawing a Free tile at X: {x} Y: {y}");
                             break;
                     }
-                    
+
                     //manager.AddFreeTile(x, y, o);
                 }
 
@@ -613,7 +615,7 @@ public class DungeonGenerator : MapGenerator
         ShopEntrance e = ShopEntranceObj.GetComponent<ShopEntrance>();
         e.shopManager = manager.gameManager.shopManager;
         e.tile = tile;
-        
+
     }
 
     void DrawRoof()
@@ -627,7 +629,7 @@ public class DungeonGenerator : MapGenerator
                 Vector3 position = new Vector3(x * 4 + 2, 5f, y * 4 + 2);
                 if (map[x, y].type != Tile.Type.filling)
                 {
-                   InstantiateObj(RoofTileObj, position);
+                    InstantiateObj(RoofTileObj, position);
                     //Instantiate(FloorTileObj, position,FloorTileObj.transform.rotation);
                 }
             }
@@ -644,7 +646,7 @@ public class DungeonGenerator : MapGenerator
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
 

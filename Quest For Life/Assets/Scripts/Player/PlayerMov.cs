@@ -6,14 +6,14 @@ using UnityEngine;
 public class PlayerMov : MonoBehaviour
 {
     Player player;
-
+    public bool haveAllKeys = false;
     Vector2 dir;
     Vector3 nextPosition;
     Quaternion nextRotation;
     float nextRotationDir;
 
     [SerializeField]
-    float inputDelay = 0.1f;    
+    float inputDelay = 0.1f;
     [SerializeField]
     float velocity = 50f;
     [SerializeField]
@@ -47,7 +47,7 @@ public class PlayerMov : MonoBehaviour
         inputTimer = 0;
         player = GetComponent<Player>();
         movementState = MovementState.WAITINGINPUT;
-        inBattle = false;      
+        inBattle = false;
     }
 
     void Start()
@@ -115,14 +115,14 @@ public class PlayerMov : MonoBehaviour
                     else movementState = MovementState.COOLDOWN;
                 }
                 break;
-            case MovementState.TURNING:               
+            case MovementState.TURNING:
                 Vector3 targetForward = nextRotation * Vector3.forward;
-                
+
                 if (Vector3.Dot(transform.forward, targetForward) > 0.99995)
                 {
                     transform.localRotation = nextRotation;
                     movementState = MovementState.COOLDOWN;
-                }                
+                }
                 break;
             case MovementState.FROZEN:
                 break;
@@ -135,8 +135,9 @@ public class PlayerMov : MonoBehaviour
 
     void input()
     {
-        if (Input.GetButtonDown("Inventory")) {
-            
+        if (Input.GetButtonDown("Inventory"))
+        {
+
             player.OpenInventory();
             movementState = MovementState.FROZEN;
             return;
@@ -215,18 +216,18 @@ public class PlayerMov : MonoBehaviour
                 break;
         }
 
-            switch (player.currentMap[(int)newPos.x, (int)newPos.y].type)
-            {
-                case Tile.Type.filling:
+        switch (player.currentMap[(int)newPos.x, (int)newPos.y].type)
+        {
+            case Tile.Type.filling:
 
-                    break;
-                case Tile.Type.hall:
-                    CalculateNextPosition(newPos);
-                    break;
-                case Tile.Type.none:
+                break;
+            case Tile.Type.hall:
+                CalculateNextPosition(newPos);
+                break;
+            case Tile.Type.none:
 
-                    break;
-                case Tile.Type.wall:
+                break;
+            case Tile.Type.wall:
                 switch (player.currentMap[(int)newPos.x, (int)newPos.y].feature)
                 {
                     case Tile.Feature.Chest:
@@ -240,52 +241,62 @@ public class PlayerMov : MonoBehaviour
                         break;
                 }
                 break;
-                case Tile.Type.room:
-                    switch (player.currentMap[(int)newPos.x, (int)newPos.y].feature)
-                    {
-                        case Tile.Feature.Entrance:
-                            CalculateNextPosition(newPos);
-                            break;
-                        case Tile.Feature.Exit:
+            case Tile.Type.room:
+                switch (player.currentMap[(int)newPos.x, (int)newPos.y].feature)
+                {
+                    case Tile.Feature.Entrance:
+                        CalculateNextPosition(newPos);
+                        break;
+                    case Tile.Feature.Exit:
+                        MoveToNextFloor(newPos);
+                        Debug.Log(player.currentMap[(int)newPos.x, (int)newPos.y].type);
+                        break;
+                    case Tile.Feature.LockedExit:
+                        DungeonManager dm = (DungeonManager)mapManager;
+
+                        if (dm.lockedExit.VerificarChaves(player.keys))
+                        {
                             MoveToNextFloor(newPos);
                             Debug.Log(player.currentMap[(int)newPos.x, (int)newPos.y].type);
-                            break;
-                        case Tile.Feature.LockedExit:
-                            MoveToNextFloor(newPos);
-                            Debug.Log(player.currentMap[(int)newPos.x, (int)newPos.y].type);
-                            break;
-                        case Tile.Feature.Fountain:
-                            UseFountain();
-                            break;
-                        case Tile.Feature.Chest:
+                            player.keys = new List<int>();
+                        }
+                        else
+                        {
+                            Debug.Log("Cannot Go");
+                        }
+                        break;
+                    case Tile.Feature.Fountain:
+                        UseFountain();
+                        break;
+                    case Tile.Feature.Chest:
                         if (player.direction == player.currentMap[(int)newPos.x, (int)newPos.y].OppositeDirection())
                         {
 
                         }
-                            break;
+                        break;
                     case Tile.Feature.Shop:
                         if (player.direction == player.currentMap[(int)newPos.x, (int)newPos.y].OppositeDirection()) //Use Shop
                         {
-                            OpenShop();                           
+                            OpenShop();
 
                         }
-                            break;
-                        case Tile.Feature.Boss:
-                            break;
-                        case Tile.Feature.Key:
-                            CalculateNextPosition(newPos);
-                            break;
-                        case Tile.Feature.None:
-                            CalculateNextPosition(newPos);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    Debug.Log(player.currentMap[(int)newPos.x, (int)newPos.y].type);
-                    break;
-            }
+                        break;
+                    case Tile.Feature.Boss:
+                        break;
+                    case Tile.Feature.Key:
+                        CalculateNextPosition(newPos);
+                        break;
+                    case Tile.Feature.None:
+                        CalculateNextPosition(newPos);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                Debug.Log(player.currentMap[(int)newPos.x, (int)newPos.y].type);
+                break;
+        }
 
 
     }
@@ -299,7 +310,7 @@ public class PlayerMov : MonoBehaviour
             if (!c.isOpen) player.addGold(c.OpenChest(player.Level, player.currentMap[x, y].floor));
 
         }
-     }
+    }
 
     private void OpenShop()
     {
@@ -312,7 +323,7 @@ public class PlayerMov : MonoBehaviour
 
     private void useShopExit(int posX, int posY)
     {
-        if (player.direction == player.currentMap[posX, posY].OppositeDirection()) 
+        if (player.direction == player.currentMap[posX, posY].OppositeDirection())
         {
             //go to Dungeon
             player.gameManager.MovePlayerToDungeon();
