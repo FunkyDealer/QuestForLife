@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8571949010789679398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8571949010789679399}
+  - component: {fileID: 286860853334034278}
+  m_Layer: 0
+  m_Name: FinalZoneGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8571949010789679399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8571949010789679398}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 50.459057, y: 47.3, z: 79.22075}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &286860853334034278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8571949010789679398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f897a2ef3ef7cda458227e7d78d288af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FloorTileObj: {fileID: 7929138529763041991, guid: d7d0d0825a09df24ea13250ae6be03b8,
+    type: 3}
+  RoofTileObj: {fileID: 2603693724652270748, guid: 7065da36b200f544e9b7d2dcc380c85c,
+    type: 3}
+  parent: 1
+  manager: {fileID: 0}
+  WallTileObj: {fileID: 1251282748155956737, guid: 7b6ed0393ae98894e8eaa4a3ddbd6a5c,
+    type: 3}
+  RoomTileObj: {fileID: 8239586189605092832, guid: 4bc1885101babdb46b2cc9d0eb447c67,
+    type: 3}
+  EntranceTileObj: {fileID: 4305351633049835609, guid: e019fa9ace6cc174fb0d500ee39abc7c,
+    type: 3}
+  endTileObj: {fileID: 1754947894281674598, guid: 619d2eb2d9893ee46993424a7ddf61d7,
+    type: 3}

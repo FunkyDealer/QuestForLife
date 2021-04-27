@@ -10,6 +10,9 @@ public class HudManager : MonoBehaviour
     [SerializeField]
     protected BattlePlayerStatsManager StatsManager;
 
+    [SerializeField]
+    MessageDisplayer messageDisplayer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,4 +29,6 @@ public class HudManager : MonoBehaviour
     {
 
     }
+
+    public void AddMessage(string message, TextMessage.MessageSpeed speed) => messageDisplayer.AddMessage(message, speed);
 }

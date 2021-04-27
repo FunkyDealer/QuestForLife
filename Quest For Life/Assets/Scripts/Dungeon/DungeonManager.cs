@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DungeonManager : MapManager
 {
-
     //Dungeon Generation start
     [SerializeField]
     GameObject DungeonGeneratorObj;
@@ -13,8 +12,6 @@ public class DungeonManager : MapManager
 
     [HideInInspector]
     public Dictionary<Tile, GameObject> Chests;
-
-    public LockedExit lockedExit;
 
     [SerializeField]
     int MAX_LEAF_SIZE = 20;
@@ -28,26 +25,34 @@ public class DungeonManager : MapManager
     DungeonGenPreset Easy = new DungeonGenPreset(30, 9, 20, 20);
     DungeonGenPreset Memium = new DungeonGenPreset(30, 9, 30, 40);
     DungeonGenPreset Hard = new DungeonGenPreset(40, 9, 50, 50);
+    DungeonGenPreset VeryHard1 = new DungeonGenPreset(10, 9, 50, 60);
     DungeonGenPreset custom;
     //Dungeon Generation end
-
-    public List<GameObject> monsterPrefabs;
-
-    int times;
-
-    [SerializeField]
-    bool genDemo = false;
 
     [HideInInspector]
     GameObject currentFloorObject;
 
     int currentFloor;
+    public int Floor => currentFloor;
 
     const int DEFAULT_ENCOUNTER_THRESHOLD = 10;
     int currentThresHold = 10;
     int stepCounter;
 
     public Tile currentShop;
+
+    GameObject FinalZoneObj;
+    [SerializeField]
+    GameObject finalZoneGeneratorPrefab;
+
+    [HideInInspector]
+    public GameObject exit;
+
+    public void Init(GameManager gm, GameObject finalZoneObj)
+    {
+        this.gameManager = gm;
+        this.FinalZoneObj = finalZoneObj;
+    }
 
     void Awake()
     {
@@ -61,34 +66,44 @@ public class DungeonManager : MapManager
 
     // Start is called before the first frame update
     void Start()
-    {
-
-        times = 0;
-        if (genDemo)
-        {
-            for (int i = 0; i < 99; i++)
-            {
-                StartCoroutine(StartFloorGenerationDelay(times, 0, i));
-                times++;
-            }
-        }
+    {      
+ 
     }
 
-    public void CreateNewFloor()
+    void resetFloor()
     {
         if (FreeTiles == null) FreeTiles = new Dictionary<Tile, GameObject>();
         FreeTiles.Clear();
         if (Chests == null) Chests = new Dictionary<Tile, GameObject>();
         Chests.Clear();
 
+        exit = null;
+
         if (currentFloorObject != null)
         {
             DestroyCurrentFloor();
         }
+    }
+
+    public void CreateNewFloor()
+    {
+        resetFloor();
 
         currentFloor++;
 
         StartFloorGeneration();
+    }
+
+    public void CreateFinalZone()
+    {
+        resetFloor();
+
+        currentFloor++;
+
+        currentFloorObject = Instantiate(finalZoneGeneratorPrefab, Vector3.zero, Quaternion.identity);
+        FinalZoneGenerator e = currentFloorObject.GetComponent<FinalZoneGenerator>();
+
+        e.Initiate(40, 10, this);
 
 
     }
@@ -97,42 +112,7 @@ public class DungeonManager : MapManager
     void Update()
     {
 
-    }
 
-
-
-    IEnumerator StartFloorGenerationDelay(float time, int x, int y)
-    {
-        yield return new WaitForSeconds(time);
-
-        GameObject DGobj = Instantiate(DungeonGeneratorObj, Vector3.zero, Quaternion.identity);
-        DungeonGenerator DG = DGobj.GetComponent<DungeonGenerator>();
-        DG.manager = this;
-
-        GameObject o = DG.gameObject;
-        o.transform.position += new Vector3(0, 10 * y, 0);
-
-        bool fountain = Random.value > 0.5f;
-        bool shop = Random.value > 0.5f;
-
-        int nKeys = Random.Range(1, 4);
-        Debug.Log("Numero de chaves " + nKeys);
-
-        int iterations = 0;
-        bool finished = false;
-        while (!finished)
-        {
-            if (!DG.Initiate(custom, true, true, 99, nKeys, currentFloor)) { Debug.Log("Floor had only 1 room"); }
-            else finished = true;
-            iterations++;
-            if (iterations > 20)
-            {
-                finished = true; Debug.Log("Failed to create a floor after 20 attempts, giving up");
-                Destroy(DG.gameObject);
-                //DG.Initiate(Easy, true, true, 99, 5);
-            }
-        }
-        lockedExit.numKeys = nKeys;
     }
 
     void StartFloorGeneration()
@@ -144,14 +124,17 @@ public class DungeonManager : MapManager
         bool fountain = Random.value > 0.5f;
         bool shop = Random.value > 0.5f;
 
-        int nKeys = Random.Range(1, 4);
-        Debug.Log("Numero de chaves " + nKeys);
+        if (currentFloor < 10)
+        {
+
+        }
+
 
         int iterations = 0;
         bool finished = false;
         while (!finished)
         {
-            if (!DG.Initiate(custom, true, true, 99, nKeys, currentFloor)) { Debug.Log("Floor had only 1 room"); }
+            if (!DG.Initiate(custom, true, true, 99, 5, currentFloor)) { Debug.Log("Floor had only 1 room"); }
             else finished = true;
             iterations++;
             if (iterations > 20)
@@ -161,13 +144,11 @@ public class DungeonManager : MapManager
                 //DG.Initiate(Easy, true, true, 99, 5);
             }
         }
-        lockedExit.numKeys = nKeys;
     }
 
     public override void StartMap(MapGenerator DG, Vector2 spawn)
     {
-        if (!genDemo) Destroy(DG);
-        else StartCoroutine(DestroyFloor(1, DG.gameObject));
+        Destroy(DG);
 
         Vector3 spawnPos = FreeTiles[map[(int)spawn.x, (int)spawn.y]].transform.position;
         spawnPos.y = 1f;
@@ -176,24 +157,16 @@ public class DungeonManager : MapManager
         gameManager.SpawnPlayer(spawnPos, spawn, map);
     }
 
-    IEnumerator DestroyFloor(int time, GameObject o)
-    {
-        yield return new WaitForSeconds(time);
-
-        Destroy(o);
-    }
-
     void DestroyCurrentFloor()
     {
         Destroy(currentFloorObject);
-    }
-
+    }    
 
     public bool CheckForEncounter()
     {
         bool enemyEncounter = false;
         stepCounter++;
-
+        
         if (stepCounter > 10)
         {
             enemyEncounter = Random.Range(0, 100) < currentThresHold;

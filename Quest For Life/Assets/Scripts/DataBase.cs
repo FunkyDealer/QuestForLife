@@ -40,6 +40,11 @@ public class DataBase : MonoBehaviour
     [SerializeField]
     TextAsset GearInfoFile;
 
+    [SerializeField]
+    public int FinalFloor = 29; //the last Floor before the game Ends; 
+
+    public GameObject confirmationInterface;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)

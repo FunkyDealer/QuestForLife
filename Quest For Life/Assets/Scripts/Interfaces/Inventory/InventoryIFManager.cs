@@ -42,6 +42,7 @@ public class InventoryIFManager : MonoBehaviour
     {
 
         // inventory = navigationInterface.player.Inventory;
+        if (goldAmmountDisplay != null)
         goldAmmountDisplay.text = HudManager.player.currentGold.ToString();
 
     }
@@ -195,6 +196,7 @@ public class InventoryIFManager : MonoBehaviour
 
     void updateGoldAmmount(int newAmmount)
     {
+        if (goldAmmountDisplay != null)
         goldAmmountDisplay.text = newAmmount.ToString() + "g";
     }
 

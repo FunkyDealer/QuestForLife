@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8198024696696950839}
-  - component: {fileID: 7283146406284762475}
-  - component: {fileID: 5981391957995809890}
-  - component: {fileID: 156279337760808133}
+  - component: {fileID: 3652610950663980706}
+  - component: {fileID: 3920792088950939193}
+  - component: {fileID: 7841130121985062724}
   m_Layer: 0
   m_Name: KeyGreen
-  m_TagString: Chave
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,14 +27,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8198024696696950838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.757, y: 18.100327, z: -51.203373}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children:
   - {fileID: 8525179385742793140}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7283146406284762475
+--- !u!114 &3652610950663980706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,11 +43,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8198024696696950838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b72c71b6cce7e643b443547624f0167, type: 3}
+  m_Script: {fileID: 11500000, guid: c2f13aa74aa26ae47b0032680c0849bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3
---- !u!65 &5981391957995809890
+  id: 1
+--- !u!65 &3920792088950939193
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,9 +58,9 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
+  m_Size: {x: 0.15, y: 0.16, z: 0.14}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &156279337760808133
+--- !u!54 &7841130121985062724
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

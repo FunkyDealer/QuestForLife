@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopGenerator : MapGenerator
-{
-    
+{   
 
     //These are the tiles that are placed on the Shop
     #region Placed Tiles
@@ -69,18 +68,15 @@ public class ShopGenerator : MapGenerator
                 //Create Walls
                 if (x == 0 || x == mapWidth - 1)
                 {
-                    map[x, y] = new Tile(true, x, y);
-                    map[x, y].type = Tile.Type.wall;
+                    map[x, y] = new WallTile(true, x, y);
                 }
                 else if (y == 0 || y == mapLength - 1)
                 {
-                    map[x, y] = new Tile(true, x, y);
-                    map[x, y].type = Tile.Type.wall;
+                    map[x, y] = new WallTile(true, x, y);
                 }
                 else
                 {
-                    map[x, y] = new Tile(false, x, y);
-                    map[x, y].type = Tile.Type.room;
+                    map[x, y] = new RoomMapTile(false, x, y);
                 }
             }
         }
@@ -89,18 +85,29 @@ public class ShopGenerator : MapGenerator
             //Create Entrance
             int x = 0, y = mapLength / 2;
 
-             map[x, y].feature = Tile.Feature.ShopExit;
-             map[x + 1, y].feature = Tile.Feature.Entrance;
+            WallTile e = (WallTile)map[x, y];
+            e.wallFeature = WallTile.WallFeature.ShopExit;
+            e.occupied = true;
+            map[x, y] = e;
+
+            RoomMapTile eE = (RoomMapTile)map[x + 1, y];
+            eE.roomFeature = RoomMapTile.RoomFeature.Entrance;
+            eE.occupied = false;
+            map[x + 1, y] = eE;
+
+           //  map[x, y].feature = Tile.Feature.ShopExit;
+           //  map[x + 1, y].feature = Tile.Feature.Entrance;
 
             spawn = new Vector2(x + 1, y);
 
             x = mapWidth - 2;
             y = 1;
-            map[x, y].feature = Tile.Feature.Shop;
-            map[x, y].occupied = true;
-            map[x, y].facing = Tile.Facing.east;
 
-           
+            RoomMapTile s = (RoomMapTile)map[x, y];
+            s.roomFeature = RoomMapTile.RoomFeature.Shop;
+            s.occupied = true;
+            s.facing = Tile.Facing.east;
+            map[x, y] = s;           
         }
     }
 
@@ -112,7 +119,7 @@ public class ShopGenerator : MapGenerator
             for (int y = 0; y < mapLength; y++)
             {
                 Vector3 position = new Vector3(objPos.x + (x * 4 + 2), objPos.y + 0f, objPos.z + (y * 4 + 2));
-                if (map[x, y].type != Tile.Type.filling) InstantiateObj(FloorTileObj, position);
+                if (!(map[x,y] is FillMapTile)) InstantiateObj(FloorTileObj, position);
 
             }
         }
@@ -127,7 +134,7 @@ public class ShopGenerator : MapGenerator
             for (int y = 0; y < mapLength; y++)
             {
                 Vector3 position = new Vector3(objPos.x + (x * 4 + 2), objPos.y + 5f, objPos.z + (y * 4 + 2));
-                if (map[x, y].type != Tile.Type.filling)
+                if (!(map[x, y] is FillMapTile))
                 {
                     InstantiateObj(RoofTileObj, position);
                     //Instantiate(FloorTileObj, position,FloorTileObj.transform.rotation);
@@ -146,16 +153,16 @@ public class ShopGenerator : MapGenerator
                 Vector3 position = new Vector3(objPos.x + (x * 4 + 2), objPos.y + 2.5f, objPos.z + (y * 4 + 2));
                 if (map[x, y].occupied == true) //Occupied Tiles
                 {
-                    switch (map[x, y].type)
+                    switch (map[x, y])
                     {
-                        case Tile.Type.room:
-                            switch (map[x, y].feature)
+                        case RoomMapTile r:
+                            switch (r.roomFeature)
                             {
-                                case Tile.Feature.Fountain:
+                                case RoomMapTile.RoomFeature.Fountain:
                                     position = new Vector3(objPos.x + (x * 4 + 2), objPos.y + 0, objPos.z + (y * 4 + 2));
                                     InstantiateObj(fountainTileObj, position);
                                     break;
-                                case Tile.Feature.Shop:
+                                case RoomMapTile.RoomFeature.Shop:
                                     GameObject s = InstantiateObj(ShopTileObj, position);
                                     rotateObj(s, map[x, y].facing);
                                     break;
@@ -164,16 +171,16 @@ public class ShopGenerator : MapGenerator
                                     break;
                             }
                             break;
-                        case Tile.Type.wall:
-                            switch (map[x, y].feature)
+                        case WallTile w:
+                            switch (w.wallFeature)
                             {
-                                case Tile.Feature.ShopExit:                                    
+                                case WallTile.WallFeature.ShopExit:
                                     position = new Vector3(objPos.x + (x * 4 + 2), objPos.y + 0, objPos.z + (y * 4 + 2));
                                     GameObject s = InstantiateObj(ExitTileObj, position);
                                     rotateObj(s, map[x, y].facing);
-                                    SetUpShopExit(s, map[x,y]);
+                                    SetUpShopExit(s, map[x, y]);
                                     break;
-                                case Tile.Feature.None:
+                                case WallTile.WallFeature.None:
                                     InstantiateObj(WallTileObj, position);
                                     break;
                                 default:
@@ -181,7 +188,7 @@ public class ShopGenerator : MapGenerator
                                     break;
                             }
                             break;
-                        case Tile.Type.filling:
+                        case FillMapTile f:
                             break;
                         default:
                             Debug.Log($"SHOP: Error drawing a Occupied tile at X: {x} Y: {y}");
@@ -190,15 +197,16 @@ public class ShopGenerator : MapGenerator
                 }
                 else //Unnocupied Tiles
                 {
-                    switch (map[x, y].type)
+                    switch (map[x, y])
                     {
-                        case Tile.Type.room:
-                            switch (map[x, y].feature)
+                        case RoomMapTile r:
+
+                            switch (r.roomFeature)
                             {
-                                case Tile.Feature.Entrance:
+                                case RoomMapTile.RoomFeature.Entrance:
                                     InstantiateFreeObj(EntranceTileObj, position, x, y);
                                     break;
-                                case Tile.Feature.None:
+                                case RoomMapTile.RoomFeature.None:
                                     InstantiateFreeObj(RoomTileObj, position, x, y);
                                     break;
                                 default:

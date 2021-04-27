@@ -43,14 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be378984c52e0a440964965889279c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   DungeonGeneratorObj: {fileID: 4875474778308391327, guid: 018b6371cad63b24c840bd574b41ed0a,
     type: 3}
   BattleManagerObj: {fileID: 6363284396884599822, guid: eca36360e3caca849989a041de9425a5,
     type: 3}
-  manager: {fileID: 0}
-  MAX_LEAF_SIZE: 30
+  MAX_LEAF_SIZE: 20
   MIN_LEAF_SIZE: 9
-  mapWidth: 30
-  mapLength: 40
+  mapWidth: 20
+  mapLength: 20
   monsterPrefabs: []
-  genDemo: 0
+  finalZoneGeneratorPrefab: {fileID: 8571949010789679398, guid: f281231838338364ba1121863108487c,
+    type: 3}

@@ -27,7 +27,7 @@ public class Player : Entity
     [SerializeField]
     int y;
 
-    // [HideInInspector]
+   // [HideInInspector]
     public Global.FacingDirection direction;
     PlayerMov movementManager;
     public PlayerMov MovementManager => movementManager;
@@ -86,6 +86,9 @@ public class Player : Entity
     public delegate void onExperienceChange();
     public static event onExperienceChange onExperience;
 
+    public delegate void FloorUpdateEvent(int floor);
+    public static event FloorUpdateEvent onFloorChange;
+
     public Inventory Inventory;
     public GearSlot HatSlot;
     public GearSlot BodySlot;
@@ -93,16 +96,24 @@ public class Player : Entity
     public GearSlot RingSlot1;
     public GearSlot RingSlot2;
     public GearSlot WeaponSlot;
-
+    
     public CompassController compass;
+
+    int currentFloor;
+
     public List<int> keys;
+
     void Awake()
     {
+        currentFloor = 1;
+
+        keys = new List<int>();
+
         this.Weakness = Global.Type.NONE;
         this.Resistence = Global.Type.NONE;
 
         movementManager = GetComponent<PlayerMov>();
-        direction = Global.FacingDirection.EAST;
+        direction = Global.FacingDirection.EAST;        
 
         EntityName = "Mage";
 
@@ -118,17 +129,15 @@ public class Player : Entity
         Inventory = new Inventory(10, this);
 
         HatSlot = new GearSlot(Global.GearType.HAT, 1, this);
-        BodySlot = new GearSlot(Global.GearType.BODYCLOTHING, 2, this);
+        BodySlot = new GearSlot(Global.GearType.BODYCLOTHING, 2, this);      
         RingSlot1 = new GearSlot(Global.GearType.RING, 3, this);
         RingSlot2 = new GearSlot(Global.GearType.RING, 4, this);
         BeltSlot = new GearSlot(Global.GearType.BELT, 5, this);
         WeaponSlot = new GearSlot(Global.GearType.WEAPON, 6, this);
 
-        Debug.Log("Inventory and Hud Created");
 
 
-
-
+      
     }
 
 
@@ -137,7 +146,7 @@ public class Player : Entity
     {
         compass.Initiate(this, direction);
 
-
+        onFloorChange(currentFloor);
     }
 
     void getAllSpells()
@@ -162,13 +171,13 @@ public class Player : Entity
     {
         DeactiveNavigationInterface();
 
-        battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();
+        battleInterface = Instantiate(BattleInterfacePrefab, Vector3.zero, Quaternion.identity).GetComponent<BattleInterFaceManager>();       
 
         return battleInterface;
     }
 
     public override void EndBattle()
-    {
+    {   
         battleInterface = null;
 
         ActivateNavigationInterface();
@@ -181,30 +190,30 @@ public class Player : Entity
         x = currentTile.x;
         y = currentTile.y;
 
-    }
-
-    public void PickKey(int id)
-    {
-        if (keys == null)
-        {
-            keys = new List<int>(4);
-        }
-        keys.Add(id);
-        Debug.Log("Got a key " + id);
-    }
-
-    public bool SearchIfHasKey(int id)
-    {
-        return keys.Contains(id);
-    }
-
+    }   
 
     public void EnterExit()
-    {
+    {       
         DungeonManager m = (DungeonManager)mapManager;
-        m.CreateNewFloor();
-        navigationInterFace.CreateNewMinimap();
+        if (m.Floor < DataBase.inst.FinalFloor)
+        {
+            m.CreateNewFloor();
+            currentFloor++;
+            navigationInterFace.CreateNewMinimap();
+            onFloorChange(currentFloor);
+            if (m.Floor == DataBase.inst.FinalFloor) AddInterfaceMessage($"You Climb to a new Floor\nIt feels life the end is near...", TextMessage.MessageSpeed.VERYSLOW);
+            else AddInterfaceMessage($"You Climb to a new Floor", TextMessage.MessageSpeed.VERYSLOW);
 
+        }
+        else if (m.Floor == DataBase.inst.FinalFloor)
+        {
+            currentFloor++;
+            m.CreateFinalZone();
+            navigationInterFace.CreateNewMinimap();
+            onFloorChange(currentFloor);
+            movementManager.leaveDungeon();
+            AddInterfaceMessage($"You Climb to a new Floor\nYou feel like this is it.", TextMessage.MessageSpeed.VERYSLOW);
+        }
     }
 
     public void Spawn(Vector3 worldPos, Vector3 mapPos, Tile[,] map, GameManager gameManager, DungeonManager dungeonManager)
@@ -218,8 +227,6 @@ public class Player : Entity
         StartNewPlayer();
     }
 
-
-
     public void Move(Vector3 worldPos, Vector2 mapPos, Tile[,] map, MapManager mapManager)
     {
         this.mapManager = mapManager;
@@ -228,7 +235,6 @@ public class Player : Entity
         currentTile = map[(int)mapPos.x, (int)mapPos.y];
         navigationInterFace.CreateNewMinimap();
     }
-
 
     void StartNewPlayer()
     {
@@ -288,11 +294,6 @@ public class Player : Entity
             onExperience();
         } catch (System.NullReferenceException)
         {
-<<<<<<< HEAD
-            int excessExp = currentExperience - experienceToNextLevel;
-
-=======
->>>>>>> 8d6aa44a76ca7a75cf0572f3238b7d3585ddb5f7
 
         }
 
@@ -301,16 +302,11 @@ public class Player : Entity
 
     public bool LevelUp()
     {
-<<<<<<< HEAD
-        Level++;
-        currentExperience = excessXp;
-=======
         if (currentExperience >= experienceToNextLevel)
         {
         battleInterface.AddMessage($"I'm feeling really confident after that battle, maybe I've gotten stronger...", TextMessage.MessageSpeed.VERYSLOW);
             Level++;
         currentExperience = currentExperience - experienceToNextLevel;
->>>>>>> 8d6aa44a76ca7a75cf0572f3238b7d3585ddb5f7
 
         experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
@@ -357,13 +353,16 @@ public class Player : Entity
         }
     }
 
-    public void UseFountain()
+    public bool UseFountain()
     {
-        RecoverAll();
-
-        Debug.Log("Player Used fountain, health and mana restored!");
+        if (currentHealth < maxHealth || currentMana < maxMana)
+        {
+            RecoverAll();
+            AddInterfaceMessage($"You Drink From the fountain.\n You Feel refreshed.", TextMessage.MessageSpeed.VERYSLOW);
+            return true;
+        }
+        return false;
     }
-
 
     void RecoverAll()
     {
@@ -521,7 +520,7 @@ public class Player : Entity
     }
 
     public void OpenInventory()
-    {
+    {      
         navigationInterFace.OpenInventory();
     }
 
@@ -569,7 +568,7 @@ public class Player : Entity
         currentMana += mDif;
         onManaUpdate(currentMana, maxMana);
 
-
+        
         Power += i.PowerBonus;
         Defence += i.DefenceBonus;
         Accuracy += i.AccuracyBonus;
@@ -580,10 +579,10 @@ public class Player : Entity
         {
             onStatsChange();
         }
-        catch
+        catch 
         {
 
-        }
+        }       
     }
 
     public void RemoveStatsFromItem(EquipableItem i)
@@ -619,10 +618,11 @@ public class Player : Entity
     }
 
     public void rotateCompass(float dir) => compass.rotate(dir);
-
+     
     public void addGold(int ammount)
     {
         currentMoney += ammount;
+        AddInterfaceMessage($"Received {ammount} gold pieces", TextMessage.MessageSpeed.VERYSLOW);
         updateGold();
     }
 
@@ -639,8 +639,7 @@ public class Player : Entity
         try
         {
             onGoldChange(currentMoney);
-        }
-        catch
+        } catch
         {
 
         }
@@ -658,9 +657,19 @@ public class Player : Entity
         }
     }
 
+    public void AddInterfaceMessage(string message, TextMessage.MessageSpeed speed) => navigationInterFace.AddMessage(message, speed);
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 8d6aa44a76ca7a75cf0572f3238b7d3585ddb5f7
+
+    public void PickKey(int id)
+    {
+        keys.Add(id);
+
+        AddInterfaceMessage("Picked up a key", TextMessage.MessageSpeed.NORMAL);
+    }
+
+    public bool SearchKey(int id)
+    {
+        return keys.Contains(id);
+    }
 }

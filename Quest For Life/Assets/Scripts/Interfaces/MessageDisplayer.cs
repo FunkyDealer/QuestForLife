@@ -11,10 +11,10 @@ public class MessageDisplayer : MonoBehaviour
     [SerializeField]
     GameObject messageBox;
 
-    Vector2 MessageDisplayPos = new Vector2(200, -60);
+    Vector2 MessageDisplayPos = new Vector2(200, 0);
 
     [SerializeField]
-    BattleInterFaceManager manager;
+    HudManager manager;
 
     [SerializeField]
     GameObject textMessagePrefab;
@@ -46,14 +46,14 @@ public class MessageDisplayer : MonoBehaviour
 
             GameObject o = Instantiate(textMessagePrefab, messageBox.transform);
             TextMessage t = o.GetComponent<TextMessage>();
-            t.Init(text, new Vector2(200, 0), this, TextMessage.MessageStatus.READING, speed);
+            t.Init(text, new Vector2(0, 0), this, TextMessage.MessageStatus.READING, speed);
             Messages.Add(t);
         }
         else
         {
             GameObject o = Instantiate(textMessagePrefab, messageBox.transform);
             TextMessage t = o.GetComponent<TextMessage>();
-            t.Init(text, new Vector2(200, 0), this, TextMessage.MessageStatus.WAITING, speed);
+            t.Init(text, new Vector2(0, 0), this, TextMessage.MessageStatus.WAITING, speed);
             Messages.Add(t);
             o.SetActive(false);
         }

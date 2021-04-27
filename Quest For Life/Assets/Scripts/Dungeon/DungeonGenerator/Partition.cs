@@ -140,6 +140,8 @@ public class Partition
 
     public void createHall(Room l, Room r)
     {
+        // connect these two rooms together with hallways.
+        // it's  trying to figure out which point is where and then either draw a straight line, or a pair of lines to make a right-angle to connect them.
 
         int point1X = Random.Range(l.left + 1, l.right - 2);
         int point1Y = Random.Range(l.top + 1, l.bottom - 2);
@@ -154,6 +156,8 @@ public class Partition
         {
             if (h < 0)
             {
+
+
                 if (Random.value < 0.5)
                 {
                     halls.Add(new Hall(point2X, point1Y, Mathf.Abs(w), 1, l, r));
@@ -165,19 +169,23 @@ public class Partition
                     halls.Add(new Hall(point1X, point2Y, 1, Mathf.Abs(h), l, r));
                 }
             }
+
+            //-----------------------------------------------------------------------------------------------------------------
             else if (h > 0)
             {
-                if (Random.value < 0.5)
-                {
-                    halls.Add(new Hall(point2X, point1Y, Mathf.Abs(w), 1, l, r));
-                    halls.Add(new Hall(point2X, point1Y, 1, Mathf.Abs(h), l, r));
-                }
-                else
-                {
-                    halls.Add(new Hall(point2X, point2Y, Mathf.Abs(w), 1, l, r));
-                    halls.Add(new Hall(point1X, point1Y, 1, Mathf.Abs(h), l, r));
-                }
-            }
+                halls.Add(new Hall(point2X, point1Y, Mathf.Abs(w), 1, l, r));
+                halls.Add(new Hall(point2X, point1Y, 1, Mathf.Abs(h), l, r));
+
+                //if (Random.value < 0.5)
+                //{
+
+                //}
+                //else
+                //{
+                //    halls.Add(new Hall(point2X, point2Y, Mathf.Abs(w), 1, l, r));
+                //    halls.Add(new Hall(point1X, point1Y, 1, Mathf.Abs(h), l, r));
+                //}
+        }
             else // if (h == 0)
             {
                 halls.Add(new Hall(point2X, point2Y, Mathf.Abs(w), 1, l, r));
@@ -187,29 +195,33 @@ public class Partition
         {
             if (h < 0)
             {
-                if (Random.value < 0.5)
-                {
-                    halls.Add(new Hall(point1X, point2Y, Mathf.Abs(w), 1, l, r));
-                    halls.Add(new Hall(point1X, point2Y, 1, Mathf.Abs(h), l, r));
-                }
-                else
-                {
-                    halls.Add(new Hall(point1X, point1Y, Mathf.Abs(w), 1, l, r));
-                    halls.Add(new Hall(point2X, point2Y, 1, Mathf.Abs(h), l, r));
-                }
+                halls.Add(new Hall(point1X, point2Y, Mathf.Abs(w), 1, l, r));
+                halls.Add(new Hall(point1X, point2Y, 1, Mathf.Abs(h), l, r));
+
+                //if (Random.value < 0.5)
+                //{
+
+                //}
+                //else
+                //{
+                //    halls.Add(new Hall(point1X, point1Y, Mathf.Abs(w), 1, l, r));
+                //    halls.Add(new Hall(point2X, point2Y, 1, Mathf.Abs(h), l, r));
+                //}
             }
             else if (h > 0)
             {
-                if (Random.value < 0.5)
-                {
-                    halls.Add(new Hall(point1X, point1Y, Mathf.Abs(w), 1, l, r));
-                    halls.Add(new Hall(point2X, point1Y, 1, Mathf.Abs(h), l, r));
-                }
-                else
-                {
-                    halls.Add(new Hall(point1X, point2Y, Mathf.Abs(w), 1, l, r));
-                    halls.Add(new Hall(point1X, point1Y, 1, Mathf.Abs(h), l, r));
-                }
+                halls.Add(new Hall(point1X, point1Y, Mathf.Abs(w), 1, l, r));
+                halls.Add(new Hall(point2X, point1Y, 1, Mathf.Abs(h), l, r));
+
+                //if (Random.value < 0.5)
+                //{
+
+                //}
+                //else
+                //{
+                //    halls.Add(new Hall(point1X, point2Y, Mathf.Abs(w), 1, l, r));
+                //    halls.Add(new Hall(point1X, point1Y, 1, Mathf.Abs(h), l, r));
+                //}
             }
             else // if (h == 0)
             {

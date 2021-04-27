@@ -47,6 +47,8 @@ MonoBehaviour:
     type: 3}
   RoofTileObj: {fileID: 2603693724652270748, guid: 7065da36b200f544e9b7d2dcc380c85c,
     type: 3}
+  parent: 1
+  manager: {fileID: 0}
   WallTileObj: {fileID: 1251282748155956737, guid: 7b6ed0393ae98894e8eaa4a3ddbd6a5c,
     type: 3}
   RoomTileObj: {fileID: 8749633959148235509, guid: 1f77c6a44e6fcf443b2f1d2c9cfe058e,
@@ -63,12 +65,10 @@ MonoBehaviour:
     type: 3}
   fountainTileObj: {fileID: 3183003937755952124, guid: 93e1ab05cf68b904d9524e653aa7fe8a,
     type: 3}
-  lockedStairsObj: {fileID: 980647247257783327, guid: e1d8e09cda80e284f81fc81a525444d0,
+  lockedStairsObj: {fileID: 8027949103064209599, guid: cf4c93a821ea05a42a615ea0065c9bac,
     type: 3}
   keysObj:
   - {fileID: 8827677277831787542, guid: fd1ca8fc55487f94fa79888c4dea030e, type: 3}
   - {fileID: 8198024696696950838, guid: 1b44ef27585214c41b11ee160001ef93, type: 3}
   - {fileID: 1869920726326590418, guid: 390a051175c4e6940a638595627b06a8, type: 3}
   - {fileID: 5899208644910193143, guid: 1fdc00fc60f59d14598fce4f0d5450ef, type: 3}
-  manager: {fileID: 0}
-  parent: 1

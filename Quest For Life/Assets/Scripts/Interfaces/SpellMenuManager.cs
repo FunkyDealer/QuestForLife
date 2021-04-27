@@ -94,7 +94,7 @@ public class SpellMenuManager : MonoBehaviour
 
     GameObject createButton(Global.Spell spell, RectTransform parent, int ButtonNum)
     {
-        parent.sizeDelta = new Vector2(parent.sizeDelta.x, 30 * (ButtonNum));
+        parent.sizeDelta = new Vector2(parent.sizeDelta.x, 50 * (ButtonNum));
 
         GameObject o = Instantiate(buttonPrefab, parent.gameObject.transform);
         BattleSpellButton b = o.GetComponent<BattleSpellButton>();

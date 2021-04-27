@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 
@@ -27,6 +28,16 @@ public class NavigationInterfaceManager : HudManager
 
     [SerializeField]
     MiniMapManager miniMapManager;
+    
+    [SerializeField]
+    Text FloorDisplaytext;
+
+    void Awake()
+    {
+        
+    }
+
+
 
     public void getInformation(Player player, PlayerMov playerMov, MapManager mapmanager) 
     {
@@ -36,12 +47,19 @@ public class NavigationInterfaceManager : HudManager
 
         inventory.SetActive(false);
         inventoryOn = false;
+
+        Player.onFloorChange += updateFloor;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    void OnDestroy()
+    {
+        Player.onFloorChange -= updateFloor;
     }
 
     // Update is called once per frame
@@ -64,6 +82,8 @@ public class NavigationInterfaceManager : HudManager
     {
         inventoryOn = true;
 
+        FloorDisplaytext.gameObject.SetActive(false);
+
         inventory.SetActive(true);
     }
 
@@ -76,6 +96,8 @@ public class NavigationInterfaceManager : HudManager
         inputDelayTimer = 0;
         inventoryOn = false;
         inventory.SetActive(false);
+
+        FloorDisplaytext.gameObject.SetActive(true);
 
         playerMov.ResumeMovement();
     }
@@ -90,5 +112,10 @@ public class NavigationInterfaceManager : HudManager
         miniMapManager.GenerateNewMiniMap();
     }
 
+    void updateFloor(int floor)
+    {
+        this.FloorDisplaytext.text = $"Floor {floor}";
+    }
+    
 
 }

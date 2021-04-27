@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public ShopManager shopManager;
 
+    [SerializeField]
+    GameObject FinalZoneObj;
+
     void Awake()
     {
         startingNewGame = true;
@@ -40,7 +43,8 @@ public class GameManager : MonoBehaviour
         GameObject o = Instantiate(dungeonManagerObj, Vector3.zero, Quaternion.identity);
         DungeonManager dm = o.GetComponent<DungeonManager>();        
         dungeonManager = dm;
-        dungeonManager.gameManager = this;
+        dungeonManager.Init(this, FinalZoneObj);
+
         dungeonManager.CreateNewFloor();
         
     }

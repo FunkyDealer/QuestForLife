@@ -30,7 +30,7 @@ public class InventorySlot : Slot
     public void PlaceItem(ItemStack i) //Place a Stack in the this Slot
     {
         this.currentStack = i;
-
+        onSlotNewItem(id);
     }
 
     public void AddQuantity(int Quantity)

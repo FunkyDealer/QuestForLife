@@ -59,7 +59,7 @@ public class BattleManager : MonoBehaviour
         
         StartCoroutine(ChooseActions(0.7f)); //Run after 1 second
 
-       interfaceManager.AddMessage($"A {monster.EntityName} Attacked!", TextMessage.MessageSpeed.SLOW);
+       interfaceManager.AddMessage($"A {monster.EntityName} Appeared!", TextMessage.MessageSpeed.SLOW);
     }
 
     //Start Choice Of Action from the Player (Ran by this script)

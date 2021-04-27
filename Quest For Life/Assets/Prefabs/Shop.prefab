@@ -43,7 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc40376b827a4d4294f699dfcfb1760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   width: 8
   length: 7
   ShopGeneratorObj: {fileID: 7578289477671873975, guid: ac71c4f7e3049534bb9aea99239f0e9f,
+    type: 3}
+  shopInterfacePrefab: {fileID: 4368188854941017103, guid: 79e7fdbdce818914a922c4fbd6c8de32,
     type: 3}

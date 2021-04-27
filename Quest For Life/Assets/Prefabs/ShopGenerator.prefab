@@ -51,7 +51,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   WallTileObj: {fileID: 1251282748155956737, guid: 7b6ed0393ae98894e8eaa4a3ddbd6a5c,
     type: 3}
-  RoomTileObj: {fileID: 8749633959148235509, guid: 1f77c6a44e6fcf443b2f1d2c9cfe058e,
+  RoomTileObj: {fileID: 8239586189605092832, guid: 4bc1885101babdb46b2cc9d0eb447c67,
     type: 3}
   EntranceTileObj: {fileID: 4305351633049835609, guid: e019fa9ace6cc174fb0d500ee39abc7c,
     type: 3}

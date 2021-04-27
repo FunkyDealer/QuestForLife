@@ -23,9 +23,6 @@ public class BattleInterFaceManager : HudManager
     public bool selectingTarget;
 
     [SerializeField]
-    MessageDisplayer messageDisplayer;
-
-    [SerializeField]
     GameObject blockers;
 
     [SerializeField]
@@ -62,16 +59,13 @@ public class BattleInterFaceManager : HudManager
         {
             AttackAction();            
         }
-
-
     }
 
     public void StartChoice()
     {
         canAct = true;
         blockers.SetActive(!canAct);
-        selectingTarget = false;
-        
+        selectingTarget = false;        
     }
 
     public void EndChoice()
@@ -108,8 +102,6 @@ public class BattleInterFaceManager : HudManager
             CloseAllMenus();
             AttackAction a = new AttackAction(player, enemy, player.BaseAttackPower, 100, Global.Type.LIGHT);
             battleManager.ReceiveActions(a, player);
-
-            Debug.Log("the Player Chose to do a normal Attack");
             
         }
     }
@@ -131,16 +123,13 @@ public class BattleInterFaceManager : HudManager
         if (canAct && player.currentMana >= spell.Cost)
         {
             CloseAllMenus();
-            SpellMenu();
 
             CastSpellAction action = new CastSpellAction();
 
             action.speed = player.Speed;
             action.spell = spell;
             action.Target = target;
-            action.user = player;
-
-            Debug.Log($"Choosing to do {action.spell.Name}");           
+            action.user = player;         
 
             battleManager.ReceiveActions(action, player);
             selectingTarget = false;
@@ -231,6 +220,6 @@ public class BattleInterFaceManager : HudManager
        statsMenuManager.gameObject.SetActive(false);
     }
 
-    public void AddMessage(string message, TextMessage.MessageSpeed speed) => messageDisplayer.AddMessage(message, speed);
+
 
 }
