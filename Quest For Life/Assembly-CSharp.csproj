@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Key.cs" />
     <Compile Include="Assets\LockedStairs.cs" />
+    <Compile Include="Assets\Menu.cs" />
     <Compile Include="Assets\Scripts\BattleItemManagementMenu.cs" />
     <Compile Include="Assets\Scripts\BattlePlayerStatsManager.cs" />
     <Compile Include="Assets\Scripts\BattleStatsmenuManager.cs" />
