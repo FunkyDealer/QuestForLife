@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class Menu : MonoBehaviour
     int volume;
     [SerializeField]
     Text volumeHud;
-
+    [SerializeField]
+    GameObject Load;
     public void Start()
     {
         
@@ -24,10 +26,6 @@ public class Menu : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M)) 
-        {
-           ActiveOrResume();
-        }    
     }
 
     public void Exit()
@@ -40,6 +38,12 @@ public class Menu : MonoBehaviour
         options.SetActive(!options.activeSelf);
         menu.SetActive(!menu.activeSelf);
     }
+    public void ChangeMtoL()
+    {
+        Load.SetActive(!Load.activeSelf);
+
+        menu.SetActive(!menu.activeSelf);
+    }
     public void ActiveOrResume() 
     {
         canvas.SetActive(!canvas.activeSelf);
@@ -49,5 +53,14 @@ public class Menu : MonoBehaviour
     {
         volume = (int)(VolBar.value*100);
         volumeHud.text = ""+volume;
+    }
+
+    public void LoadGame() 
+    {
+        Load.SetActive(!Load.activeSelf);
+    }
+    public void ChangeScene() 
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }
