@@ -20,6 +20,7 @@ public class NavigationInterfaceManager : HudManager
     public PlayerMov playerMov;
 
     bool inventoryOn;
+    bool pauseMenuOn;
     float inputDelayTimer = 0;
     float inputDelayTime = 0.1f;
 
@@ -31,6 +32,12 @@ public class NavigationInterfaceManager : HudManager
     
     [SerializeField]
     Text FloorDisplaytext;
+
+    [SerializeField]
+    GameObject keyHolder;
+
+    [SerializeField]
+    GameObject pauseMenu;
 
     void Awake()
     {
@@ -45,8 +52,12 @@ public class NavigationInterfaceManager : HudManager
         this.mapManager = mapmanager;
         this.playerMov = playerMov;
 
+        FloorDisplaytext.gameObject.SetActive(true);
+
         inventory.SetActive(false);
         inventoryOn = false;
+        pauseMenu.SetActive(false);
+        pauseMenuOn = false;
 
         Player.onFloorChange += updateFloor;
     }
@@ -73,9 +84,39 @@ public class NavigationInterfaceManager : HudManager
                 if (Input.GetButtonDown("Inventory") || Input.GetButtonDown("CloseMenu"))
                 {
                     CloseInventory();
+                    return;
                 }
             }
         }
+
+        if (pauseMenuOn)
+        {
+            if (inputDelayTimer < inputDelayTime) inputDelayTimer += Time.deltaTime;
+            else
+            {
+                if (Input.GetButtonDown("CloseMenu"))
+                {
+                    ClosePauseMenu();
+                    return;
+                }
+            }
+        }
+    }
+
+    public void OpenPauseMenu()
+    {
+        CloseInventory();
+
+        pauseMenu.SetActive(true);
+        pauseMenuOn = true;
+    }
+
+    public void ClosePauseMenu()
+    {
+        pauseMenuOn = false;
+        pauseMenu.SetActive(false);
+
+        playerMov.ResumeMovement();
     }
 
    public void OpenInventory()
@@ -83,6 +124,7 @@ public class NavigationInterfaceManager : HudManager
         inventoryOn = true;
 
         FloorDisplaytext.gameObject.SetActive(false);
+        inputDelayTimer = 0;
 
         inventory.SetActive(true);
     }
@@ -117,5 +159,24 @@ public class NavigationInterfaceManager : HudManager
         this.FloorDisplaytext.text = $"Floor {floor}";
     }
     
+
+    public void AddKey(int id)
+    {
+        Instantiate(PropsDataBase.inst.HudKeys[id], keyHolder.transform);
+
+
+    }
+
+
+    public void ClearKeyHolder()
+    {
+        int childCount = keyHolder.transform.childCount;
+
+        for (int i = 0; i < childCount; i++)
+        {
+            Destroy(keyHolder.transform.GetChild(i).gameObject);
+        }
+    }
+
 
 }

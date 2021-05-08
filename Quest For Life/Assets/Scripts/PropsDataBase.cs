@@ -7,7 +7,14 @@ public class PropsDataBase : MonoBehaviour
     private static PropsDataBase _instance;
     public static PropsDataBase inst { get { return _instance; } }
 
+    [SerializeField]
+    public List<GameObject> CeilingLamps;
 
+    [SerializeField]
+    public List<GameObject> CeilingProps;
+
+    [SerializeField]
+    public List<GameObject> HudKeys;
 
     private void Awake()
     {
@@ -21,10 +28,6 @@ public class PropsDataBase : MonoBehaviour
         }
 
     }
-
-
-    [SerializeField]
-    public List<GameObject> CeilingLamps;
 
         // Start is called before the first frame update
         void Start()

@@ -62,6 +62,7 @@ public class Player : Entity
     int maxSpeedGain = 5;
 
     List<Global.Spell> knownSpells;
+    Dictionary<Global.Spell, bool> learnableSpells;
 
     public List<Global.Spell> getKnownSpells() => knownSpells;
 
@@ -103,6 +104,14 @@ public class Player : Entity
 
     public List<int> keys;
 
+    public enum Location
+    {
+        DUNGEON,
+        SHOP,
+        FINALZONE
+    }
+    public Location location;
+
     void Awake()
     {
         currentFloor = 1;
@@ -118,9 +127,8 @@ public class Player : Entity
         EntityName = "Mage";
 
         BaseAttackPower = 40;
-        knownSpells = new List<Global.Spell>();
-
-        getAllSpells();
+        learnableSpells = new Dictionary<Global.Spell, bool>();
+        knownSpells = new List<Global.Spell>();       
 
 
         navigationInterFace = Instantiate(NavigationInterFacePrefab, Vector3.zero, Quaternion.identity).GetComponent<NavigationInterfaceManager>();
@@ -135,11 +143,10 @@ public class Player : Entity
         BeltSlot = new GearSlot(Global.GearType.BELT, 5, this);
         WeaponSlot = new GearSlot(Global.GearType.WEAPON, 6, this);
 
-
+        location = Location.DUNGEON;
 
       
     }
-
 
     // Start is called before the first frame update
     void Start()
@@ -149,13 +156,15 @@ public class Player : Entity
         onFloorChange(currentFloor);
     }
 
-    void getAllSpells()
+    void getLearnableSpells()
     {
         foreach (var s in DataBase.inst.Spells)
         {
-            knownSpells.Add(s.Value);
+            if (s.Value.PlayerLearn) learnableSpells.Add(s.Value, false);
         }
     }
+
+
 
     public void DeactiveNavigationInterface()
     {
@@ -204,6 +213,10 @@ public class Player : Entity
             if (m.Floor == DataBase.inst.FinalFloor) AddInterfaceMessage($"You Climb to a new Floor\nIt feels life the end is near...", TextMessage.MessageSpeed.VERYSLOW);
             else AddInterfaceMessage($"You Climb to a new Floor", TextMessage.MessageSpeed.VERYSLOW);
 
+            location = Location.DUNGEON;
+
+            keys.Clear();
+            navigationInterFace.ClearKeyHolder();
         }
         else if (m.Floor == DataBase.inst.FinalFloor)
         {
@@ -213,6 +226,11 @@ public class Player : Entity
             onFloorChange(currentFloor);
             movementManager.leaveDungeon();
             AddInterfaceMessage($"You Climb to a new Floor\nYou feel like this is it.", TextMessage.MessageSpeed.VERYSLOW);
+
+            location = Location.FINALZONE;
+
+            keys.Clear();
+            navigationInterFace.ClearKeyHolder();
         }
     }
 
@@ -224,7 +242,7 @@ public class Player : Entity
         this.gameManager = gameManager;
         this.mapManager = dungeonManager;        
 
-        StartNewPlayer();
+        StartPlayer();
     }
 
     public void Move(Vector3 worldPos, Vector2 mapPos, Tile[,] map, MapManager mapManager)
@@ -236,7 +254,39 @@ public class Player : Entity
         navigationInterFace.CreateNewMinimap();
     }
 
-    void StartNewPlayer()
+    public void TurnPlayer(Global.FacingDirection dir)
+    {
+        direction = dir;
+        RotatePlayer(dir);
+        compass.SetDirectionFast(dir);
+    }
+
+    void RotatePlayer(Global.FacingDirection dir)
+    {
+        switch (dir)
+        {
+            case Global.FacingDirection.NORTH:
+                transform.localEulerAngles = new Vector3(0, -90, 0);
+              // transform.localRotation = new Quaternion(0, 90, 0, 0);
+                break;
+            case Global.FacingDirection.EAST:
+                transform.localEulerAngles = new Vector3(0, 0, 0);
+              //  transform.localRotation = new Quaternion(0, 0, 0, 0);
+                break;
+            case Global.FacingDirection.WEST:
+                transform.localEulerAngles = new Vector3(0, 180, 0);
+              //  transform.localRotation = new Quaternion(0, -90, 0, 0);
+                break;
+            case Global.FacingDirection.SOUTH:
+                transform.localEulerAngles = new Vector3(0, 90, 0);
+              //  transform.localRotation = new Quaternion(0, 180, 0, 0);
+                break;
+            default:
+                break;
+        }
+    }
+
+    void StartPlayer()
     {
         Level = 1;
 
@@ -254,6 +304,15 @@ public class Player : Entity
         currentMoney = 100;
         experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
+        FillNewInventory();      
+
+        getLearnableSpells();
+
+        gameManager.startingNewGame = false;
+    }
+
+    void FillNewInventory()
+    {
         //Inventory
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[1], 3); //add Small health Potions
         Inventory.TryToAddToInventory(DataBase.inst.Consumables[2], 1); //add small mana Potion
@@ -269,13 +328,11 @@ public class Player : Entity
         //RingSlot2.AttemptToPlaceItem(DataBase.inst.Gears[5]);
 
         //Inventory.TryToAddToInventory(DataBase.inst.Gears[6], 1);
-
-        gameManager.startingNewGame = false;
     }
 
-    public bool gainExp(Enemy enemy)
+    public float gainExp(Enemy enemy)
     {
-        bool levelUp = false; ;
+        float levelUp = 0;
         int baseExp = enemy.BaseExpReward;
         int Elevel = enemy.Level;
         int multiplier = 3;
@@ -287,7 +344,7 @@ public class Player : Entity
         currentExperience += ammount;
         totalExperience += ammount;            
 
-        levelUp = LevelUp();        
+        levelUp += LevelUp();        
 
         try
         {
@@ -300,13 +357,25 @@ public class Player : Entity
         return levelUp;
     }
 
-    public bool LevelUp()
+    public float LevelUp()
     {
+        float time = 0;
         if (currentExperience >= experienceToNextLevel)
         {
-        battleInterface.AddMessage($"I'm feeling really confident after that battle, maybe I've gotten stronger...", TextMessage.MessageSpeed.VERYSLOW);
+            time += 3.5f;
+
             Level++;
-        currentExperience = currentExperience - experienceToNextLevel;
+
+            if (battleInterface != null)
+            {
+                battleInterface.AddMessage($"I'm feeling really confident after that battle, maybe I've gotten stronger...", TextMessage.MessageSpeed.VERYSLOW);
+            }
+            else if (navigationInterFace != null)
+            {
+                navigationInterFace.AddMessage($"I've gained a level! I'm now level {Level}", TextMessage.MessageSpeed.VERYSLOW);
+            }
+
+            currentExperience = currentExperience - experienceToNextLevel;
 
         experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
@@ -320,6 +389,8 @@ public class Player : Entity
         Dodge += Random.Range(1, 6);
         Speed += Random.Range(1, 6);
 
+          if ( CheckForNewSpells()) time += 2f ;
+
         try
         {
             onLevelUp(Level);
@@ -328,8 +399,40 @@ public class Player : Entity
         catch { }
 
         RecoverAll();
+        }
 
-            return true;
+        return time;
+    }
+
+    public float gainMoney(Enemy enemy)
+    {
+        float time = 2;
+
+        int quantity = enemy.BaseMoneyReward * enemy.Level;
+
+        currentMoney += quantity;
+        updateGold();
+
+        battleInterface.AddMessage($"Gained {quantity} Gold!", TextMessage.MessageSpeed.NORMAL);
+
+        return time;
+    }
+
+    private bool CheckForNewSpells()
+    {
+        foreach (var s in learnableSpells)
+        {
+            if (s.Key.LevelLearn <= Level)
+            {
+                if (!s.Value)
+                {
+                    knownSpells.Add(s.Key);
+                    if (battleInterface != null) battleInterface.AddMessage($"I learned {s.Key.Name}!", TextMessage.MessageSpeed.NORMAL);
+                    else navigationInterFace.AddMessage($"I learned {s.Key.Name}!", TextMessage.MessageSpeed.NORMAL);
+                    learnableSpells[s.Key] = true;
+                    return true;
+                }                
+            }
         }
 
         return false;
@@ -396,7 +499,7 @@ public class Player : Entity
                 Inventory.ConsumeItem(c.slot);
                 battleInterface.AddMessage($"The mage used a {i.Name}", TextMessage.MessageSpeed.FAST);
 
-                animationTime += 0.5f;
+                animationTime += 1f;
                 animationTime += enemy.ReceiveAction(action);
                 break;
             case InvestigationAction d:
@@ -424,21 +527,21 @@ public class Player : Entity
                 int ToHit = (int)tohit;
 
                 if (ToHit > 100)
-                {
-                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                {                    
+                    int attackDamage = (((int)(a.user.Power) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
                     animationTime += 1.3f;
                 }
                 else if (ToHit > Random.Range(0, 100))
                 {
-                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    int attackDamage = (((int)(a.user.Power) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
                     animationTime += 1.3f;
                 }
                 else
                 {
                     battleInterface.AddMessage($"The {a.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
-                    animationTime += 1.3f;
+                    animationTime += 1.8f;
                 }
 
                 break;
@@ -460,7 +563,7 @@ public class Player : Entity
                 else
                 {
                     battleInterface.AddMessage($"The {b.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
-                    animationTime += 1f;
+                    animationTime += 2f;
                 }
                 break;
             case ItemUseAction c:
@@ -522,6 +625,11 @@ public class Player : Entity
     public void OpenInventory()
     {      
         navigationInterFace.OpenInventory();
+    }
+
+    public void OpenPauseMenu()
+    {
+        navigationInterFace.OpenPauseMenu();
     }
 
     public void HealHealth(int ammount)
@@ -619,6 +727,8 @@ public class Player : Entity
 
     public void rotateCompass(float dir) => compass.rotate(dir);
      
+
+
     public void addGold(int ammount)
     {
         currentMoney += ammount;
@@ -665,11 +775,92 @@ public class Player : Entity
     {
         keys.Add(id);
 
-        AddInterfaceMessage("Picked up a key", TextMessage.MessageSpeed.NORMAL);
+        AddInterfaceMessage($"Picked up a {getKeyColorFromId(id)} Key", TextMessage.MessageSpeed.NORMAL);
+        navigationInterFace.AddKey(id);
     }
 
     public bool SearchKey(int id)
     {
         return keys.Contains(id);
     }
+
+
+    string getKeyColorFromId(int id)
+    {
+        switch (id)
+        {
+            case 1:
+                return "Green";
+            case 2:
+                return "Blue";
+            case 3:
+                return "Yellow";
+        }
+
+
+        return "Red";
+    }
+
+    public void EndGame()
+    {
+        gameManager.EndGame();
+    }
+
+    public int KnownTypeSpellsCount(Global.Type type)
+    {
+        int spellCount = 0;
+        int knownSpellsCount = knownSpells.Count;
+        if (knownSpellsCount == 0) return 0;
+        else
+        {
+            for (int i = 0; i < knownSpellsCount; i++)
+            {
+                if (knownSpells[i].type == type) spellCount++;
+            }
+
+            return spellCount;
+        }  
+    }
+
+
+    public void LevelUpManually()
+    {
+        Level++;
+
+        if (battleInterface != null)
+        {
+            battleInterface.AddMessage($"I'm feeling really confident after that battle, maybe I've gotten stronger...", TextMessage.MessageSpeed.VERYSLOW);
+        }
+        else if (navigationInterFace != null)
+        {
+            navigationInterFace.AddMessage($"I've gained a level! I'm now level {Level}", TextMessage.MessageSpeed.VERYSLOW);
+        }
+
+        currentExperience = experienceToNextLevel;
+
+        experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
+
+        //Stats up
+        maxHealth += Random.Range(5, 21);
+        maxMana += Random.Range(5, 11);
+
+        Power += Random.Range(1, 6);
+        Defence += Random.Range(2, 6);
+        Accuracy += Random.Range(2, 6);
+        Dodge += Random.Range(1, 6);
+        Speed += Random.Range(1, 6);
+
+        CheckForNewSpells();
+
+        try
+        {
+            onLevelUp(Level);
+            onStatsChange();
+        }
+        catch { }
+
+        RecoverAll();
+    }
+
+
 }

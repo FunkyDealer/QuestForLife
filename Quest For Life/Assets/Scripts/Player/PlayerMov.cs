@@ -20,6 +20,7 @@ public class PlayerMov : MonoBehaviour
     float turningVelocity = 50f;
     float inputTimer;
     bool inputDelayOn = false;
+    bool inCutScene;
 
     MapManager mapManager;
 
@@ -45,6 +46,7 @@ public class PlayerMov : MonoBehaviour
         inDungeon = false;
 
         interactCoolDown = false;
+        inCutScene = false;
 
         inputTimer = 0;
         player = GetComponent<Player>();
@@ -100,7 +102,11 @@ public class PlayerMov : MonoBehaviour
                 Vector3 dir = nextPosition - transform.position;
                 dir.Normalize();
 
-                transform.position += dir * velocity * Time.deltaTime; //Moving
+                float v = velocity;
+                if (inCutScene) v = velocity / 6;
+                
+
+                transform.position += dir * v * Time.deltaTime; //Moving
 
                 float mag = Vector3.Distance(transform.position, nextPosition);
                 if (mag < 0.1f)
@@ -115,6 +121,7 @@ public class PlayerMov : MonoBehaviour
                         inBattle = m.CheckForEncounter();
                     }
                     if (inBattle) movementState = MovementState.IN_BATTLE;
+                    else if (inCutScene) movementState = MovementState.FROZEN;
                     else movementState = MovementState.COOLDOWN;
                 }
                 break;
@@ -145,6 +152,13 @@ public class PlayerMov : MonoBehaviour
             movementState = MovementState.FROZEN;
             return;
         }
+        if (Input.GetButtonDown("CloseMenu"))
+        {
+            player.OpenPauseMenu();
+            movementState = MovementState.FROZEN;
+            return;
+        }
+
         if (Input.GetKeyDown("r"))
         {
             OpenShop();
@@ -161,6 +175,15 @@ public class PlayerMov : MonoBehaviour
         if (Input.GetKeyDown("l"))
         {
             player.AddInterfaceMessage($"Testing a message \n 2nd line", TextMessage.MessageSpeed.VERYSLOW);
+            movementState = MovementState.COOLDOWN;
+            return;
+        }
+
+        if (Input.GetKeyDown("k"))
+        {
+           // Debug.Log("Leveling Up manually");
+           
+            player.LevelUpManually();
             movementState = MovementState.COOLDOWN;
             return;
         }
@@ -293,6 +316,10 @@ public class PlayerMov : MonoBehaviour
                     case RoomMapTile.RoomFeature.None:
                         CalculateNextPosition(newPos);
                         break;
+                    case RoomMapTile.RoomFeature.EndGame:
+                        movementState = MovementState.FROZEN;
+                        player.EndGame();
+                        break;
                     default:
                         break;
                 }
@@ -308,8 +335,13 @@ public class PlayerMov : MonoBehaviour
         {
             DungeonManager DM = (DungeonManager)player.mapManager;
             Chest c = DM.Chests[player.currentMap[x, y]].GetComponent<Chest>();
-            if (!c.isOpen) player.addGold(c.OpenChest(player.Level, player.currentMap[x, y].floor));
+            if (!c.isOpen)
+            {
+                player.addGold(c.OpenChest(player.Level, player.currentMap[x, y].floor));
 
+                movementState = MovementState.FROZEN;
+                StartCoroutine(ResumeMovement(1));
+            }
         }
      }
 
@@ -327,12 +359,13 @@ public class PlayerMov : MonoBehaviour
         if (player.direction == player.currentMap[posX, posY].OppositeDirection()) 
         {
             //go to Dungeon
-            player.gameManager.MovePlayerToDungeon();
-            inDungeon = true;
-            DungeonManager d = (DungeonManager)player.mapManager; //set shop
-            d.currentShop = null;
+            player.gameManager.shopManager.shopExit.Open(MoveFromShopToDungeon, CalculateShopDoor);
 
-            movementState = MovementState.COOLDOWN;
+
+            
+            inCutScene = true;
+
+            movementState = MovementState.FROZEN;
         }
     }
 
@@ -341,15 +374,41 @@ public class PlayerMov : MonoBehaviour
         if (player.direction == player.currentMap[posX, posY].OppositeDirection())
         {
             //go to Shop
-            DungeonManager e = (DungeonManager)player.mapManager; //set shop
-            e.currentShop = player.currentTile;
 
-            player.gameManager.MovePlayerToShop();
-            
+            //ShopEntrance 
+            DungeonManager d = (DungeonManager)player.mapManager;
+            d.currentShop.Open(MoveFromDungeonToShop, CalculateShopDoor);
+                       
 
             inDungeon = false;
-            movementState = MovementState.COOLDOWN;
+            inCutScene = true;
+            movementState = MovementState.FROZEN;
         }
+    }
+
+    private void MoveFromDungeonToShop()
+    {
+        player.gameManager.MovePlayerToShop();
+        movementState = MovementState.COOLDOWN;
+        inCutScene = false;
+    }
+
+    private void MoveFromShopToDungeon()
+    {
+        player.gameManager.MovePlayerToDungeon();
+        movementState = MovementState.COOLDOWN;
+        inCutScene = false;
+        inDungeon = true;
+    }
+
+    void CalculateShopDoor(PhysicalTile door)
+    {
+        Vector3 targetPos = door.gameObject.transform.position;
+
+        targetPos = new Vector3(targetPos.x, player.gameObject.transform.position.y, targetPos.z);
+
+        nextPosition = targetPos;
+        movementState = MovementState.MOVING;
     }
 
     void CalculateNextPosition(Vector2 newPos)
@@ -369,19 +428,28 @@ public class PlayerMov : MonoBehaviour
         DungeonManager m = (DungeonManager)player.mapManager;
 
         LockedStairs l = m.exit.GetComponent<LockedStairs>();
-        if (l.CheckKeys(player.keys))
+        if (l.Locked)
+        {
+            if (l.CheckKeys(player.keys))
+            {
+                movementState = MovementState.FROZEN;
+                player.AddInterfaceMessage("You Opened the Stairs to the next Floor", TextMessage.MessageSpeed.NORMAL);
+                StartCoroutine(ResumeMovement(2));
+            }
+            else
+            {
+                if (!interactCoolDown)
+                {
+                    player.AddInterfaceMessage("You lack all the keys to open this", TextMessage.MessageSpeed.NORMAL);
+                    interactCoolDown = true;
+                }
+                movementState = MovementState.COOLDOWN;
+            }
+        } else
         {
             MoveToNextFloor();
         }
-        else
-        {
-            if (!interactCoolDown)
-            {
-                player.AddInterfaceMessage("You lack all the keys to open this", TextMessage.MessageSpeed.VERYFAST);
-                interactCoolDown = true;
-            }
-            movementState = MovementState.COOLDOWN;
-        }
+       
     }
 
     void UseExit()
@@ -413,6 +481,13 @@ public class PlayerMov : MonoBehaviour
 
     public void ResumeMovement()
     {
+        movementState = MovementState.COOLDOWN;
+    }
+
+    public IEnumerator ResumeMovement(float time)
+    {
+        yield return new WaitForSeconds(time);
+
         movementState = MovementState.COOLDOWN;
     }
 

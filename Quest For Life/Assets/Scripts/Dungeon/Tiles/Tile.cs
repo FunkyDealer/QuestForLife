@@ -69,10 +69,10 @@ public class Tile
 
     public void createConnections(Tile[,] map, int width, int length)
     {
-        if (x > 0) north = map[x - 1, y];
-        if (x < length) south = map[x + 1, y];
-        if (y > 0) west = map[x - 1, y];
-        if (y < width) east = map[x + 1, y];
+        if (x - 1 > 0) north = map[x - 1, y];
+        if (x + 1 < length) south = map[x + 1, y];
+        if (y - 1  > 0) west = map[x, y - 1];
+        if (y + 1 < width) east = map[x, y + 1];
     }
 
     public Global.FacingDirection OppositeDirection()
@@ -89,5 +89,37 @@ public class Tile
                 return Global.FacingDirection.NORTH;
         }
         return Global.FacingDirection.NORTH;
+    }
+
+    public Global.FacingDirection Direction()
+    {
+        switch (facing)
+        {
+            case Facing.west:
+                return Global.FacingDirection.WEST;
+            case Facing.east:
+                return Global.FacingDirection.EAST;
+            case Facing.south:
+                return Global.FacingDirection.SOUTH;
+        }
+
+        return Global.FacingDirection.NORTH;
+    }
+
+    public Tile getForwardTile()
+    {
+        switch (facing)
+        {
+            case Facing.north:
+                return north;                
+            case Facing.west:
+                return west;
+            case Facing.east:
+                return east;
+            case Facing.south:
+                return south;
+        }
+
+        return null;
     }
 }

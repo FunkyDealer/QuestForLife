@@ -143,7 +143,7 @@ Animator:
   m_GameObject: {fileID: 921174080552903849}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c76d673050a72b34eafdd2e849485479, type: 2}
+  m_Controller: {fileID: 9100000, guid: ac45f4298a3f2f84ca8e87ae44070334, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -165,16 +165,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityName: Red Slime
-  Level: 7
-  maxHealth: 92
-  currentHealth: 92
-  maxMana: 92
-  currentMana: 92
-  Power: 34
-  Defence: 28
-  Accuracy: 31
-  Dodge: 19
-  Speed: 28
+  Level: 13
+  maxHealth: 128
+  currentHealth: 128
+  maxMana: 128
+  currentMana: 128
+  Power: 58
+  Defence: 46
+  Accuracy: 49
+  Dodge: 31
+  Speed: 46
   BaseAttackPower: 40
   battleManager: {fileID: 0}
   Resistence: 0

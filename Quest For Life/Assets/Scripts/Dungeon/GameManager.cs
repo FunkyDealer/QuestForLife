@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -75,17 +77,36 @@ public class GameManager : MonoBehaviour
 
     public void MovePlayerToShop()
     {
-        player.Move(shopManager.SpawnPos3d(), shopManager.Spawn2d(), shopManager.map, shopManager);        
+        player.Move(shopManager.SpawnPos3d, shopManager.Spawn2d, shopManager.map, shopManager);
+        player.TurnPlayer(shopManager.EntranceDir);
+        player.location = Player.Location.SHOP;
+
     }
 
     public void MovePlayerToDungeon()
     {
-        Vector3 pos3d = dungeonManager.FreeTiles[dungeonManager.currentShop].transform.position;
+        Tile forwarTile = dungeonManager.currentShop.tile.getForwardTile();
+        Vector3 pos3d = dungeonManager.FreeTiles[forwarTile].transform.position;
         pos3d.y = 1;
-        Vector2 pos2d = new Vector2(dungeonManager.currentShop.x, dungeonManager.currentShop.y);
+        Vector2 pos2d = new Vector2(forwarTile.x, forwarTile.y);
 
         player.Move(pos3d, pos2d, dungeonManager.map, dungeonManager);
+        player.TurnPlayer(dungeonManager.currentShop.tile.Direction());
+        player.location = Player.Location.DUNGEON;
     }
 
+    internal void EndGame()
+    {
+        GameObject o = Instantiate(DataBase.inst.ScreenChanger, Vector3.zero, Quaternion.identity);
+        FadeToBlackScreenChange f = o.GetComponent<FadeToBlackScreenChange>();
+        f.Init(GoToEndGame, false);
+
+    }
+
+    void GoToEndGame()
+    {
+        Debug.Log("Ending Game");
+        SceneManager.LoadScene("EndGameScene", LoadSceneMode.Single);
+    }
 
 }

@@ -235,7 +235,7 @@ Animator:
   m_GameObject: {fileID: 4513769769517518167}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c76d673050a72b34eafdd2e849485479, type: 2}
+  m_Controller: {fileID: 9100000, guid: ac45f4298a3f2f84ca8e87ae44070334, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -257,16 +257,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityName: Blue Slime
-  Level: 7
-  maxHealth: 92
-  currentHealth: 92
-  maxMana: 92
-  currentMana: 92
-  Power: 27
-  Defence: 35
-  Accuracy: 31
-  Dodge: 19
-  Speed: 28
+  Level: 14
+  maxHealth: 134
+  currentHealth: 134
+  maxMana: 134
+  currentMana: 134
+  Power: 48
+  Defence: 63
+  Accuracy: 52
+  Dodge: 33
+  Speed: 49
   BaseAttackPower: 40
   battleManager: {fileID: 0}
   Resistence: 1

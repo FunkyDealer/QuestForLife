@@ -2,3 +2,6 @@ MonsterName,RangeMin,RangeMax,ID,Health,HealthGain,Mana,manaGain,Power,PowerGain
 Green Slime,1,13,1,50,5,10,1,4,2,7,2,10,3,5,2,7,3,30,10,50,None,None,0,0,0
 Red Slime,3,14,2,50,6,10,1,6,4,7,3,10,3,5,2,7,3,40,20,150,Fire,Water,1,0,0
 Blue Slime,5,14,3,50,6,10,1,6,3,7,4,10,3,5,2,7,3,40,20,200,Water,Thunder,2,0,0
+Giant Green Slime,11,25,4,50,10,10,2,6,3,7,3,10,3,5,2,7,2,70,50,350,None,None,3,2,0
+Giant Red Slime,11,25,5,50,10,10,3,6,5,7,3,10,3,5,1,7,2,90,70,400,Fire,Water,5,1,0
+Giant Blue Slime,11,25,6,50,13,10,4,6,3,7,4,10,3,5,1,7,2,80,80,440,Water,Thunder,6,2,0

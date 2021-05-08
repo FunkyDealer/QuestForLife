@@ -7,6 +7,7 @@ public class Chest : PhysicalTile
     public bool isOpen;
     public int moneyBase = 10;
     public int moneyMul = 10;
+    public int id;
 
     Animator animator;
 

@@ -44,8 +44,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MPrefabs:
-  - {fileID: 3062223073250991363, guid: 7209a86d70609ac40b981644cb5eb1e8, type: 3}
-  - {fileID: 2250979852166427208, guid: ef06307c09493c64bb4eb9eb8813b79a, type: 3}
-  - {fileID: 4332449162212752354, guid: 621abede3050f85468ad5c85c49a0050, type: 3}
+  - {fileID: 9141090210292813343, guid: bfd8995c3a8f55449aefa75a6f97a845, type: 3}
+  - {fileID: 921174080552903849, guid: 0bcb5dd3201c0ae4fa285474a687d7e6, type: 3}
+  - {fileID: 4513769769517518167, guid: 210ead29d063b6e44a5c0c843ed9a21f, type: 3}
+  - {fileID: 1885564683832300475, guid: bc16b5699b772584eae0774f921c7168, type: 3}
+  - {fileID: 1035406080595119870, guid: d42f9192e3c6f4442b6e65f314ebf49b, type: 3}
+  - {fileID: 2415918119166234633, guid: b24736cfe7c73474f9ec290d9ce5600b, type: 3}
+  ConsumablePrefrabs:
+  - {fileID: 4108385147297716221, guid: f20f90a476b09ab4fb7a0b824094f015, type: 3}
+  - {fileID: 5259298085213454498, guid: e059bbf34be4ef142a0ef54b6e316417, type: 3}
+  - {fileID: 5259298085213454498, guid: 3ac501f190f8be3478afbcab02f55f01, type: 3}
+  - {fileID: 5259298085213454498, guid: 6451597dc0858d94db3dd8e43bd99307, type: 3}
+  - {fileID: 5259298085213454498, guid: d6246c7ceb909b94797da729a4f9b8e8, type: 3}
+  - {fileID: 5259298085213454498, guid: c7c996844d521d84fb514f8abff546c2, type: 3}
+  - {fileID: 5259298085213454498, guid: d8679bc15bb46c94ab3fa8f4cb2b8434, type: 3}
+  - {fileID: 5259298085213454498, guid: 7f3f4be7304caa54797a5cc0d51052d3, type: 3}
+  - {fileID: 5259298085213454498, guid: 277405ef4086195408b91bd89d19fbfa, type: 3}
+  - {fileID: 5259298085213454498, guid: c176a6159848c9f49a72c519cd26f757, type: 3}
+  - {fileID: 5259298085213454498, guid: 30cad65fc3ff3774099de70bd517076f, type: 3}
+  GearPrefrabs:
+  - {fileID: 4266233680165781666, guid: b7f8287607ea57349b4ba915c5b71733, type: 3}
+  - {fileID: 4732913377445683671, guid: 4bd68d9b6bd6e7745ac86fa8c3263110, type: 3}
+  - {fileID: 4860736849968165056, guid: f121f8d8ebe4e1d46bac99c011fbc730, type: 3}
+  - {fileID: 2870897314308961820, guid: 851de8e1d4d45b647b00a3236e517d08, type: 3}
+  - {fileID: 2468539570185645162, guid: e95db2f3fb953ac47b9880caf08b1c44, type: 3}
+  - {fileID: 7044179615400987690, guid: c3e164ba07708b7489ced8d21ed1627d, type: 3}
+  - {fileID: 4266233680165781666, guid: 65076570d2ffc9240ac810f0049a35be, type: 3}
   MonsterInfoFile: {fileID: 4900000, guid: facabba7cc6cbc440a1f7e6103c540e2, type: 3}
   SpellInfoFile: {fileID: 4900000, guid: b65fd95f0d2333840b26b8fad20cf0d2, type: 3}
+  ConsumableInfoFile: {fileID: 4900000, guid: 8819bc65fc9ac8f4c976abfd573917c1, type: 3}
+  GearInfoFile: {fileID: 4900000, guid: 416c9e4307d73494a9bf1ee0eda2278d, type: 3}
+  FinalFloor: 25
+  confirmationInterface: {fileID: 6017819301932501908, guid: 8418dcf71e0b6254cabbe417e6e9b364,
+    type: 3}
+  ScreenChanger: {fileID: 7764975914577480874, guid: 6e0db138faf7b1d4197df722fa4fe430,
+    type: 3}
+  DoorScreenChanger: {fileID: 7764975914577480874, guid: 4bf3e4c98e32a394d85a4892f1909036,
+    type: 3}

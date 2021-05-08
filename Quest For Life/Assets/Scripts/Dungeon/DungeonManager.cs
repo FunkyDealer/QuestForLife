@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DungeonManager : MapManager
@@ -39,7 +40,7 @@ public class DungeonManager : MapManager
     int currentThresHold = 10;
     int stepCounter;
 
-    public Tile currentShop;
+    public ShopEntrance currentShop;
 
     GameObject FinalZoneObj;
     [SerializeField]
@@ -52,6 +53,7 @@ public class DungeonManager : MapManager
     {
         this.gameManager = gm;
         this.FinalZoneObj = finalZoneObj;
+        
     }
 
     void Awake()
@@ -77,6 +79,7 @@ public class DungeonManager : MapManager
         if (Chests == null) Chests = new Dictionary<Tile, GameObject>();
         Chests.Clear();
 
+        currentShop = null;
         exit = null;
 
         if (currentFloorObject != null)
@@ -91,7 +94,7 @@ public class DungeonManager : MapManager
 
         currentFloor++;
 
-        StartFloorGeneration();
+        StartFloorGeneration(false);
     }
 
     public void CreateFinalZone()
@@ -103,7 +106,7 @@ public class DungeonManager : MapManager
         currentFloorObject = Instantiate(finalZoneGeneratorPrefab, Vector3.zero, Quaternion.identity);
         FinalZoneGenerator e = currentFloorObject.GetComponent<FinalZoneGenerator>();
 
-        e.Initiate(40, 10, this);
+        e.Initiate(30, 7, this);
 
 
     }
@@ -115,35 +118,40 @@ public class DungeonManager : MapManager
 
     }
 
-    void StartFloorGeneration()
+    void StartFloorGeneration(bool loading)
     {
         currentFloorObject = Instantiate(DungeonGeneratorObj, Vector3.zero, Quaternion.identity);
         DungeonGenerator DG = currentFloorObject.GetComponent<DungeonGenerator>();
-        DG.manager = this;
-
-        bool fountain = Random.value > 0.5f;
-        bool shop = Random.value > 0.5f;
+        DG.manager = this;      
 
         if (currentFloor < 10)
         {
 
         }
+        
+        currentSeed = 0;
 
+        if (!loading) mapSeeds = generateNewSeed();
 
         int iterations = 0;
         bool finished = false;
         while (!finished)
         {
+
+            bool fountain = Global.Value(this) > 0.5f;
+            bool shop = Global.Value(this) > 0.5f;
+
             if (!DG.Initiate(custom, true, true, 99, 5, currentFloor)) { Debug.Log("Floor had only 1 room"); }
             else finished = true;
             iterations++;
             if (iterations > 20)
             {
-                finished = true; Debug.Log("Failed to create a floor after 20 attempts, giving up");
+                finished = true;
+                Debug.Log("Failed to create a floor after 20 attempts, giving up");
                 Destroy(DG.gameObject);
                 //DG.Initiate(Easy, true, true, 99, 5);
             }
-        }
+        }       
     }
 
     public override void StartMap(MapGenerator DG, Vector2 spawn)
@@ -155,6 +163,19 @@ public class DungeonManager : MapManager
 
 
         gameManager.SpawnPlayer(spawnPos, spawn, map);
+    }
+
+    public void StartFinalRoom(MapGenerator DG, Vector2 spawn)
+    {
+        Destroy(DG);
+
+        Vector3 spawnPos = FreeTiles[map[(int)spawn.x, (int)spawn.y]].transform.position;
+        spawnPos.y = 1f;
+
+
+        gameManager.SpawnPlayer(spawnPos, spawn, map);
+        gameManager.player.MovementManager.leaveDungeon();
+        gameManager.player.TurnPlayer(Global.FacingDirection.SOUTH);
     }
 
     void DestroyCurrentFloor()
@@ -200,6 +221,22 @@ public class DungeonManager : MapManager
     }
 
 
+    int[] generateNewSeed()
+    {
+        int[] mapSeeds = new int[254];
 
+        for (int i = 0; i < 100; i++)
+        {
+            int[] seed = new int[9];
+            for (int z = 0; z < 9; z++)
+            {
+                seed[z] = Random.Range(0, 10);              
+
+            }
+            mapSeeds[i] = seed.Select((t, r) => t * System.Convert.ToInt32(Mathf.Pow(10, seed.Length - r - 1))).Sum();
+        }
+
+        return mapSeeds;
+    }
 
 }

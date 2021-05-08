@@ -112,12 +112,16 @@ public class Entity : MonoBehaviour
 
                 if (ToHit > 100)
                 {
-                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    Vector2 weakness = checkForWeakness(a.type);
+
+                    int attackDamage = (((int)(a.user.Power * weakness.x) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
                 }
                 else if (ToHit > Random.Range(0, 100))
                 {
-                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    Vector2 weakness = checkForWeakness(a.type);
+
+                    int attackDamage = (((int)(a.user.Power * weakness.x) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
                 } else
                 {
@@ -166,11 +170,8 @@ public class Entity : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            battleManager.MonsterDeath();
-            battleInterface.MonsterDeath();
-            //Debug.Log($"Monster Died!");
-            battleInterface.AddMessage($"The {this.EntityName} Died!", TextMessage.MessageSpeed.VERYFAST);
-            dead = true;
+            Death();
+           
         }
         else
         {
@@ -178,13 +179,18 @@ public class Entity : MonoBehaviour
         }
     }
 
-    protected float checkForWeakness(Global.Type type)
+    protected virtual void Death()
     {
-        if (type == Global.Type.NONE) return 1;
 
-        if (Weakness == type) { battleInterface.AddMessage("That attack looks like it really hurt!", TextMessage.MessageSpeed.FAST); ; return 2; }
-        else if (Resistence == type) { battleInterface.AddMessage("that Attacks seems to have had little effect!", TextMessage.MessageSpeed.NORMAL); return 0.5f; }
-        else return 1;
+    }
+
+    protected Vector2 checkForWeakness(Global.Type type)
+    {
+        if (type == Global.Type.NONE) return new Vector2(1, 0);
+
+        if (Weakness == type) { battleInterface.AddMessage("That attack looks like it really hurt!", TextMessage.MessageSpeed.FAST); return new Vector2(2, 1); }
+        else if (Resistence == type) { battleInterface.AddMessage("that Attacks seems to have had little effect!", TextMessage.MessageSpeed.NORMAL); return new Vector2(0.5f, 1); }
+        else return new Vector2(1, 0);
     }
 
     protected virtual void castSpell(CastSpellAction b)
@@ -205,7 +211,8 @@ public class Entity : MonoBehaviour
     {
         if (b.Target == this)
         {
-            int spellDamage = (((int)(b.user.Power * checkForWeakness(b.spell.type)) * b.spell.Power) / (Defence + 1));
+            Vector2 weakness = checkForWeakness(b.spell.type);
+            int spellDamage = (((int)(b.user.Power * weakness.x) * b.spell.Power) / (Defence + 1));
 
             ReceiveDamage(spellDamage);
         }

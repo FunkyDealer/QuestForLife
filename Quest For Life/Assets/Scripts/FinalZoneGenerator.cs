@@ -32,7 +32,10 @@ public class FinalZoneGenerator : MapGenerator
         drawFinalRoom();
         DrawRoof();
 
-        manager.StartMap(this, spawn);
+       // manager.StartMap(this, spawn);
+        DungeonManager DM = (DungeonManager)manager;
+        DM.StartFinalRoom(this, spawn);
+        
 
         return true;
     }
@@ -61,11 +64,11 @@ public class FinalZoneGenerator : MapGenerator
                 //Create Walls
                 if (x == 0 || x == mapWidth - 1)
                 {
-                    map[x, y] = new WallTile(true, x, y);
+                    map[x, y] = new WallTile(true, x, y, true);
                 }
                 else if (y == 0 || y == mapLength - 1)
                 {
-                    map[x, y] = new WallTile(true, x, y);
+                    map[x, y] = new WallTile(true, x, y, true);
                 }
                 else
                 {
@@ -88,7 +91,7 @@ public class FinalZoneGenerator : MapGenerator
 
             spawn = new Vector2(x, y);
 
-            x = mapWidth / 2;
+            x = mapWidth - 4;
             y = mapLength / 2;
 
             RoomMapTile s = (RoomMapTile)map[x, y];

@@ -51,21 +51,47 @@ public class CompassController : MonoBehaviour
         SetDirectionFast(dir);
     }
 
-    void SetDirectionFast(Global.FacingDirection dir)
+    //void SetDirectionFast(Global.FacingDirection dir)
+    //{
+    //    switch (dir)
+    //    {
+    //        case Global.FacingDirection.NORTH:
+    //            transform.Rotate(0, 0, 0);
+    //            break;
+    //        case Global.FacingDirection.EAST:
+    //            transform.Rotate(0, 0, -90);
+    //            break;
+    //        case Global.FacingDirection.WEST:
+    //            transform.Rotate(0, 0, 90);
+    //            break;
+    //        case Global.FacingDirection.SOUTH:
+    //            transform.Rotate(0, 0, 180);
+    //            break;
+    //    }
+    //}
+
+    public void SetDirectionFast(Global.FacingDirection dir)
     {
         switch (dir)
         {
             case Global.FacingDirection.NORTH:
-                transform.Rotate(0, 0, 0);
+                transform.localEulerAngles = new Vector3(0, 0, 0);
+                //  transform.Rotate(0, 0, 0);
                 break;
             case Global.FacingDirection.EAST:
-                transform.Rotate(0, 0, -90);
+                //   transform.Rotate(0, 0, -90);
+                transform.localEulerAngles = new Vector3(0, 0, -90);
+             //   transform.localRotation = new Quaternion(0, 0, -90, 0);
                 break;
             case Global.FacingDirection.WEST:
-                transform.Rotate(0, 0, 90);
+                //  transform.Rotate(0, 0, 90);
+                transform.localEulerAngles = new Vector3(0, 0, 90);
+               // transform.localRotation = new Quaternion(0, 0, 90, 0);
                 break;
             case Global.FacingDirection.SOUTH:
-                transform.Rotate(0, 0, 180);
+                //  transform.Rotate(0, 0, 180);
+                transform.localEulerAngles = new Vector3(0, 0, 180);
+                //transform.localRotation = new Quaternion(0, 0, 180, 0);
                 break;
         }
     }

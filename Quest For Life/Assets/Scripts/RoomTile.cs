@@ -19,7 +19,6 @@ public class RoomTile : PhysicalTile
     [SerializeField]
     int maxCeilingProps = 1;
 
-
     [SerializeField]
     int propChance = 20;
 
@@ -30,13 +29,15 @@ public class RoomTile : PhysicalTile
     [SerializeField]
     int ceilingChange = 10; //chance that there will be ceiling props
 
+    public MapManager m;
+
     // Start is called before the first frame update
     void Start()
     {
         foreach (var f in floorPropsSpotList) f.SetActive(false);
         foreach (var c in ceilingPropsSpotList) c.SetActive(false);
         chandelierObj.SetActive(false);
-
+        
         PropBuilder();
     }
 
@@ -51,7 +52,7 @@ public class RoomTile : PhysicalTile
         int currentProps = 0;
         int totalSpotsAvailable = ceilingPropsSpotList.Count; //number of spots in the ceiling
 
-        if (chandelierChance >= Random.Range(0, 101))
+        if (chandelierChance >= Global.Range(0, 101, m))
         {
             currentProps++;
             chandelierObj.SetActive(true);
@@ -63,14 +64,14 @@ public class RoomTile : PhysicalTile
 
         int availableSpots = totalSpotsAvailable; //floor spots still avaialble, each ceiling prop that is not the chandelier takes one away
 
-        if (propChance >= Random.Range(1, 101)) //chance that there will be props in this space
+        if (propChance >= Global.Range(1, 101, m)) //chance that there will be props in this space
         {
-            if (floorPropsChance >= Random.Range(1, 101)) //chance that it is a floor prop
+            if (floorPropsChance >= Global.Range(1, 101, m)) //chance that it is a floor prop
             {
-                int FloorPropNr = Random.Range(1, maxFloorProps + 1);
+                int FloorPropNr = Global.Range(1, maxFloorProps + 1, m);
                 if (FloorPropNr > availableSpots) FloorPropNr = availableSpots;
 
-                int toActivate = Random.Range(0, totalSpotsAvailable);
+                int toActivate = Global.Range(0, totalSpotsAvailable, m);
 
                 while (true)
                 {
@@ -85,17 +86,22 @@ public class RoomTile : PhysicalTile
             }
             else
             {
-                if (ceilingChange >= Random.Range(1, 101)) //chance that it is a ceiling prop
+                if (ceilingChange >= Global.Range(1, 101, m)) //chance that it is a ceiling prop
                 {
-                    int ceilingPropsNr = Random.Range(1, maxCeilingProps + 1);
+                    int ceilingPropsNr = Global.Range(1, maxCeilingProps + 1, m);
                     if (ceilingPropsNr > totalSpotsAvailable) ceilingPropsNr = totalSpotsAvailable;
 
                     while (true)
                     {
-                        int toActivate = Random.Range(0, totalSpotsAvailable);
+                        int toActivate = Global.Range(0, totalSpotsAvailable, m);
                         if (!ceilingPropsSpotList[toActivate].activeSelf && !floorPropsSpotList[toActivate].activeSelf)
                         {
                             ceilingPropsSpotList[toActivate].SetActive(true);
+
+                            GameObject prefab = PropsDataBase.inst.CeilingProps[0];
+                            GameObject o = Instantiate(prefab, ceilingPropsSpotList[toActivate].transform.position, Quaternion.identity, ceilingPropsSpotList[toActivate].transform);
+                            o.transform.localScale = prefab.transform.localScale;
+
                             break;
                         }
                     }

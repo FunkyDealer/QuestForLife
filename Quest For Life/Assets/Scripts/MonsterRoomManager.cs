@@ -72,7 +72,7 @@ public class MonsterRoomManager : MonoBehaviour
 
     public void EndBattle()
     {
-        
+        MonsterDeath();
     }
 
     public void MonsterDeath()

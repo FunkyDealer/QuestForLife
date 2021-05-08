@@ -13,15 +13,16 @@ public class Partition
     public Room room; //Room that is inside this partition
     public List<Hall> halls; //halls that connect this partition to other partitions
 
-    Random r;
+    MapManager m;
 
-    public Partition(int X, int Y, int Width, int Height, int MIN_LEAF_SIZE)
+    public Partition(int X, int Y, int Width, int Height, int MIN_LEAF_SIZE, MapManager m)
     {
         this.MIN_LEAF_SIZE = MIN_LEAF_SIZE;
         x = X;
         y = Y;
         width = Width;
         height = Height;
+        this.m = m;
 
         halls = new List<Hall>();
 
@@ -37,7 +38,7 @@ public class Partition
         // if the width is >25% larger than height, we split vertically
         // if the height is >25% larger than the width, we split horizontally
         // otherwise we split randomly
-        bool splitH = Random.value > 0.5;
+        bool splitH = Global.Value(m) > 0.5;
 
         if (width > height && width / height >= 1.25)
             splitH = false;
@@ -48,18 +49,18 @@ public class Partition
         if (max <= MIN_LEAF_SIZE)
             return false; // the area is too small to split any more...
 
-        int split = Random.Range(MIN_LEAF_SIZE, max); // determine where we're going to split
+        int split = Global.Range(MIN_LEAF_SIZE, max, m); // determine where we're going to split
 
         // create our left and right children based on the direction of the split
         if (splitH)
         {
-            leftChild = new Partition(x, y, width, split, MIN_LEAF_SIZE);
-            rightChild = new Partition(x, y + split, width, height - split, MIN_LEAF_SIZE);
+            leftChild = new Partition(x, y, width, split, MIN_LEAF_SIZE, m);
+            rightChild = new Partition(x, y + split, width, height - split, MIN_LEAF_SIZE, m);
         }
         else
         {
-            leftChild = new Partition(x, y, split, height, MIN_LEAF_SIZE);
-            rightChild = new Partition(x + split, y, width - split, height, MIN_LEAF_SIZE);
+            leftChild = new Partition(x, y, split, height, MIN_LEAF_SIZE, m);
+            rightChild = new Partition(x + split, y, width - split, height, MIN_LEAF_SIZE, m);
         }
         return true; // split successful!
     }
@@ -96,12 +97,12 @@ public class Partition
             int roomPosY;
 
             // the room can be between 3 x 3 tiles to the size of the leaf - 2.
-            roomSizeX = Random.Range(3, width - 2);
-            roomSizeY = Random.Range(3, height - 2);
+            roomSizeX = Global.Range(3, width - 2, m);
+            roomSizeY = Global.Range(3, height - 2, m);
             // place the room within the Leaf, but don't put it right 
             // against the side of the Leaf (that would merge rooms together)
-            roomPosX = Random.Range(1, width - roomSizeX - 1);
-            roomPosY = Random.Range(1, height - roomSizeY - 1);
+            roomPosX = Global.Range(1, width - roomSizeX - 1, m);
+            roomPosY = Global.Range(1, height - roomSizeY - 1, m);
 
             room = new Room(x + roomPosX, y + roomPosY, roomSizeX, roomSizeY);
         }
@@ -130,7 +131,7 @@ public class Partition
                 return lRoom;
             else if (lRoom == null)
                 return rRoom;
-            else if (Random.value > .5)
+            else if (Global.Value(m) > .5)
                 return lRoom;
             else
                 return rRoom;
@@ -143,11 +144,11 @@ public class Partition
         // connect these two rooms together with hallways.
         // it's  trying to figure out which point is where and then either draw a straight line, or a pair of lines to make a right-angle to connect them.
 
-        int point1X = Random.Range(l.left + 1, l.right - 2);
-        int point1Y = Random.Range(l.top + 1, l.bottom - 2);
+        int point1X = Global.Range(l.left + 1, l.right - 2, m);
+        int point1Y = Global.Range(l.top + 1, l.bottom - 2 , m);
 
-        int point2X = Random.Range(r.left + 1, r.right - 2);
-        int point2Y = Random.Range(r.top + 1, r.bottom - 2);
+        int point2X = Global.Range(r.left + 1, r.right - 2, m);
+        int point2Y = Global.Range(r.top + 1, r.bottom - 2, m);
 
         int w = point2X - point1X;
         int h = point2Y - point1Y;
@@ -158,7 +159,7 @@ public class Partition
             {
 
 
-                if (Random.value < 0.5)
+                if (Global.Value(m) < 0.5)
                 {
                     halls.Add(new Hall(point2X, point1Y, Mathf.Abs(w), 1, l, r));
                     halls.Add(new Hall(point2X, point2Y, 1, Mathf.Abs(h), l, r));

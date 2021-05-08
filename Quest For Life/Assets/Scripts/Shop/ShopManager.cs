@@ -13,11 +13,17 @@ public class ShopManager : MapManager
 
     Vector3 spawnPos3d;
     Vector2 spawn2d;
-    public Vector3 SpawnPos3d() => spawnPos3d;
-    public Vector2 Spawn2d() => spawn2d;
+    Global.FacingDirection entranceDir;
+    public Vector3 SpawnPos3d => spawnPos3d;
+    public Vector2 Spawn2d => spawn2d;
+    public Global.FacingDirection EntranceDir => entranceDir;
+    
 
     private Shop shop;
     public Shop Shop => shop;
+
+    [HideInInspector]
+    public ShopExit shopExit;
 
     [SerializeField]
     GameObject shopInterfacePrefab;
@@ -34,11 +40,12 @@ public class ShopManager : MapManager
         shop = new Shop(3, 6);
     }
 
-    public override void StartMap(MapGenerator DG, Vector2 spawn)
+    public void StartShop(MapGenerator DG, Vector2 spawn, Global.FacingDirection entranceDir)
     {
 
         spawnPos3d = FreeTiles[map[(int)spawn.x, (int)spawn.y]].transform.position;
         spawnPos3d.y = this.gameObject.transform.position.y + 1f;
+        this.entranceDir = entranceDir;
 
         spawn2d = spawn;
 

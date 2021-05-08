@@ -9,6 +9,8 @@ public class DungeonGenerator : MapGenerator
     [SerializeField]
     GameObject WallTileObj; //Tiles for Walls
     [SerializeField]
+    GameObject HallWallTileObj;
+    [SerializeField]
     GameObject RoomTileObj; //Tile for Room
     [SerializeField]
     GameObject HallTileObj; //Tile for Hall
@@ -81,6 +83,9 @@ public class DungeonGenerator : MapGenerator
         if (!CreateNewMap()) { return false; }
         else
         {
+            fillTileConnections();
+
+
             manager.map = this.map;
 
             DrawFloor();
@@ -116,8 +121,8 @@ public class DungeonGenerator : MapGenerator
             //Create Entrance
             int x = 5, y = 10;
 
-            x = Random.Range(1, mapWidth);
-            y = Random.Range(1, mapLength);
+            x = Global.Range(1, mapWidth, manager);
+            y = Global.Range(1, mapLength, manager);
 
             spawn = new Vector2(x, y);
         }
@@ -169,7 +174,7 @@ public class DungeonGenerator : MapGenerator
         Partition l; // helper Leaf
 
         // first, create a Leaf to be the 'root' of all Leafs.
-        Partition root = new Partition(0, 0, mapWidth, mapLength, MIN_LEAF_SIZE);
+        Partition root = new Partition(0, 0, mapWidth, mapLength, MIN_LEAF_SIZE, manager);
         _leafs.Add(root);
 
         bool did_split = true;
@@ -185,7 +190,7 @@ public class DungeonGenerator : MapGenerator
                 if (l.leftChild == null && l.rightChild == null) // if this partition is not already split...
                 {
                     // if this partion is too big, or 75% chance...
-                    if (l.width > MAX_LEAF_SIZE || l.height > MAX_LEAF_SIZE || Random.value > 0.25)
+                    if (l.width > MAX_LEAF_SIZE || l.height > MAX_LEAF_SIZE || Global.Value(manager) > 0.25)
                     {
                         if (l.Split()) // split the partition!
                         {
@@ -226,7 +231,7 @@ public class DungeonGenerator : MapGenerator
                         }
                         else if (map[x, y].occupied)
                         {
-                            map[x, y] = new WallTile(map[x, y]);
+                            map[x, y] = new WallTile(map[x, y], true);
                         }
                     }
                 }
@@ -252,7 +257,7 @@ public class DungeonGenerator : MapGenerator
                             {
                                 if (map[x, y] is FillMapTile && map[x, y].occupied)
                                 {                                    
-                                    map[x, y] = new WallTile(map[x, y]);
+                                    map[x, y] = new WallTile(map[x, y], false);                                    
                                 }
                             }
                         }
@@ -279,8 +284,8 @@ public class DungeonGenerator : MapGenerator
     {
         Room currentRoom = rooms[0];
 
-        int entranceX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width); //Entrance's Random X
-        int entranceY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height); //Entrance's Random Y
+        int entranceX = Global.Range(currentRoom.x, currentRoom.x + currentRoom.width, manager); //Entrance's random X
+        int entranceY = Global.Range(currentRoom.y, currentRoom.y + currentRoom.height, manager); //Entrance's random Y
 
         if (map[entranceX, entranceY] is RoomMapTile) //create Entrance
         {
@@ -300,8 +305,8 @@ public class DungeonGenerator : MapGenerator
 
         currentRoom = rooms[rooms.Count - 1];
 
-        int exitX = Random.Range(currentRoom.x + 1, currentRoom.x + currentRoom.width - 1); //exit's Random X
-        int exitY = Random.Range(currentRoom.y + 1, currentRoom.y + currentRoom.height - 1); //exit's Random Y
+        int exitX = Global.Range(currentRoom.x + 1, currentRoom.x + currentRoom.width - 1, manager); //exit's random X
+        int exitY = Global.Range(currentRoom.y + 1, currentRoom.y + currentRoom.height - 1, manager); //exit's random Y
 
         if (map[exitX, exitY] is RoomMapTile) //create Exit
         {
@@ -330,27 +335,27 @@ public class DungeonGenerator : MapGenerator
 
             while (!placed)
             {
-                int roomNumber = Random.Range(0, rooms.Count - 2);
+                int roomNumber = Global.Range(0, rooms.Count - 2, manager);
                 currentRoom = rooms[roomNumber];               
                
-                Tile.Facing facing = (Tile.Facing)Random.Range(0, 4); //Select in which side of the squared room the shop will be
+                Tile.Facing facing = (Tile.Facing)Global.Range(0, 4, manager); //Select in which side of the squared room the shop will be
                 switch (facing)
                 {
                     case Tile.Facing.north: //Down
                         fX = currentRoom.x + 1 + currentRoom.width;
-                        fY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height);
+                        fY = Global.Range(currentRoom.y, currentRoom.y + currentRoom.height, manager);
                         break;
                     case Tile.Facing.east: //Left
-                        fX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width);
+                        fX = Global.Range(currentRoom.x, currentRoom.x + currentRoom.width, manager);
                         fY = currentRoom.y - 1;
                         break;
                     case Tile.Facing.west: //Right
-                        fX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width);
+                        fX = Global.Range(currentRoom.x, currentRoom.x + currentRoom.width, manager);
                         fY = currentRoom.y + 1 + currentRoom.height;
                         break;
                     case Tile.Facing.south: //Up
                         fX = currentRoom.x - 1;
-                        fY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height);
+                        fY = Global.Range(currentRoom.y, currentRoom.y + currentRoom.height, manager);
                         break;
 
                     default:
@@ -382,7 +387,7 @@ public class DungeonGenerator : MapGenerator
 
         if (fountain) //Creates Foutain
         {
-            int roomNumber = Random.Range(1, rooms.Count - 1);
+            int roomNumber = Global.Range(1, rooms.Count - 1, manager);
             currentRoom = rooms[roomNumber];
             bool placed = false;
             int iterations = 0;
@@ -392,8 +397,8 @@ public class DungeonGenerator : MapGenerator
 
             while (!placed)
             {
-                fX = Random.Range(currentRoom.x + 1, currentRoom.x + currentRoom.width - 1);
-                fY = Random.Range(currentRoom.y + 1, currentRoom.y + currentRoom.height - 1);
+                fX = Global.Range(currentRoom.x + 1, currentRoom.x + currentRoom.width - 1, manager);
+                fY = Global.Range(currentRoom.y + 1, currentRoom.y + currentRoom.height - 1, manager);
 
                 if (map[fX, fY] is RoomMapTile) //create Fountain
                 {
@@ -434,7 +439,7 @@ public class DungeonGenerator : MapGenerator
             int roomNumber = 0;
             while (!FreeRoom)
             {
-                roomNumber = Random.Range(1, rooms.Count);
+                roomNumber = Global.Range(1, rooms.Count, manager);
                 currentRoom = rooms[roomNumber];
                 if (!currentRoom.shop && !currentRoom.chest) FreeRoom = true;
             }
@@ -444,24 +449,24 @@ public class DungeonGenerator : MapGenerator
             {
                 int fX = currentRoom.x - 1;//base
                 int fY = currentRoom.y;
-                Tile.Facing facing = (Tile.Facing)Random.Range(0, 4); //Select in which side of the squared room the Chest will be
+                Tile.Facing facing = (Tile.Facing)Global.Range(0, 4, manager); //Select in which side of the squared room the Chest will be
                 switch (facing)
                 {
                     case Tile.Facing.north: //Down
                         fX = currentRoom.x + 1 + currentRoom.width;
-                        fY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height);
+                        fY = Global.Range(currentRoom.y, currentRoom.y + currentRoom.height, manager);
                         break;
                     case Tile.Facing.east: //Left
-                        fX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width);
+                        fX = Global.Range(currentRoom.x, currentRoom.x + currentRoom.width, manager);
                         fY = currentRoom.y - 1;
                         break;
                     case Tile.Facing.west: //Right
-                        fX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width);
+                        fX = Global.Range(currentRoom.x, currentRoom.x + currentRoom.width, manager);
                         fY = currentRoom.y + 1 + currentRoom.height;
                         break;
                     case Tile.Facing.south: //Up
                         fX = currentRoom.x - 1;
-                        fY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height);
+                        fY = Global.Range(currentRoom.y, currentRoom.y + currentRoom.height, manager);
                         break;
                     default:
                         Debug.Log("CHEST FACING ERROR");
@@ -509,7 +514,7 @@ public class DungeonGenerator : MapGenerator
             int roomNumber = 0;
             while (!FreeRoom)
             {
-                roomNumber = Random.Range(1, rooms.Count-1);
+                roomNumber = Global.Range(1, rooms.Count-1, manager);
                 currentRoom = rooms[roomNumber];
                 if (!currentRoom.key) FreeRoom = true;
             }
@@ -517,8 +522,8 @@ public class DungeonGenerator : MapGenerator
             bool placed = false;
             while (!placed)
             {
-                int keyX = Random.Range(currentRoom.x, currentRoom.x + currentRoom.width);
-                int keyY = Random.Range(currentRoom.y, currentRoom.y + currentRoom.height);
+                int keyX = Global.Range(currentRoom.x, currentRoom.x + currentRoom.width, manager);
+                int keyY = Global.Range(currentRoom.y, currentRoom.y + currentRoom.height, manager);
 
                 if (map[keyX, keyY] is RoomMapTile) //create Key
                 {
@@ -564,6 +569,7 @@ public class DungeonGenerator : MapGenerator
     void DrawMap() //Draws the Map
     {
         int placedKey = 0;
+        int placedChests = 0;
         
         for (int x = 0; x < mapWidth; x++)
         {
@@ -619,11 +625,15 @@ public class DungeonGenerator : MapGenerator
                                     rotateObj(o, map[x, y].facing);
                                     DungeonManager DM = (DungeonManager)manager;
                                     DM.Chests.Add(map[x, y], o);
+                                    Chest c = o.GetComponent<Chest>();
+                                    c.id = chestNumber;
+                                    chestNumber++;
                                     break;
                                 case WallTile.WallFeature.ShopExit:
                                     break;
                                 case WallTile.WallFeature.None:
-                                    InstantiateObj(WallTileObj, position);
+                                    if (w.Room) InstantiateObj(WallTileObj, position);
+                                    else InstantiateObj(HallWallTileObj, position);
                                     break;
                                 default:
                                     Debug.Log($"Error drawing a tile in a Wall Tile at X: {x} Y: {y}");
@@ -659,7 +669,11 @@ public class DungeonGenerator : MapGenerator
                                 case RoomMapTile.RoomFeature.Boss:
                                     break;
                                 case RoomMapTile.RoomFeature.Key:
-                                    InstantiateFreeObj(RoomTileObj, position, x, y);
+                                    GameObject g = InstantiateFreeObj(RoomTileObj, position, x, y);
+
+                                    RoomTile RT = g.GetComponent<RoomTile>();
+                                    RT.m = manager;
+
                                     position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
                                     InstantiateObj(keysObj[placedKey], position);
                                     placedKey++;
@@ -667,7 +681,9 @@ public class DungeonGenerator : MapGenerator
                                 case RoomMapTile.RoomFeature.Shop:
                                     break;
                                 case RoomMapTile.RoomFeature.None:
-                                    InstantiateFreeObj(RoomTileObj, position, x, y);
+                                    GameObject o = InstantiateFreeObj(RoomTileObj, position, x, y);
+                                    RoomTile rt = o.GetComponent<RoomTile>();
+                                    rt.m = manager;
                                     break;
                                 default:
                                     Debug.Log($"Error Drawing a room tile in a room at X: {x} Y: {y}");
@@ -713,7 +729,9 @@ public class DungeonGenerator : MapGenerator
         ShopEntrance e = ShopEntranceObj.GetComponent<ShopEntrance>();
         e.shopManager = manager.gameManager.shopManager;
         e.tile = tile;
-        
+
+        DungeonManager d = (DungeonManager)manager;
+        d.currentShop = e;
     }
 
     void DrawRoof()

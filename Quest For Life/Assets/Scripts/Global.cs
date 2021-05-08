@@ -88,10 +88,39 @@ public class Global
         public int Cost;
         public int Accuracy;
         public AttackEffect effect;
+        public bool PlayerLearn;
+        public int LevelLearn;
     }
 
+    static int getSeed(MapManager m)
+    {
+        int seed = m.MapSeeds[m.CurrentSeed];
+        m.increaseSeed();
+        return seed;
+    }
 
+    /// <summary>
+    /// Return an integer number between min[INCLUSIVE] and max[EXLUSIVE] (read only)
+    /// </summary>
+    public static int Range(int min, int max, MapManager m)
+    {
+        int n = 0;
+        Random.State originalState = Random.state;
+        Random.InitState(getSeed(m));
+        n = Random.Range(min, max);
+        Random.state = originalState;
+        return n;
+    }
 
+    public static float Value(MapManager m)
+    {
+        float n = 0;
+        Random.State originalState = Random.state;
+        Random.InitState(getSeed(m));
+        n = Random.value;
+        Random.state = originalState;
+        return n;
 
+    }
 
 }

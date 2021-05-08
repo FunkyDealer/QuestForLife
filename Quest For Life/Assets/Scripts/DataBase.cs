@@ -45,6 +45,9 @@ public class DataBase : MonoBehaviour
 
     public GameObject confirmationInterface;
 
+    public GameObject ScreenChanger; //for use when you want to change screen/Scene
+    public GameObject DoorScreenChanger; //for use when you want to change screen/Scene with a door
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -83,16 +86,18 @@ public class DataBase : MonoBehaviour
             i++;
         }
 
+
+        readSpells(SpellInfoFile);
+        ReadMonsters(MonsterInfoFile);
+        ReadConsumable(ConsumableInfoFile);
+        ReadGears(GearInfoFile);
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        readSpells(SpellInfoFile);
-        ReadMonsters(MonsterInfoFile);
-        ReadConsumable(ConsumableInfoFile);
-        ReadGears(GearInfoFile);
+
 
     }
 
@@ -123,6 +128,8 @@ public class DataBase : MonoBehaviour
             spell.Cost = int.Parse(data[4]);
             spell.Accuracy = int.Parse(data[5]);
             spell.effect = ConvertToAttackEffect(int.Parse(data[6]));
+            spell.PlayerLearn = convertToBoolean(int.Parse(data[7]));
+            spell.LevelLearn = int.Parse(data[8]);
 
             Spells.Add(spell.Id, spell);
            // Debug.Log($"Adding new Spell: {spell.Name}, {spell.Id}, {spell.type}, {spell.Power},  {spell.Cost}, {spell.Accuracy},  {spell.effect}");

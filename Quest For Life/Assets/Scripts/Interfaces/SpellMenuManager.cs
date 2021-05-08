@@ -94,7 +94,7 @@ public class SpellMenuManager : MonoBehaviour
 
     GameObject createButton(Global.Spell spell, RectTransform parent, int ButtonNum)
     {
-        parent.sizeDelta = new Vector2(parent.sizeDelta.x, 50 * (ButtonNum));
+        parent.sizeDelta = new Vector2(parent.sizeDelta.x, 50 * (ButtonNum + 1));
 
         GameObject o = Instantiate(buttonPrefab, parent.gameObject.transform);
         BattleSpellButton b = o.GetComponent<BattleSpellButton>();
@@ -111,8 +111,8 @@ public class SpellMenuManager : MonoBehaviour
 
     public void FireButtonClick()
     {
-        if (manager.canAct && !manager.selectingTarget)
-        {
+        if (manager.canAct && !manager.selectingTarget && manager.player.KnownTypeSpellsCount(Global.Type.FIRE) > 0)
+        {            
             if (FireContent.gameObject.activeInHierarchy) FireContent.gameObject.SetActive(false);
             else
             {
@@ -125,7 +125,7 @@ public class SpellMenuManager : MonoBehaviour
 
     public void ThunderButtonClick()
     {
-        if (manager.canAct && !manager.selectingTarget)
+        if (manager.canAct && !manager.selectingTarget && manager.player.KnownTypeSpellsCount(Global.Type.THUNDER) > 0)
         {
             if (ThunderContent.gameObject.activeInHierarchy) ThunderContent.gameObject.SetActive(false);
             else
@@ -139,7 +139,7 @@ public class SpellMenuManager : MonoBehaviour
 
     public void WaterButtonClick()
     {
-        if (manager.canAct && !manager.selectingTarget)
+        if (manager.canAct && !manager.selectingTarget && manager.player.KnownTypeSpellsCount(Global.Type.WATER) > 0)
         {
             if (WaterContent.gameObject.activeInHierarchy) WaterContent.gameObject.SetActive(false);
             else
@@ -153,7 +153,7 @@ public class SpellMenuManager : MonoBehaviour
 
     public void LightButtonClick()
     {
-        if (manager.canAct && !manager.selectingTarget)
+        if (manager.canAct && !manager.selectingTarget && manager.player.KnownTypeSpellsCount(Global.Type.LIGHT) > 0)
         {
             if (LightContent.gameObject.activeInHierarchy) LightContent.gameObject.SetActive(false);
             else

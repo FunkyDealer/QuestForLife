@@ -55,7 +55,6 @@ public class BattleManager : MonoBehaviour
         monster.battleManager = this;
 
         interfaceManager.getInformation(player, monster, this);
-
         
         StartCoroutine(ChooseActions(0.7f)); //Run after 1 second
 
@@ -153,7 +152,8 @@ public class BattleManager : MonoBehaviour
             float TimeforFinish = 2;
             Player p = (Player)player;
             Enemy m = (Enemy)monster;
-            if (p.gainExp(m)) TimeforFinish += 4.5f;
+            TimeforFinish += p.gainExp(m);
+            TimeforFinish += p.gainMoney(m);
 
             StartCoroutine(FinishBattle(TimeforFinish, false));
 
@@ -183,7 +183,7 @@ public class BattleManager : MonoBehaviour
     public void MonsterDeath() //If the Monster Dies
     {
         death = true;        
-        MonsterRoomManager.inst.MonsterDeath();
+       // MonsterRoomManager.inst.MonsterDeath();
     }
 
     IEnumerator FinishBattle(float time, bool ranAway)

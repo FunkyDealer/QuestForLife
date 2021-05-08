@@ -66,7 +66,6 @@ public class Shop
         {          
             if (player.Inventory.TryToAddToInventory(item, 1)) //try to add to inventory
             {
-
                 consumableInventory[slot] = null;
                 player.spendGold(item.Cost);
                 return true;

@@ -13,6 +13,8 @@ public class WallTile : Tile
     }
     public WallFeature wallFeature;
 
+    public bool Room;
+
     public enum WallType
     {
         Wall,
@@ -21,15 +23,14 @@ public class WallTile : Tile
     }
     public WallType wallType;
 
-
-
-    public WallTile(bool occupied, int x, int y) : base(occupied, x, y)
+    public WallTile(bool occupied, int x, int y, bool room) : base(occupied, x, y)
     {
         this.occupied = occupied;
         this.x = x;
         this.y = y;
         wallFeature = WallFeature.None;
         facing = Facing.none;
+        this.Room = room;
 
         north = null;
         south = null;
@@ -37,7 +38,7 @@ public class WallTile : Tile
         east = null;
     }
 
-    public WallTile(Tile t)
+    public WallTile(Tile t, bool room)
     {
         this.occupied = t.occupied;
         this.x = t.x;
@@ -49,6 +50,7 @@ public class WallTile : Tile
         south = null;
         west = null;
         east = null;
+        this.Room = room;
     }
 
 

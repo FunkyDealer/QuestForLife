@@ -22,6 +22,7 @@ public class ShopGenerator : MapGenerator
     GameObject fountainTileObj; //Tile for fountain
     #endregion
 
+    Global.FacingDirection entranceDir;
 
     public bool Initiate(int width, int length)
     {
@@ -38,7 +39,8 @@ public class ShopGenerator : MapGenerator
         drawShop();
         DrawRoof();
 
-        manager.StartMap(this, spawn);
+        ShopManager s = (ShopManager)manager;
+        s.StartShop(this, spawn, Global.FacingDirection.SOUTH);
 
         return true;
     }
@@ -68,11 +70,11 @@ public class ShopGenerator : MapGenerator
                 //Create Walls
                 if (x == 0 || x == mapWidth - 1)
                 {
-                    map[x, y] = new WallTile(true, x, y);
+                    map[x, y] = new WallTile(true, x, y, true);
                 }
                 else if (y == 0 || y == mapLength - 1)
                 {
-                    map[x, y] = new WallTile(true, x, y);
+                    map[x, y] = new WallTile(true, x, y, true);
                 }
                 else
                 {
@@ -87,6 +89,7 @@ public class ShopGenerator : MapGenerator
 
             WallTile e = (WallTile)map[x, y];
             e.wallFeature = WallTile.WallFeature.ShopExit;
+            e.facing = Tile.Facing.south;
             e.occupied = true;
             map[x, y] = e;
 
@@ -229,5 +232,6 @@ public class ShopGenerator : MapGenerator
         ShopManager m = (ShopManager)manager;
         e.shopManager = m;
         e.tile = tile;
+        m.shopExit = e;
     }
 }

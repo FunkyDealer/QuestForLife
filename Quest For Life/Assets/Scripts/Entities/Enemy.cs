@@ -13,9 +13,12 @@ public class Enemy : Entity
     int DodgeGainPerLevel;
     int SpeedGainPerLevel;
 
+    [HideInInspector]
     public int BaseMoneyReward;
+    [HideInInspector]
     public int BaseExpReward;
 
+    [HideInInspector]
     public int MonsterID;
 
     Global.Spell[] KnownSpells;
@@ -130,6 +133,20 @@ public class Enemy : Entity
         
     }
 
+    protected override void Death()
+    {
+        base.Death();
+
+        battleManager.MonsterDeath();
+        animator.SetBool("Dead", true);
+
+
+        battleInterface.MonsterDeath();
+        //Debug.Log($"Monster Died!");
+        battleInterface.AddMessage($"The {this.EntityName} Died!", TextMessage.MessageSpeed.VERYFAST);
+        dead = true;
+    }
+
     public override float PerformAction(BattleAction action, Entity Enemy)
     {
         float animationTime = 0;
@@ -167,19 +184,23 @@ public class Enemy : Entity
 
                 if (ToHit > 100)
                 {
-                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    Vector2 weakness = checkForWeakness(a.type);
+
+                    int attackDamage = (((int)(a.user.Power * weakness.x) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
                     animator.SetTrigger("TakeDmg");
                     MonsterAnimator.SetTrigger("Damaged");
-                    animationTime += 1.3f;
+                    animationTime += 1.3f + weakness.y;
                 }
                 else if (ToHit > Random.Range(0, 100))
                 {
-                    int attackDamage = (((int)(a.user.Power * checkForWeakness(a.type)) * a.attackBasePower) / (Defence + 1));
+                    Vector2 weakness = checkForWeakness(a.type);
+
+                    int attackDamage = (((int)(a.user.Power * weakness.x) * a.attackBasePower) / (Defence + 1));
                     ReceiveDamage(attackDamage);
                     animator.SetTrigger("TakeDmg");
                     MonsterAnimator.SetTrigger("Damaged");
-                    animationTime += 1.3f;
+                    animationTime += 1.3f + weakness.y;
                 }
                 else
                 {

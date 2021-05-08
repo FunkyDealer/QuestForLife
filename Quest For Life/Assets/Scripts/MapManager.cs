@@ -13,6 +13,14 @@ public class MapManager : MonoBehaviour
     [HideInInspector]
     public GameManager gameManager;
 
+    [HideInInspector]
+    protected int[] mapSeeds;
+    public int[] MapSeeds => mapSeeds;
+    protected int currentSeed = 0;
+    public int CurrentSeed => currentSeed;
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,5 +43,12 @@ public class MapManager : MonoBehaviour
     {
         FreeTiles.Add(map[x, y], obj);
     }
+
+    public void increaseSeed()
+    {
+        currentSeed++;
+        if (currentSeed == 254) currentSeed = 0;
+    }
+
 
 }
