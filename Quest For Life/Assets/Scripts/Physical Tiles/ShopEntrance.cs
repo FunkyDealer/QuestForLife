@@ -16,16 +16,20 @@ public class ShopEntrance : PhysicalTile
     System.Action<PhysicalTile> moveAction;
     System.Action telePortAction;
 
+    [HideInInspector]
+    public ShopData data = null;
+
     void Awake()
     {
-        animator = GetComponent<Animator>();
-       
+        animator = GetComponent<Animator>();       
     }
 
     // Start is called before the first frame update
     void Start()
-    {        
-        shopManager.Shop.RestockInventory(tile.floor);
+    {
+        if (data == null) shopManager.Shop.RestockInventory(tile.floor);
+        else shopManager.Shop.LoadShop(data);
+
 
         facing = tile.facing;
         pos2D = new Vector2(tile.x, tile.y);

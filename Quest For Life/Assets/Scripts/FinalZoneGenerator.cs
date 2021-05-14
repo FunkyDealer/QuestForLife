@@ -16,7 +16,7 @@ public class FinalZoneGenerator : MapGenerator
     GameObject endTileObj;
     #endregion
 
-    public bool Initiate(int width, int length, MapManager manager)
+    public bool Initiate(int width, int length, MapManager manager, SaveData data)
     {
         this.mapWidth = width;
         this.mapLength = length;
@@ -34,8 +34,9 @@ public class FinalZoneGenerator : MapGenerator
 
        // manager.StartMap(this, spawn);
         DungeonManager DM = (DungeonManager)manager;
-        DM.StartFinalRoom(this, spawn);
-        
+        if (data == null) DM.StartFinalRoom(this, spawn);
+        else DM.gameManager.StartLoadedMap(this, data);
+
 
         return true;
     }

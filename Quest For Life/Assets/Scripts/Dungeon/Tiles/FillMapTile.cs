@@ -20,6 +20,7 @@ public class FillMapTile : Tile
 
     public FillMapTile(Tile t)
     {
+        this.floor = t.floor;
         this.occupied = t.occupied;
         this.x = t.x;
         this.y = t.y;

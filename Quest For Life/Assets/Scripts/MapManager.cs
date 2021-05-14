@@ -33,7 +33,7 @@ public class MapManager : MonoBehaviour
         
     }
 
-    public virtual void StartMap(MapGenerator DG, Vector2 spawn)
+    public virtual void StartMap(MapGenerator DG, Vector2 spawn, SaveData data)
     {
 
     }

@@ -87,6 +87,19 @@ public class Inventory
         return false; //if everything fails, returns that the Inventory
     }
 
+    /// <summary>
+    /// For use only in loading
+    /// </summary>
+    /// <param name="i"></param>
+    /// <param name="Quantity"></param>
+    /// <param name="slot"></param>
+    public void ForceIntoSlot(Item i, int Quantity, int slot)
+    {
+        ItemStack s = new ItemStack(i, Quantity, slots[slot]);
+
+        Slots[slot].PlaceItem(s);
+    }
+
     InventorySlot areThereAvailableSlotsForConsumable(HealItem i, int Quantity) //Checks if there is a slot where an healItem can be placed in One go
     {
         foreach (var s in slots)

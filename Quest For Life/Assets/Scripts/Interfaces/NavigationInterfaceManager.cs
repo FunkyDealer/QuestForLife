@@ -65,7 +65,10 @@ public class NavigationInterfaceManager : HudManager
     // Start is called before the first frame update
     void Start()
     {
-        
+        foreach (var k in player.keys)
+        {
+            AddKey(k);
+        }
     }
 
     void OnDestroy()

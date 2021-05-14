@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject FinalZoneObj;
 
+
     void Awake()
     {
         startingNewGame = true;
@@ -42,13 +43,16 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SaveData data = DataGameMail.inst.getData();
+
         GameObject o = Instantiate(dungeonManagerObj, Vector3.zero, Quaternion.identity);
         DungeonManager dm = o.GetComponent<DungeonManager>();        
         dungeonManager = dm;
         dungeonManager.Init(this, FinalZoneObj);
 
-        dungeonManager.CreateNewFloor();
-        
+        if (data == null) dungeonManager.CreateNewFloor();
+        else dungeonManager.LoadGame(data);
+
     }
 
     // Update is called once per frame
@@ -109,4 +113,39 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("EndGameScene", LoadSceneMode.Single);
     }
 
+    public void LoadPlayer(SaveData data, Vector3 worldPos, Tile[,] map)
+    {
+        GameObject o = Instantiate(playerObj, worldPos, Quaternion.identity);
+
+        player = o.GetComponent<Player>();
+        player.compass = compassController;
+
+        Vector2 MapPosition = new Vector2(data.playerData.currentTile[0], data.playerData.currentTile[1]);
+
+        player.Spawn(worldPos, MapPosition, map, this, dungeonManager, data);
+
+        player.TurnPlayer((Global.FacingDirection)data.playerData.Orientation);
+    }
+
+
+
+    public void StartLoadedMap(MapGenerator DG, SaveData data)
+    {
+        Destroy(DG);
+        Vector3 spawnPos = Vector3.zero;
+        Tile[,] Map = dungeonManager.map;
+        if (data.playerData.inShop)
+        {
+            spawnPos = shopManager.FreeTiles[shopManager.map[(int)data.playerData.currentTile[0], (int)data.playerData.currentTile[1]]].transform.position;
+            Map = shopManager.map;
+        }
+        else
+        {
+            spawnPos = dungeonManager.FreeTiles[dungeonManager.map[(int)data.playerData.currentTile[0], (int)data.playerData.currentTile[1]]].transform.position;
+        }
+
+        spawnPos.y = 1f;
+
+        LoadPlayer(data, spawnPos, Map);
+    }
 }

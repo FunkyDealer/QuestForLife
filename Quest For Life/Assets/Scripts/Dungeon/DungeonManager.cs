@@ -97,18 +97,33 @@ public class DungeonManager : MapManager
         StartFloorGeneration(false);
     }
 
-    public void CreateFinalZone()
+    public void LoadGame(SaveData data)
     {
         resetFloor();
+        currentFloor = data.mapData.floor;
+        mapSeeds = data.mapData.seeds;
 
-        currentFloor++;
+        if (data.playerData.inFinalZone) CreateFinalZone(data);
+        else StartFloorGeneration(true, data);
+    }
 
-        currentFloorObject = Instantiate(finalZoneGeneratorPrefab, Vector3.zero, Quaternion.identity);
-        FinalZoneGenerator e = currentFloorObject.GetComponent<FinalZoneGenerator>();
+    public void CreateFinalZone(SaveData data = null)
+    {
+        if (data == null)
+        {
+            resetFloor();
 
-        e.Initiate(30, 7, this);
+            currentFloor++;
+        }
+        else
+        {
+            currentFloor = data.mapData.floor;
+        }
 
+            currentFloorObject = Instantiate(finalZoneGeneratorPrefab, Vector3.zero, Quaternion.identity);
+            FinalZoneGenerator e = currentFloorObject.GetComponent<FinalZoneGenerator>();
 
+            e.Initiate(30, 7, this, data);
     }
 
     // Update is called once per frame
@@ -118,16 +133,11 @@ public class DungeonManager : MapManager
 
     }
 
-    void StartFloorGeneration(bool loading)
+    void StartFloorGeneration(bool loading, SaveData data = null)
     {
         currentFloorObject = Instantiate(DungeonGeneratorObj, Vector3.zero, Quaternion.identity);
         DungeonGenerator DG = currentFloorObject.GetComponent<DungeonGenerator>();
-        DG.manager = this;      
-
-        if (currentFloor < 10)
-        {
-
-        }
+        DG.manager = this;     
         
         currentSeed = 0;
 
@@ -141,7 +151,7 @@ public class DungeonManager : MapManager
             bool fountain = Global.Value(this) > 0.5f;
             bool shop = Global.Value(this) > 0.5f;
 
-            if (!DG.Initiate(custom, true, true, 99, 5, currentFloor)) { Debug.Log("Floor had only 1 room"); }
+            if (!DG.Initiate(custom, true, true, 99, 5, currentFloor, data)) { Debug.Log("Floor had only 1 room"); }
             else finished = true;
             iterations++;
             if (iterations > 20)
@@ -154,9 +164,10 @@ public class DungeonManager : MapManager
         }       
     }
 
-    public override void StartMap(MapGenerator DG, Vector2 spawn)
+    public override void StartMap(MapGenerator DG, Vector2 spawn, SaveData data)
     {
         Destroy(DG);
+
 
         Vector3 spawnPos = FreeTiles[map[(int)spawn.x, (int)spawn.y]].transform.position;
         spawnPos.y = 1f;
@@ -164,6 +175,8 @@ public class DungeonManager : MapManager
 
         gameManager.SpawnPlayer(spawnPos, spawn, map);
     }
+
+
 
     public void StartFinalRoom(MapGenerator DG, Vector2 spawn)
     {

@@ -56,6 +56,7 @@ public class Tile
 
     public Tile(Tile t)
     {
+        this.floor = t.floor;
         this.occupied = t.occupied;
         this.x = t.x;
         this.y = t.y;

@@ -11,10 +11,19 @@ public class Chest : PhysicalTile
 
     Animator animator;
 
-    void Start()
+    void Awake()
     {
         isOpen = false;
+    }
+
+    void Start()
+    {
         animator = GetComponentInChildren<Animator>();
+
+        if (isOpen == true)
+        {
+            Animation();
+        }
     }
 
     public int OpenChest(int lvl, int floor)
@@ -22,7 +31,6 @@ public class Chest : PhysicalTile
         isOpen = true;
         Animation();
         int money = moneyBase + moneyMul * (int)1.5 * floor * lvl;
-        Debug.Log("Received " + money + "g");
         return money;
     }
 

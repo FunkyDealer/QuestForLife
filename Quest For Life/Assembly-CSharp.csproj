@@ -56,6 +56,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\AppManager.cs" />
+     <Compile Include="Assets\AudioDataBase.cs" />
+     <Compile Include="Assets\DataGameMail.cs" />
+     <Compile Include="Assets\EndSceneController.cs" />
      <Compile Include="Assets\FadeToBlackScreenChange.cs" />
      <Compile Include="Assets\Key.cs" />
      <Compile Include="Assets\LockedStairs.cs" />
@@ -139,6 +142,7 @@
      <Compile Include="Assets\Scripts\RoomTile.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\AppData.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\DataManager.cs" />
+     <Compile Include="Assets\Scripts\SavingLoading\InventoryData.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\MapData.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\PlayerData.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\SaveData.cs" />
@@ -147,6 +151,7 @@
      <Compile Include="Assets\Scripts\Shop\ShopGenerator.cs" />
      <Compile Include="Assets\Scripts\Shop\ShopManager.cs" />
      <Compile Include="Assets\Scripts\TextMessage.cs" />
+     <None Include="Assets\Shader\Glass.shader" />
      <None Include="Assets\Shader\Toon.shader" />
      <None Include="Assets\Shader\ToonRimLight.shader" />
      <None Include="Assets\Shader\maskTexture.shader" />

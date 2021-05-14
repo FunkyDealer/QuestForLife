@@ -204,7 +204,7 @@ public class Entity : MonoBehaviour
                 if (currentHealth >= maxHealth) currentHealth = maxHealth;
                 Debug.Log($"{b.user}  healed himself for {b.spell.Power} hp points!");
             }
-        }
+        }       
     }
 
     protected void ReceiveSpellAttack(CastSpellAction b)

@@ -27,7 +27,25 @@ public class Player : Entity
     [SerializeField]
     int y;
 
-   // [HideInInspector]
+    //Health and Mana
+    [HideInInspector]
+    public int ExtraMaxHealth = 0;
+    [HideInInspector]
+    public int ExtraMaxMana = 0;
+
+    //Other Stats
+    [HideInInspector]
+    public int ExtraPower = 0;
+    [HideInInspector]
+    public int ExtraDefence = 0;
+    [HideInInspector]
+    public int ExtraAccuracy = 0;
+    [HideInInspector]
+    public int ExtraDodge = 0;
+    [HideInInspector]
+    public int ExtraSpeed = 0;
+
+    // [HideInInspector]
     public Global.FacingDirection direction;
     PlayerMov movementManager;
     public PlayerMov MovementManager => movementManager;
@@ -98,11 +116,16 @@ public class Player : Entity
     public GearSlot RingSlot2;
     public GearSlot WeaponSlot;
     
+    [HideInInspector]
     public CompassController compass;
 
     int currentFloor;
 
     public List<int> keys;
+
+    //Sound
+    [SerializeField]
+    AudioSource SpellVoicePlayer;
 
     public enum Location
     {
@@ -116,7 +139,7 @@ public class Player : Entity
     {
         currentFloor = 1;
 
-        keys = new List<int>();
+        keys = new List<int>();        
 
         this.Weakness = Global.Type.NONE;
         this.Resistence = Global.Type.NONE;
@@ -234,15 +257,16 @@ public class Player : Entity
         }
     }
 
-    public void Spawn(Vector3 worldPos, Vector3 mapPos, Tile[,] map, GameManager gameManager, DungeonManager dungeonManager)
+    public void Spawn(Vector3 worldPos, Vector3 mapPos, Tile[,] map, GameManager gameManager, DungeonManager dungeonManager, SaveData data = null)
     {
         gameObject.transform.position = worldPos;
         currentMap = map;
         currentTile = map[(int)mapPos.x, (int)mapPos.y];
         this.gameManager = gameManager;
-        this.mapManager = dungeonManager;        
+        this.mapManager = dungeonManager;
 
-        StartPlayer();
+        if (data == null) StartPlayer();
+        else LoadPlayer(data);
     }
 
     public void Move(Vector3 worldPos, Vector2 mapPos, Tile[,] map, MapManager mapManager)
@@ -292,6 +316,7 @@ public class Player : Entity
 
         maxHealth = 100;
         currentHealth = maxHealth;
+
         maxMana = 50;
         currentMana = maxMana;
 
@@ -307,6 +332,57 @@ public class Player : Entity
         FillNewInventory();      
 
         getLearnableSpells();
+
+        gameManager.startingNewGame = false;
+    }
+
+    void LoadPlayer(SaveData data)
+    {
+        Level = data.playerData.currentLevel;
+        maxHealth = data.playerData.maxHp;
+        currentHealth = data.playerData.currentHp;
+        maxMana = data.playerData.maxMana;
+        currentMana = data.playerData.currentMana;
+
+        Power = data.playerData.Power;
+        Defence = data.playerData.Defense;
+        Accuracy = data.playerData.Accuracy;
+        Dodge = data.playerData.Dodge;
+        Speed = data.playerData.Speed;
+
+        currentMoney = data.playerData.CurrentGold;
+        currentExperience = data.playerData.CurrentExp;
+        experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
+
+        currentFloor = data.mapData.floor;
+
+        if (data.playerData.inFinalZone)
+        {
+            location = Location.FINALZONE;
+            movementManager.leaveDungeon();
+        }
+        else if (data.playerData.inShop)
+        {
+            location = Location.SHOP;
+            movementManager.leaveDungeon();
+            mapManager = gameManager.shopManager;
+        }
+
+        foreach (var k in data.playerData.keys)
+        {
+            keys.Add(k);
+        }
+
+        getLearnableSpells();
+
+        foreach (var s in data.playerData.knownSpells)
+        {
+            Global.Spell spell = DataBase.inst.Spells[s];
+            knownSpells.Add(spell);
+            learnableSpells[spell] = true;
+        }
+
+        LoadItems(data.inventoryData);
 
         gameManager.startingNewGame = false;
     }
@@ -328,6 +404,26 @@ public class Player : Entity
         //RingSlot2.AttemptToPlaceItem(DataBase.inst.Gears[5]);
 
         //Inventory.TryToAddToInventory(DataBase.inst.Gears[6], 1);
+    }
+
+    void LoadItems(InventoryData data)
+    {
+        for (int i = 0; i < Inventory.Slots.Length; i++)
+        {
+            if (data.inventoryIds[i] != -1)
+            {
+                if (data.inventoryType[i] == 0) Inventory.ForceIntoSlot(DataBase.inst.Consumables[data.inventoryIds[i]], data.inventoryQt[i], i);
+                else if (data.inventoryType[i] == 1) Inventory.ForceIntoSlot(DataBase.inst.Gears[data.inventoryIds[i]], data.inventoryQt[i], i);
+            }
+        }
+
+        if (data.HatSlot != -1) HatSlot.AttemptToPlaceItem(DataBase.inst.Gears[data.HatSlot]);
+        if (data.BodySlot != -1) BodySlot.AttemptToPlaceItem(DataBase.inst.Gears[data.BodySlot]);
+        if (data.BeltSlot != -1) BeltSlot.AttemptToPlaceItem(DataBase.inst.Gears[data.BeltSlot]);
+        if (data.RingSlot1 != -1) RingSlot1.AttemptToPlaceItem(DataBase.inst.Gears[data.RingSlot1]);
+        if (data.RingSlot2 != -1) RingSlot2.AttemptToPlaceItem(DataBase.inst.Gears[data.RingSlot2]);
+        if (data.WeaponSlot != -1) WeaponSlot.AttemptToPlaceItem(DataBase.inst.Gears[data.WeaponSlot]);
+
     }
 
     public float gainExp(Enemy enemy)
@@ -598,6 +694,22 @@ public class Player : Entity
         return animationTime;
     }
 
+    protected override void castSpell(CastSpellAction b)
+    {
+        currentMana -= b.spell.Cost;
+        if (b.Target == this)
+        {
+            if (b.spell.type == Global.Type.LIGHT)
+            {
+                this.currentHealth += b.spell.Power;
+                if (currentHealth >= maxHealth) currentHealth = maxHealth;
+                Debug.Log($"{b.user}  healed himself for {b.spell.Power} hp points!");
+            }
+        }
+
+        playSpellVoiceClip(b.spell.Id);
+    }
+
     void sendUpdateHealth()
     {
         try
@@ -666,7 +778,9 @@ public class Player : Entity
         int m = maxMana;
 
         maxHealth += i.HealthBonus;
+        ExtraMaxHealth += i.HealthBonus;
         maxMana += i.ManaBonus;
+        ExtraMaxMana += i.ManaBonus;
 
         int hDif = maxHealth - h;
         currentHealth += hDif;
@@ -678,10 +792,15 @@ public class Player : Entity
 
         
         Power += i.PowerBonus;
+        ExtraPower += i.PowerBonus;
         Defence += i.DefenceBonus;
+        ExtraDefence += i.DefenceBonus;
         Accuracy += i.AccuracyBonus;
+        ExtraAccuracy += i.AccuracyBonus;
         Dodge += i.DodgeBonus;
+        ExtraDodge += i.DodgeBonus;
         Speed += i.SpeedBonus;
+        ExtraSpeed += i.SpeedBonus;
 
         try
         {
@@ -699,7 +818,9 @@ public class Player : Entity
         int m = maxMana;
 
         maxHealth -= i.HealthBonus;
+        ExtraMaxHealth -= i.HealthBonus;
         maxMana -= i.ManaBonus;
+        ExtraMaxMana -= i.ManaBonus;
 
         int hDif = h - maxHealth;
         currentHealth -= hDif;
@@ -710,10 +831,15 @@ public class Player : Entity
         onManaUpdate(currentMana, maxMana);
 
         Power -= i.PowerBonus;
+        ExtraPower -= i.PowerBonus;
         Defence -= i.DefenceBonus;
+        ExtraDefence -= i.DefenceBonus;
         Accuracy -= i.AccuracyBonus;
+        ExtraAccuracy -= i.AccuracyBonus;
         Dodge -= i.DodgeBonus;
+        ExtraDodge -= i.DodgeBonus;
         Speed -= i.SpeedBonus;
+        ExtraSpeed -= i.SpeedBonus;
 
         try
         {
@@ -822,7 +948,6 @@ public class Player : Entity
         }  
     }
 
-
     public void LevelUpManually()
     {
         Level++;
@@ -836,7 +961,8 @@ public class Player : Entity
             navigationInterFace.AddMessage($"I've gained a level! I'm now level {Level}", TextMessage.MessageSpeed.VERYSLOW);
         }
 
-        currentExperience = experienceToNextLevel;
+        totalExperience += experienceToNextLevel;
+        currentExperience = 0;
 
         experienceToNextLevel = 100 * (int)Mathf.Pow((Level + 1), 2) - (100 * (Level + 1));
 
@@ -862,5 +988,25 @@ public class Player : Entity
         RecoverAll();
     }
 
+
+    public void playSpellVoiceClip(int id)
+    {
+        //AudioClip original = SpellVoicePlayer.clip;
+        //SpellVoicePlayer.clip = AudioDataBase.inst.spellVoice[id];
+        AudioClip clip;
+        try
+        {
+            clip = AudioDataBase.inst.spellVoice[id];
+
+            SpellVoicePlayer.PlayOneShot(clip);
+        }
+        catch (KeyNotFoundException)
+        {
+            SpellVoicePlayer.PlayOneShot(SpellVoicePlayer.clip);
+        }
+
+
+
+    }
 
 }

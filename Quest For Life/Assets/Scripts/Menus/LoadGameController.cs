@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoadGameController : MonoBehaviour
 {
     [SerializeField]
     MainMenuManager manager;
+
+    [SerializeField]
+    GameObject dataMailPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -23,5 +27,15 @@ public class LoadGameController : MonoBehaviour
     public void ExitMenu()
     {
         manager.OpenMainMenu(this.gameObject);
+    }
+
+    public void LoadGame()
+    {
+        SaveData data = DataManager.LoadGame(1);
+
+        GameObject o = Instantiate(dataMailPrefab);
+        DataGameMail.inst.SetData(data);
+
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 }

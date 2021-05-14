@@ -59,6 +59,40 @@ public class Shop
 
     }
 
+    public void LoadShop(ShopData data)
+    {
+        Debug.Log("Loading Shop");
+        List<HealItem> HealItems = new List<HealItem>(); //List of available heal Items
+        List<EquipableItem> EquipItems = new List<EquipableItem>(); //list of available equipItems
+
+        for (int i = 0; i < data.consumableNumber; i++)
+        {
+            HealItems.Add(DataBase.inst.Consumables[data.consumables[i]]);
+        }
+
+        for (int i = 0; i < data.equipableNumber; i++)
+        {
+            EquipItems.Add(DataBase.inst.Gears[data.equipables[i]]);
+        }
+
+        if (HealItems.Count > 0)
+        {            
+            for (int i = 0; i < HealItems.Count; i++) //fill consumable inventory
+            {
+                if (HealItems[i] != null) consumableInventory[i] = HealItems[i];
+            }
+        }
+
+        if (EquipItems.Count > 0)
+        {
+            for (int i = 0; i < EquipItems.Count; i++) //fill the equipable inventory
+            {
+                if (EquipItems[i] != null) equipableInventory[i] = EquipItems[i];
+            }
+        }
+
+    }
+
     public bool buyItem(Item item, int slot, Player player)
     {
         Debug.Log("entered");

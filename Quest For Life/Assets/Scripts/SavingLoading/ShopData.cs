@@ -24,7 +24,6 @@ public class ShopData
                 consumableNumber++;
             }
         }
-
         
         consumables = new int[consumableNumber];
         if (consumableNumber > 0) for (int i = 0; i < consumablesList.Count; i++) consumables[i] = consumablesList[i];
@@ -43,8 +42,6 @@ public class ShopData
 
         equipables = new int[equipableNumber];
         if (equipableNumber > 0) for (int i = 0; i < equipablesList.Count; i++) equipables[i] = equipablesList[i];
-
-
     }
 
 

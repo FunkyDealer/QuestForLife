@@ -40,6 +40,7 @@ public class WallTile : Tile
 
     public WallTile(Tile t, bool room)
     {
+        this.floor = t.floor;
         this.occupied = t.occupied;
         this.x = t.x;
         this.y = t.y;

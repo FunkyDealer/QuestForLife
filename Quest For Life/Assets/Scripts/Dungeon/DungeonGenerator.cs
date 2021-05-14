@@ -61,7 +61,7 @@ public class DungeonGenerator : MapGenerator
         
     }
 
-    public bool Initiate(DungeonGenPreset preset, bool fountain, bool shop, int chestNumber, int keys, int floorNumber)
+    public bool Initiate(DungeonGenPreset preset, bool fountain, bool shop, int chestNumber, int keys, int floorNumber, SaveData data)
     {
         this.mapWidth = preset.WIDTH;
         this.mapLength = preset.LENGTH;
@@ -89,10 +89,13 @@ public class DungeonGenerator : MapGenerator
             manager.map = this.map;
 
             DrawFloor();
-            DrawMap();
+            DrawMap(data);
             DrawRoof();
 
-            manager.StartMap(this, spawn);
+            DungeonManager DG = (DungeonManager)manager;
+
+            if (data == null) DG.StartMap(this, spawn, data);
+            else DG.gameManager.StartLoadedMap(this, data);
 
             return true;
         }
@@ -566,7 +569,7 @@ public class DungeonGenerator : MapGenerator
         }
     }
 
-    void DrawMap() //Draws the Map
+    void DrawMap(SaveData data = null) //Draws the Map
     {
         int placedKey = 0;
         int placedChests = 0;
@@ -618,16 +621,12 @@ public class DungeonGenerator : MapGenerator
                                     position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
                                     GameObject s = InstantiateObj(ShopTileObj, position);
                                     rotateObj(s, map[x, y].facing);
-                                    SetShopEntrance(s, map[x, y]);
+                                    SetShopEntrance(s, map[x, y],data);
                                     break;
                                 case WallTile.WallFeature.Chest:
-                                    GameObject o = InstantiateObj(ChestTileObj, position);
-                                    rotateObj(o, map[x, y].facing);
-                                    DungeonManager DM = (DungeonManager)manager;
-                                    DM.Chests.Add(map[x, y], o);
-                                    Chest c = o.GetComponent<Chest>();
-                                    c.id = chestNumber;
-                                    chestNumber++;
+
+                                    createChest(position, x, y, data);
+
                                     break;
                                 case WallTile.WallFeature.ShopExit:
                                     break;
@@ -674,8 +673,24 @@ public class DungeonGenerator : MapGenerator
                                     RoomTile RT = g.GetComponent<RoomTile>();
                                     RT.m = manager;
 
-                                    position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
-                                    InstantiateObj(keysObj[placedKey], position);
+                                    if (data != null)
+                                    {
+                                        bool hasKey = false;                                        
+                                        foreach (var K in data.playerData.keys)
+                                        {
+                                            if (placedKey == K) hasKey = true;
+                                        }
+                                        if (hasKey == false)
+                                        {
+                                            position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
+                                            InstantiateObj(keysObj[placedKey], position);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        position = new Vector3(x * 4 + 2, 0, y * 4 + 2);
+                                        InstantiateObj(keysObj[placedKey], position);
+                                    }
                                     placedKey++;
                                     break;
                                 case RoomMapTile.RoomFeature.Shop:
@@ -724,11 +739,13 @@ public class DungeonGenerator : MapGenerator
         }
     }
 
-    private void SetShopEntrance(GameObject ShopEntranceObj, Tile tile)
+    private void SetShopEntrance(GameObject ShopEntranceObj, Tile tile, SaveData data)
     {
         ShopEntrance e = ShopEntranceObj.GetComponent<ShopEntrance>();
         e.shopManager = manager.gameManager.shopManager;
         e.tile = tile;
+        if (data != null) e.data = data.shopData;
+        else e.data = null;
 
         DungeonManager d = (DungeonManager)manager;
         d.currentShop = e;
@@ -758,5 +775,26 @@ public class DungeonGenerator : MapGenerator
     {
         
     }
+
+
+    void createChest(Vector3 position, int x, int y, SaveData data)
+    {
+        GameObject o = InstantiateObj(ChestTileObj, position);
+        rotateObj(o, map[x, y].facing);
+        DungeonManager DM = (DungeonManager)manager;
+        DM.Chests.Add(map[x, y], o);
+        Chest c = o.GetComponent<Chest>();
+        c.id = chestNumber;
+        chestNumber++;
+
+        if (data != null)
+        {
+            foreach (var C in data.mapData.openChests)
+            {
+                if (c.id == C) c.isOpen = true;
+            }
+        }
+    }
+
 }
 

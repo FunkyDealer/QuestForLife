@@ -20,10 +20,15 @@
 
         Pass
         {
+			Blend SrcAlpha OneMinusSrcAlpha // standard alpha blending
+			ZWrite Off
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
 			#pragma multi_compile_fwdbase
+			// make fog work
+            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 			#include "Lighting.cginc"
@@ -40,8 +45,9 @@
             {
                 float4 pos : SV_POSITION;
 				float3 worldNormal : NORMAL;
+				float2 uv : TEXCOORD0;
 				float3 viewDir : TEXCOORD1;
-                float2 uv : TEXCOORD0;
+				UNITY_FOG_COORDS(3)
 				SHADOW_COORDS(2)
             };
 
@@ -64,6 +70,7 @@
 				o.viewDir = WorldSpaceViewDir(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				TRANSFER_SHADOW(o);
+				UNITY_TRANSFER_FOG(o,o.pos);
                 return o;
             }
 
@@ -91,9 +98,11 @@
 				float specularIntensity = pow(NdotH * shadow, _Glossiness * _Glossiness);
 				specularIntensity = smoothstep(0.005, 0.01, specularIntensity);
 				float4 specular = specularIntensity * _SpecularColor;
-
-
-                return _Color * sample * (_AmbientColor + light + specular);
+				// apply fog
+                UNITY_APPLY_FOG(i.fogCoord, _Color);
+				float4 color = _Color * sample * (_AmbientColor + light + specular);
+				float4 FinalColor = float4(color.rgb, _Color.a);
+                return FinalColor;
             }
             ENDCG
         }

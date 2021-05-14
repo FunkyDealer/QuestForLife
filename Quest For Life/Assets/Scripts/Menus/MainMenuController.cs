@@ -8,6 +8,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     public MainMenuManager manager;
 
+    [SerializeField]
+    GameObject dataMailPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +26,8 @@ public class MainMenuController : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene("GameScene");
+        GameObject o = Instantiate(dataMailPrefab);
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
     public void LoadGame()

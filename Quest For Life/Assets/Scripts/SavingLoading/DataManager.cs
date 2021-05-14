@@ -43,14 +43,14 @@ public static class DataManager
 
     public static void saveGame(int slot, Player p)
     {
-
         int[] openedChests = getOpenedChests(p.gameManager.dungeonManager);
 
-        MapData mapData = new MapData(p.currentTile.floor, p.currentMap.GetLength(0), p.currentMap.GetLength(1), p.mapManager.MapSeeds, openedChests);
+        MapData mapData = new MapData(p.gameManager.dungeonManager.Floor, p.currentMap.GetLength(0), p.currentMap.GetLength(1), p.gameManager.dungeonManager.MapSeeds, openedChests);
         PlayerData playerData = savePlayer(p);
+        InventoryData inventoryData = new InventoryData(p);
         ShopData shopData = new ShopData(p.gameManager.shopManager.Shop);        
 
-        SaveData data = new SaveData(mapData, playerData, shopData);
+        SaveData data = new SaveData(mapData, playerData, inventoryData, shopData);
 
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/Slot" + slot + ".SAVE";

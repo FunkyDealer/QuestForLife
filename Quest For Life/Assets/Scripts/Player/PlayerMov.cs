@@ -22,8 +22,6 @@ public class PlayerMov : MonoBehaviour
     bool inputDelayOn = false;
     bool inCutScene;
 
-    MapManager mapManager;
-
     enum MovementState
     {
         WAITINGINPUT,
@@ -42,8 +40,8 @@ public class PlayerMov : MonoBehaviour
 
     void Awake()
     {
-        //inDungeon = true;
-        inDungeon = false;
+        inDungeon = true;
+        //inDungeon = false;
 
         interactCoolDown = false;
         inCutScene = false;
@@ -56,7 +54,7 @@ public class PlayerMov : MonoBehaviour
 
     void Start()
     {
-        mapManager = player.mapManager;
+
     }
 
     void Update()
@@ -117,7 +115,7 @@ public class PlayerMov : MonoBehaviour
 
                     if (inDungeon)
                     {
-                        DungeonManager m = (DungeonManager)mapManager;
+                        DungeonManager m = (DungeonManager)player.mapManager;
                         inBattle = m.CheckForEncounter();
                     }
                     if (inBattle) movementState = MovementState.IN_BATTLE;

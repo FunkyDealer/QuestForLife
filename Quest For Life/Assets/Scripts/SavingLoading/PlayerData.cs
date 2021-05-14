@@ -42,16 +42,16 @@ public class PlayerData
 
         Orientation = (int)player.direction;
 
-        maxHp = player.maxHealth;
-        currentHp = player.currentHealth;
-        maxMana = player.maxMana;
-        currentMana = player.currentMana;
+        maxHp = player.maxHealth - player.ExtraMaxHealth;
+        currentHp = player.currentHealth - player.ExtraMaxHealth;
+        maxMana = player.maxMana - player.ExtraMaxMana;
+        currentMana = player.currentMana - player.ExtraMaxMana;
 
-        Power = player.Power;
-        Defense = player.Defence;
-        Accuracy = player.Accuracy;
-        Dodge = player.Dodge;
-        Speed = player.Speed;
+        Power = player.Power - player.ExtraPower;
+        Defense = player.Defence - player.ExtraDefence;
+        Accuracy = player.Accuracy - player.ExtraAccuracy;
+        Dodge = player.Dodge - player.ExtraDodge;
+        Speed = player.Speed - player.ExtraSpeed;
 
         CurrentExp = player.Experience;
         CurrentGold = player.currentGold;
