@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : Entity
-{      
+{
+    EnemyIA iA;
+
+    public Entity entityEnemy;
 
     int HealthGainPerLevel;
     int ManaGainPerLevel;
@@ -36,6 +39,17 @@ public class Enemy : Entity
     void Start()
     {
         Debug.Log($"{EntityName}: Level:{Level}; Health: {currentHealth}; - {currentMana};{Power};{Defence};{Accuracy};{Dodge};{Speed}{BaseAttackPower};{BaseMoneyReward}");
+        //AQUI
+        AtakEnemy atk = new AtakEnemy(this);
+        Global.Spell i = new Global.Spell();
+        i.Accuracy = 50;
+        i.Name = "I";
+        Global.Spell a = new Global.Spell();
+        a.Accuracy = 100;
+        a.Name = "A";
+        KnownSpells = new Global.Spell[2] { i, a };
+
+        iA = new EnemyIA(CreateNodeList(), atk);
     }
 
     // Update is called once per frame
@@ -57,14 +71,14 @@ public class Enemy : Entity
 
         maxHealth = info.BaseHealth + info.HealthGainPerLevel * level;
         currentHealth = maxHealth;
-        maxMana = info.BaseHealth + info.HealthGainPerLevel * level; 
+        maxMana = info.BaseHealth + info.HealthGainPerLevel * level;
         currentMana = maxMana;
 
 
-        Power = info.BasePower + info.PowerGainPerLevel * level; 
-        Defence = info.BaseDefence + info.DefenceGainPerLevel * level; 
-        Accuracy = info.BaseAccuracy + info.AccuracyGainPerLevel * level; 
-        Dodge = info.BaseDodge + info.DodgeGainPerLevel * level; 
+        Power = info.BasePower + info.PowerGainPerLevel * level;
+        Defence = info.BaseDefence + info.DefenceGainPerLevel * level;
+        Accuracy = info.BaseAccuracy + info.AccuracyGainPerLevel * level;
+        Dodge = info.BaseDodge + info.DodgeGainPerLevel * level;
         Speed = info.BaseSpeed + info.SpeedGainPerLevel * level;
 
         KnownSpells = info.spells;
@@ -75,18 +89,49 @@ public class Enemy : Entity
         this.BaseAttackPower = info.BaseAttackPower;
         this.BaseMoneyReward = info.BaseReward;
         this.BaseExpReward = info.BaseExpReward;
+
+
     }
 
+    public List<SpellEnemy> CreateNodeList()
+    {
+        List<SpellEnemy> lista = new List<SpellEnemy>();
 
+        for (int i = 0; i < KnownSpells.Length; i++)
+        {
+            int p = KnownSpells[i].Power;
+            float prob = (float)(((p - 100000) * -1) * 0.000001);
 
+            SpellEnemy s = new SpellEnemy(this, KnownSpells[i], (float)(KnownSpells[i].Accuracy * 0.01));
+            lista.Add(s);
+        }
+
+        return lista;
+    }
+
+    public void BattleActionChangetoSpell(CastSpellAction spell) 
+    {
+        _currentBattleAction = spell;
+    }
+
+    public void BattleActionChangetoAtk(AttackAction attack)
+    {
+        _currentBattleAction = attack;
+    }
     public override BattleAction ChooseAction(Entity enemy)
     {
-        AttackAction AttackAction = new AttackAction(this, enemy, this.BaseAttackPower, 100, Global.Type.NONE);
+        //AQUI
+        entityEnemy = enemy;
 
-        Debug.Log("the Monster Chose to do a normal Attack");
+        iA.DoSeqN();
 
-        this._currentBattleAction = AttackAction;
-        return AttackAction;
+        //AttackAction AttackAction = new AttackAction(this, enemy, this.BaseAttackPower, 100, Global.Type.NONE);
+
+        // Debug.Log("the Monster Chose to do a normal Attack");
+
+        //  this._currentBattleAction = AttackAction;
+
+        return _currentBattleAction;
     }
 
 
@@ -122,7 +167,7 @@ public class Enemy : Entity
     {
         base.ReceiveDamage(attackPower);
 
-        
+
 
     }
 
@@ -130,7 +175,7 @@ public class Enemy : Entity
     {
         base.castSpell(b);
 
-        
+
     }
 
     protected override void Death()
@@ -149,6 +194,7 @@ public class Enemy : Entity
 
     public override float PerformAction(BattleAction action, Entity Enemy)
     {
+
         float animationTime = 0;
         switch (action)
         {
@@ -223,7 +269,8 @@ public class Enemy : Entity
                     ReceiveSpellAttack(b);
                     animationTime += 1.3f;
                 }
-                else {
+                else
+                {
                     animator.SetTrigger("Dodge");
                     animationTime += 2.1f;
                     battleInterface.AddMessage($"The {b.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
@@ -238,7 +285,8 @@ public class Enemy : Entity
             case RunAction e:
                 float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
                 Debug.Log($"Chance to escape: {chanceToEscape}");
-                if (chanceToEscape > 100) {
+                if (chanceToEscape > 100)
+                {
                     battleManager.RunAway();
                     animationTime += 1;
                 }
