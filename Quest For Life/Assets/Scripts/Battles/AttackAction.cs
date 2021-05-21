@@ -19,5 +19,11 @@ public class AttackAction : BattleAction
         this.type = type;
     }
 
+    public AttackAction(int attackPower,int attackAccuracy,Global.Type type) 
+    {
+        this.attackBasePower = attackPower;
+        this.AttackAccuracy = attackAccuracy;
+        this.type = type;
+    }
 
 }

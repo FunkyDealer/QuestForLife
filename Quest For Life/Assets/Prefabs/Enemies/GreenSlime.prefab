@@ -273,6 +273,7 @@ MonoBehaviour:
   Weakness: 5
   battleInterface: {fileID: 0}
   dead: 0
+  entityEnemy: {fileID: 0}
   BaseMoneyReward: 10
   BaseExpReward: 50
   MonsterID: 1
