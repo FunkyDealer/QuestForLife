@@ -3993,6 +3993,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4665708589183519111, guid: 1aaf80f470e21ee43865b1c20c6c2fc0,
         type: 3}
+      propertyPath: floorProps.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4665708589183519111, guid: 1aaf80f470e21ee43865b1c20c6c2fc0,
+        type: 3}
       propertyPath: HudKeys.Array.data[0]
       value: 
       objectReference: {fileID: 6119350266817031047, guid: c73650157ba39224aa89f7447bc3ead3,
@@ -4020,6 +4025,30 @@ PrefabInstance:
       propertyPath: CeilingProps.Array.data[0]
       value: 
       objectReference: {fileID: 2874061097864561120, guid: 341ef8a8723026f43ab9034f12fb57c4,
+        type: 3}
+    - target: {fileID: 4665708589183519111, guid: 1aaf80f470e21ee43865b1c20c6c2fc0,
+        type: 3}
+      propertyPath: floorProps.Array.data[0]
+      value: 
+      objectReference: {fileID: 8584938570864301831, guid: ac66742cf19829d4b9dab18d2ee75f71,
+        type: 3}
+    - target: {fileID: 4665708589183519111, guid: 1aaf80f470e21ee43865b1c20c6c2fc0,
+        type: 3}
+      propertyPath: floorProps.Array.data[1]
+      value: 
+      objectReference: {fileID: 5979089053281825649, guid: ee21588607ec094408154dd1760d69d9,
+        type: 3}
+    - target: {fileID: 4665708589183519111, guid: 1aaf80f470e21ee43865b1c20c6c2fc0,
+        type: 3}
+      propertyPath: floorProps.Array.data[2]
+      value: 
+      objectReference: {fileID: 4202480906016045006, guid: f710a891c520f5242ba8b563125231f5,
+        type: 3}
+    - target: {fileID: 4665708589183519111, guid: 1aaf80f470e21ee43865b1c20c6c2fc0,
+        type: 3}
+      propertyPath: floorProps.Array.data[3]
+      value: 
+      objectReference: {fileID: 3136520049834241526, guid: ce282fef35741d34db5ef4f1144f1ffa,
         type: 3}
     - target: {fileID: 4665708589183519112, guid: 1aaf80f470e21ee43865b1c20c6c2fc0,
         type: 3}

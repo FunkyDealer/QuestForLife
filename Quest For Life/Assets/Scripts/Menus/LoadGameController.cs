@@ -29,9 +29,9 @@ public class LoadGameController : MonoBehaviour
         manager.OpenMainMenu(this.gameObject);
     }
 
-    public void LoadGame()
+    public void LoadGame(int slot)
     {
-        SaveData data = DataManager.LoadGame(1);
+        SaveData data = DataManager.LoadGame(slot);
 
         GameObject o = Instantiate(dataMailPrefab);
         DataGameMail.inst.SetData(data);

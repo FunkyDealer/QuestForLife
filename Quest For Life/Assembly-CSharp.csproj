@@ -55,14 +55,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\AppManager.cs" />
-     <Compile Include="Assets\AudioDataBase.cs" />
-     <Compile Include="Assets\DataGameMail.cs" />
-     <Compile Include="Assets\EndSceneController.cs" />
-     <Compile Include="Assets\FadeToBlackScreenChange.cs" />
-     <Compile Include="Assets\Key.cs" />
-     <Compile Include="Assets\LockedStairs.cs" />
-     <Compile Include="Assets\PauseMenu.cs" />
+     <Compile Include="Assets\Scripts\AppManager.cs" />
+     <Compile Include="Assets\Scripts\AudioDataBase.cs" />
      <Compile Include="Assets\Scripts\BattleItemManagementMenu.cs" />
      <Compile Include="Assets\Scripts\BattlePlayerStatsManager.cs" />
      <Compile Include="Assets\Scripts\BattleStatsmenuManager.cs" />
@@ -75,6 +69,7 @@
      <Compile Include="Assets\Scripts\Battles\RunAction.cs" />
      <Compile Include="Assets\Scripts\CompassController.cs" />
      <Compile Include="Assets\Scripts\DataBase.cs" />
+     <Compile Include="Assets\Scripts\DataGameMail.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonGenerator.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonGenerator\DungeonGenPreset.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonGenerator\Hall.cs" />
@@ -88,8 +83,10 @@
      <Compile Include="Assets\Scripts\Dungeon\Tiles\RoomMapTile.cs" />
      <Compile Include="Assets\Scripts\Dungeon\Tiles\Tile.cs" />
      <Compile Include="Assets\Scripts\Dungeon\Tiles\WallTile.cs" />
+     <Compile Include="Assets\Scripts\EndSceneController.cs" />
      <Compile Include="Assets\Scripts\Entities\Enemy.cs" />
      <Compile Include="Assets\Scripts\Entities\Entity.cs" />
+     <Compile Include="Assets\Scripts\FadeToBlackScreenChange.cs" />
      <Compile Include="Assets\Scripts\FinalZoneGenerator.cs" />
      <Compile Include="Assets\Scripts\GearManagementMenu.cs" />
      <Compile Include="Assets\Scripts\GenericConfirmInterface.cs" />
@@ -123,6 +120,9 @@
      <Compile Include="Assets\Scripts\Items\EquipableItem.cs" />
      <Compile Include="Assets\Scripts\Items\HealItem.cs" />
      <Compile Include="Assets\Scripts\Items\Item.cs" />
+     <Compile Include="Assets\Scripts\Key.cs" />
+     <Compile Include="Assets\Scripts\LoadSlotController.cs" />
+     <Compile Include="Assets\Scripts\LockedStairs.cs" />
      <Compile Include="Assets\Scripts\MapGenerator.cs" />
      <Compile Include="Assets\Scripts\MapManager.cs" />
      <Compile Include="Assets\Scripts\Menus\LoadGameController.cs" />
@@ -132,6 +132,7 @@
      <Compile Include="Assets\Scripts\MiniMapGenerator.cs" />
      <Compile Include="Assets\Scripts\MiniMapManager.cs" />
      <Compile Include="Assets\Scripts\MonsterRoomManager.cs" />
+     <Compile Include="Assets\Scripts\PauseMenu.cs" />
      <Compile Include="Assets\Scripts\Physical Tiles\Chest.cs" />
      <Compile Include="Assets\Scripts\Physical Tiles\PhysicalTile.cs" />
      <Compile Include="Assets\Scripts\Physical Tiles\ShopEntrance.cs" />
@@ -140,6 +141,8 @@
      <Compile Include="Assets\Scripts\Player\PlayerMov.cs" />
      <Compile Include="Assets\Scripts\PropsDataBase.cs" />
      <Compile Include="Assets\Scripts\RoomTile.cs" />
+     <Compile Include="Assets\Scripts\SaveGameController.cs" />
+     <Compile Include="Assets\Scripts\SaveSlotController.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\AppData.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\DataManager.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\InventoryData.cs" />
@@ -151,11 +154,14 @@
      <Compile Include="Assets\Scripts\Shop\ShopGenerator.cs" />
      <Compile Include="Assets\Scripts\Shop\ShopManager.cs" />
      <Compile Include="Assets\Scripts\TextMessage.cs" />
+     <None Include="Assets\Shader\outline\Outline.shader" />
      <None Include="Assets\Shader\Glass.shader" />
-     <None Include="Assets\Shader\Toon.shader" />
-     <None Include="Assets\Shader\ToonRimLight.shader" />
+     <None Include="Assets\Shader\Toon\ToonOutline.shader" />
      <None Include="Assets\Shader\maskTexture.shader" />
-     <None Include="Assets\Shader\Toon Normal.shader" />
+     <None Include="Assets\Shader\Toon\ToonRimLight.shader" />
+     <None Include="Assets\Shader\Toon\ToonNormal.shader" />
+     <None Include="Assets\Shader\Toon\Toon.shader" />
+     <None Include="Assets\Shader\Toon\ToonSteepParallax.shader" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.12f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

@@ -993,17 +993,17 @@ public class Player : Entity
     {
         //AudioClip original = SpellVoicePlayer.clip;
         //SpellVoicePlayer.clip = AudioDataBase.inst.spellVoice[id];
-        AudioClip clip;
-        try
-        {
-            clip = AudioDataBase.inst.spellVoice[id];
+        //AudioClip clip;
+        //try
+        //{
+        //    clip = AudioDataBase.inst.spellVoice[id];
 
-            SpellVoicePlayer.PlayOneShot(clip);
-        }
-        catch (KeyNotFoundException)
-        {
-            SpellVoicePlayer.PlayOneShot(SpellVoicePlayer.clip);
-        }
+        //    SpellVoicePlayer.PlayOneShot(clip);
+        //}
+        //catch (KeyNotFoundException)
+        //{
+        //    SpellVoicePlayer.PlayOneShot(SpellVoicePlayer.clip);
+        //}
 
 
 

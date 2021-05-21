@@ -78,6 +78,12 @@ public class RoomTile : PhysicalTile
                     if (!ceilingPropsSpotList[toActivate].activeSelf && !floorPropsSpotList[toActivate].activeSelf)
                     {
                         floorPropsSpotList[toActivate].SetActive(true);
+
+                        int FloorProp = Global.Range(0, PropsDataBase.inst.floorProps.Count, m);
+                        GameObject prefab = PropsDataBase.inst.floorProps[FloorProp];
+                        GameObject o = Instantiate(prefab, floorPropsSpotList[toActivate].transform.position, Quaternion.identity, floorPropsSpotList[toActivate].transform);
+                        o.transform.localScale = prefab.transform.localScale;
+
                         break;
                     }
                 }

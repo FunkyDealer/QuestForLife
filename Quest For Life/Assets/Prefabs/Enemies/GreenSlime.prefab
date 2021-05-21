@@ -257,16 +257,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityName: Green Slime
-  Level: 3
-  maxHealth: 65
-  currentHealth: 65
-  maxMana: 65
-  currentMana: 65
-  Power: 10
-  Defence: 13
-  Accuracy: 19
-  Dodge: 11
-  Speed: 16
+  Level: 1
+  maxHealth: 55
+  currentHealth: 55
+  maxMana: 55
+  currentMana: 55
+  Power: 6
+  Defence: 9
+  Accuracy: 13
+  Dodge: 7
+  Speed: 10
   BaseAttackPower: 30
   battleManager: {fileID: 0}
   Resistence: 5

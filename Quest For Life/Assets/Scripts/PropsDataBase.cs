@@ -16,6 +16,9 @@ public class PropsDataBase : MonoBehaviour
     [SerializeField]
     public List<GameObject> HudKeys;
 
+    [SerializeField]
+    public List<GameObject> floorProps;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)

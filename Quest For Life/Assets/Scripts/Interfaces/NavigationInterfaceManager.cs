@@ -44,8 +44,6 @@ public class NavigationInterfaceManager : HudManager
         
     }
 
-
-
     public void getInformation(Player player, PlayerMov playerMov, MapManager mapmanager) 
     {
         this.player = player;
@@ -160,16 +158,12 @@ public class NavigationInterfaceManager : HudManager
     void updateFloor(int floor)
     {
         this.FloorDisplaytext.text = $"Floor {floor}";
-    }
-    
+    }    
 
     public void AddKey(int id)
     {
         Instantiate(PropsDataBase.inst.HudKeys[id], keyHolder.transform);
-
-
     }
-
 
     public void ClearKeyHolder()
     {

@@ -238,7 +238,7 @@ public class DungeonManager : MapManager
     {
         int[] mapSeeds = new int[254];
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 254; i++)
         {
             int[] seed = new int[9];
             for (int z = 0; z < 9; z++)

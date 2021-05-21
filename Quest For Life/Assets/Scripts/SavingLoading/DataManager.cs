@@ -84,7 +84,13 @@ public static class DataManager
 
 
         return null;
+    }
 
+    public static bool isData(int slot)
+    {
+        string path = Application.persistentDataPath + "/Slot" + slot + ".SAVE";
+
+        return File.Exists(path);
 
     }
 
