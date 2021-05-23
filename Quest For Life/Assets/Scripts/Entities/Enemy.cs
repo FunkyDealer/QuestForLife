@@ -123,13 +123,13 @@ public class Enemy : Entity
         //AQUI
         entityEnemy = enemy;
 
-        iA.DoSeqN();
+        //iA.DoSeqN();
 
-        //AttackAction AttackAction = new AttackAction(this, enemy, this.BaseAttackPower, 100, Global.Type.NONE);
+        AttackAction AttackAction = new AttackAction(this, enemy, this.BaseAttackPower, 100, Global.Type.NONE);
 
-        // Debug.Log("the Monster Chose to do a normal Attack");
+        Debug.Log("the Monster Chose to do a normal Attack");
 
-        //  this._currentBattleAction = AttackAction;
+        this._currentBattleAction = AttackAction;
 
         return _currentBattleAction;
     }
