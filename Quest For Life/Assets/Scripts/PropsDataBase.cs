@@ -19,6 +19,9 @@ public class PropsDataBase : MonoBehaviour
     [SerializeField]
     public List<GameObject> floorProps;
 
+    [SerializeField]
+    public List<GameObject> DungeonSoundProps;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)

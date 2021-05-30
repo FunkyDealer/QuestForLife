@@ -1,4 +1,4 @@
-﻿Name,ID,Type,Hp Modifier,Mp Modifier,Power Boost,Defence Modifier,Accuracy Modifier,Dodge Modifier,Speed Modifier,Cost,Buyable,Findable,MinLevel,MaxLevel
+Name,ID,Type,Hp Modifier,Mp Modifier,Power Boost,Defence Modifier,Accuracy Modifier,Dodge Modifier,Speed Modifier,Cost,Buyable,Findable,MinLevel,MaxLevel
 Mage's Hat,1,0,0,10,3,0,0,0,0,10,0,0,0,0
 Mage's Clothes,2,2,0,0,0,4,0,0,0,10,0,0,0,0
 Mage's Staff,3,4,0,0,4,0,0,0,0,10,0,0,0,0
@@ -6,3 +6,6 @@ Ring of Power,4,1,0,0,5,0,0,0,0,50,1,1,1,10
 Ring of Defense,5,1,0,0,0,5,0,0,0,50,1,1,1,10
 Ring of The Knight,6,1,0,0,5,10,0,0,0,50,1,1,4,15
 Belt,7,3,20,0,0,0,0,0,-5,50,1,1,1,10
+Leather Helmet,8,0,0,0,0,8,5,0,0,80,1,1,5,20
+Leather Armor,9,2,10,0,0,15,0,0,-3,80,1,1,5,20
+Magic Tunic,10,2,0,30,10,5,5,5,5,100,1,1,8,20

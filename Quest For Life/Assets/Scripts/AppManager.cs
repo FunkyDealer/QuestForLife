@@ -11,8 +11,6 @@ public class AppManager : MonoBehaviour
     
     public AppData appdata;
 
-
-
     void Awake()
     {
         if (_instance != null && _instance != this)

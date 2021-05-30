@@ -69,11 +69,11 @@ Material:
     - _Parallax: 0.02
     - _RimAmount: 1
     - _RimThreshold: 1
-    - _Shininess: 50
+    - _Shininess: 8
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Steps: 4
+    - _Steps: 3
     - _UVSec: 0
     - _ZWrite: 1
     - _ambientPower: 0.1

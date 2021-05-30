@@ -121,6 +121,7 @@ public class InventoryIFManager : MonoBehaviour
 
     public bool ConsumeItem(int slot)
     {
+        HudManager.player.audioController.PlayWaterDrinking();
         return Inventory.ConsumeItem(slot);
 
         return false;
@@ -137,8 +138,6 @@ public class InventoryIFManager : MonoBehaviour
     {
         HudManager.UseItemAction(slot);       
     }
-
-
 
     public bool UnequipItem(int ID)
     {

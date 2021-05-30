@@ -11,6 +11,29 @@ public class AudioDataBase : MonoBehaviour
     [SerializeField]
     List<AudioClip> SpellVoice;
 
+    [SerializeField]
+    List<AudioClip> StepsClips;
+
+    [SerializeField]
+    List<AudioClip> SlimeIntroSound;
+
+    [SerializeField]
+    List<AudioClip> SlimeHurtSound;
+
+    [SerializeField]
+    List<AudioClip> GhostIntroSound;
+    [SerializeField]
+    List<AudioClip> GhostHurtSound;
+
+    public AudioClip dodgeSound;
+
+    int currentStep;
+
+    public AudioClip WaterSpell;
+    public AudioClip FireSpell;
+    public AudioClip ThunderSpell;
+    public AudioClip HealthSpell;
+
     public Dictionary<int, AudioClip> spellVoice;
 
     private void Awake()
@@ -32,7 +55,7 @@ public class AudioDataBase : MonoBehaviour
             spellVoice.Add(i+1, SpellVoice[i]);
         }
 
-
+        currentStep = Random.Range(0, StepsClips.Count);
 
     }
 
@@ -46,5 +69,38 @@ public class AudioDataBase : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public AudioClip GetStep()
+    {
+        AudioClip o = StepsClips[currentStep];
+        currentStep++;
+        if (currentStep == StepsClips.Count) currentStep = 0;
+
+        return o;
+    }
+
+    public AudioClip getSlimeIntroduction()
+    {
+        int i = Random.Range(0, SlimeIntroSound.Count);
+        return SlimeIntroSound[i];
+    }
+
+    public AudioClip getSlimeHurt()
+    {
+        int i = Random.Range(0, SlimeHurtSound.Count);
+        return SlimeHurtSound[i];
+    }
+
+    public AudioClip getGhostIntroduction()
+    {
+        int i = Random.Range(0, GhostIntroSound.Count);
+        return GhostIntroSound[i];
+    }
+
+    public AudioClip getGhostHurt()
+    {
+        int i = Random.Range(0, GhostHurtSound.Count);
+        return GhostHurtSound[i];
     }
 }

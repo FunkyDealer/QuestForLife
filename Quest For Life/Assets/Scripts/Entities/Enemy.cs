@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
+    enum Type
+    {
+        Slime,
+        GiantSlime,
+        Ghost
+    }
+    [SerializeField]
+    Type type;
+
     EnemyIA iA;
 
+    [HideInInspector]
     public Entity entityEnemy;
 
     int HealthGainPerLevel;
@@ -29,6 +39,8 @@ public class Enemy : Entity
     Animator animator;
     Animator MonsterAnimator;
 
+    [SerializeField]
+    AudioSource audioSource;
 
     void Awake()
     {
@@ -50,6 +62,8 @@ public class Enemy : Entity
         KnownSpells = new Global.Spell[2] { i, a };
 
         iA = new EnemyIA(CreateNodeList(), atk);
+
+        PlayIntroductionSound();
     }
 
     // Update is called once per frame
@@ -167,7 +181,7 @@ public class Enemy : Entity
     {
         base.ReceiveDamage(attackPower);
 
-
+        PlayHurtSound();
 
     }
 
@@ -307,6 +321,62 @@ public class Enemy : Entity
         return animationTime;
     }
 
+    void PlayDodgeSound()
+    {
+        audioSource.PlayOneShot(AudioDataBase.inst.dodgeSound, AppManager.inst.appdata.EffectsVolume);
+    }
+
+    void PlayCastSpell()
+    {
+        switch (type)
+        {
+            case Type.Slime:
+
+                break;
+            case Type.GiantSlime:
+                break;
+            case Type.Ghost:
+                break;
+            default:
+                break;
+        }
+    }
+
+    void PlayHurtSound()
+    {
+        switch (type)
+        {
+            case Type.Slime:
+                audioSource.PlayOneShot(AudioDataBase.inst.getSlimeHurt(), AppManager.inst.appdata.EffectsVolume);
+                break;
+            case Type.GiantSlime:
+                audioSource.PlayOneShot(AudioDataBase.inst.getSlimeHurt(), AppManager.inst.appdata.EffectsVolume);
+                break;
+            case Type.Ghost:
+                audioSource.PlayOneShot(AudioDataBase.inst.getGhostIntroduction(), AppManager.inst.appdata.EffectsVolume);
+                break;
+            default:
+                break;
+        }
+    }
+
+    void PlayIntroductionSound()
+    {
+        switch (type)
+        {
+            case Type.Slime:
+                audioSource.PlayOneShot(AudioDataBase.inst.getSlimeIntroduction(), AppManager.inst.appdata.EffectsVolume);
+                break;
+            case Type.GiantSlime:
+                audioSource.PlayOneShot(AudioDataBase.inst.getSlimeIntroduction(), AppManager.inst.appdata.EffectsVolume);
+                break;
+            case Type.Ghost:
+                audioSource.PlayOneShot(AudioDataBase.inst.getGhostIntroduction(), AppManager.inst.appdata.EffectsVolume);
+                break;
+            default:
+                break;
+        }
+    }
 
 
 

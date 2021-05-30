@@ -5,14 +5,14 @@ using UnityEngine;
 [System.Serializable]
 public class AppData
 {
-    public int MusicVolume;
-    public int VoiceVolume;
-    public int EffectsVolume;
+    public float MusicVolume;
+    public float VoiceVolume;
+    public float EffectsVolume;
 
     public AppData(int MusicVolume, int VoiceVolume, int EffectsVolume)
     {
-        this.MusicVolume = MusicVolume;
-        this.VoiceVolume = VoiceVolume;
-        this.EffectsVolume = EffectsVolume;
+        this.MusicVolume = (float)MusicVolume / 100;
+        this.VoiceVolume = (float)VoiceVolume / 100;
+        this.EffectsVolume = (float)EffectsVolume / 100;
     }
 }

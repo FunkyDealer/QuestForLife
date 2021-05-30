@@ -24,6 +24,9 @@ public class LockedStairs : MonoBehaviour
     private bool locked;
     public bool Locked => locked;
 
+    [SerializeField]
+    AudioSource StairsSound;
+
     private void Start()
     {
         locked = true;
@@ -36,7 +39,7 @@ public class LockedStairs : MonoBehaviour
         }
 
 
-
+    
         animators = GetComponentsInChildren<Animator>();
     }
 
@@ -63,8 +66,9 @@ public class LockedStairs : MonoBehaviour
     {
         foreach (var a in animators)
         {
-            a.SetTrigger("Open");
+            a.SetTrigger("Open");            
         }
+        playSound();
         locked = false;
     }
 
@@ -85,5 +89,10 @@ public class LockedStairs : MonoBehaviour
                 Instantiate(YellowPillarPrefab, s.transform);
                 break;
         }
+    }
+
+    public void playSound()
+    {
+        StairsSound.PlayOneShot(StairsSound.clip, AppManager.inst.appdata.EffectsVolume);
     }
 }

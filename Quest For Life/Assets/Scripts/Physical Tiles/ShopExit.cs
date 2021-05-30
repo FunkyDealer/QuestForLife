@@ -11,6 +11,9 @@ public class ShopExit : PhysicalTile
     System.Action<PhysicalTile> moveAction;
     System.Action telePortAction;
 
+    [SerializeField]
+    AudioSource OpenSound;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -48,5 +51,10 @@ public class ShopExit : PhysicalTile
 
         //telePortAction();
         animator.SetBool("Open", false);
+    }
+
+    public void playSound()
+    {
+        OpenSound.PlayOneShot(OpenSound.clip, AppManager.inst.appdata.EffectsVolume);
     }
 }

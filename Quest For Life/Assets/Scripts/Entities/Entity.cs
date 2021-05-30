@@ -36,13 +36,16 @@ public class Entity : MonoBehaviour
 
     [HideInInspector]
     public BattleManager battleManager;
-
+    
+    [HideInInspector]
     public Global.Type Resistence;
+    [HideInInspector]
     public Global.Type Weakness;
 
     [HideInInspector]
     public BattleInterFaceManager battleInterface;
 
+    [HideInInspector]
     public bool dead;
 
     protected BattleAction _currentBattleAction;

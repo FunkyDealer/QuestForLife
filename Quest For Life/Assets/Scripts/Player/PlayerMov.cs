@@ -359,8 +359,6 @@ public class PlayerMov : MonoBehaviour
             //go to Dungeon
             player.gameManager.shopManager.shopExit.Open(MoveFromShopToDungeon, CalculateShopDoor);
 
-
-            
             inCutScene = true;
 
             movementState = MovementState.FROZEN;
@@ -375,8 +373,7 @@ public class PlayerMov : MonoBehaviour
 
             //ShopEntrance 
             DungeonManager d = (DungeonManager)player.mapManager;
-            d.currentShop.Open(MoveFromDungeonToShop, CalculateShopDoor);
-                       
+            d.currentShop.Open(MoveFromDungeonToShop, CalculateShopDoor);            
 
             inDungeon = false;
             inCutScene = true;
@@ -405,6 +402,8 @@ public class PlayerMov : MonoBehaviour
 
         targetPos = new Vector3(targetPos.x, player.gameObject.transform.position.y, targetPos.z);
 
+        player.audioController.PlayStepsSound();
+
         nextPosition = targetPos;
         movementState = MovementState.MOVING;
     }
@@ -414,6 +413,8 @@ public class PlayerMov : MonoBehaviour
         Vector3 targetPos = player.mapManager.FreeTiles[player.currentMap[(int)newPos.x, (int)newPos.y]].transform.position;
 
         targetPos = new Vector3(targetPos.x, player.gameObject.transform.position.y, targetPos.z);
+
+        player.audioController.PlayStepsSound();
 
         //this.transform.position = targetPos;
         player.currentTile = player.currentMap[(int)newPos.x, (int)newPos.y];
@@ -446,14 +447,7 @@ public class PlayerMov : MonoBehaviour
         } else
         {
             MoveToNextFloor();
-        }
-       
-    }
-
-    void UseExit()
-    {
-        player.EnterExit();
-        movementState = MovementState.COOLDOWN;
+        }       
     }
 
     void MoveToNextFloor()
@@ -463,6 +457,24 @@ public class PlayerMov : MonoBehaviour
 
         g.Init(UseExit, ResumeMovement, "Move to next floor?");
         movementState = MovementState.FROZEN;
+    }
+
+    void UseExit()
+    {
+        player.audioController.PlayClimbingSound();
+        
+
+        GameObject o = Instantiate(DataBase.inst.DoorScreenChanger, Vector3.zero, Quaternion.identity);
+        FadeToBlackScreenChange f = o.GetComponent<FadeToBlackScreenChange>();
+        f.Init(FinishMovingToNextFloor, true);
+
+        movementState = MovementState.FROZEN;
+    }
+
+    void FinishMovingToNextFloor()
+    {
+        player.EnterExit();
+        ResumeMovement();
     }
 
 
@@ -481,6 +493,7 @@ public class PlayerMov : MonoBehaviour
     {
         movementState = MovementState.COOLDOWN;
     }
+
 
     public IEnumerator ResumeMovement(float time)
     {

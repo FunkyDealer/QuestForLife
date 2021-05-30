@@ -10,6 +10,8 @@ public class Chest : PhysicalTile
     public int id;
 
     Animator animator;
+    [SerializeField]
+    AudioSource audioSource;
 
     void Awake()
     {
@@ -30,6 +32,7 @@ public class Chest : PhysicalTile
     {
         isOpen = true;
         Animation();
+        playSound();
         int money = moneyBase + moneyMul * (int)1.5 * floor * lvl;
         return money;
     }
@@ -37,5 +40,10 @@ public class Chest : PhysicalTile
     void Animation()
     {
         animator.SetBool("Open", true);
+    }
+
+    void playSound()
+    {
+        audioSource.PlayOneShot(audioSource.clip, AppManager.inst.appdata.EffectsVolume);
     }
 }

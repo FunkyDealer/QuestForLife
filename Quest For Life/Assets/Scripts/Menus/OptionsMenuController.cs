@@ -46,36 +46,36 @@ public class OptionsMenuController : MonoBehaviour
     public void MusicVolumeChange()
     { 
         musicText.text = musicBar.value.ToString();
-        AppManager.inst.appdata.MusicVolume = (int)musicBar.value;
+        AppManager.inst.appdata.MusicVolume = ((float)musicBar.value / 100);
     }
 
     public void VoiceVolumeChange()
     {
         voiceText.text = voiceBar.value.ToString();
-        AppManager.inst.appdata.VoiceVolume = (int)voiceBar.value;
+        AppManager.inst.appdata.VoiceVolume = ((float)voiceBar.value / 100);
     }
 
     public void EffectsVolumeChange()
     {
         effectsText.text = effectsBar.value.ToString();
-        AppManager.inst.appdata.EffectsVolume = (int)effectsBar.value;
+        AppManager.inst.appdata.EffectsVolume = ((float)effectsBar.value /100);
     }
 
     void getMusicVolume()
     {
-        musicBar.value = AppManager.inst.appdata.MusicVolume;
+        musicBar.value = AppManager.inst.appdata.MusicVolume * 100;
         musicText.text = musicBar.value.ToString();
     }
 
     void getVoiceVolume()
     {
-        voiceBar.value = AppManager.inst.appdata.VoiceVolume;
+        voiceBar.value = AppManager.inst.appdata.VoiceVolume * 100;
         voiceText.text = voiceBar.value.ToString();
     }
 
     void getEffectsVolume()
     {
-        effectsBar.value = AppManager.inst.appdata.EffectsVolume;
+        effectsBar.value = AppManager.inst.appdata.EffectsVolume * 100;
         effectsText.text = effectsBar.value.ToString();
     }
 

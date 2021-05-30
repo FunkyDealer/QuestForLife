@@ -19,6 +19,9 @@ public class ShopEntrance : PhysicalTile
     [HideInInspector]
     public ShopData data = null;
 
+    [SerializeField]
+    AudioSource OpenSound;
+
     void Awake()
     {
         animator = GetComponent<Animator>();       
@@ -61,6 +64,11 @@ public class ShopEntrance : PhysicalTile
 
         //telePortAction();
         animator.SetBool("Open", false);
+    }
+
+    public void playSound()
+    {
+        OpenSound.PlayOneShot(OpenSound.clip, AppManager.inst.appdata.EffectsVolume);
     }
 
 }

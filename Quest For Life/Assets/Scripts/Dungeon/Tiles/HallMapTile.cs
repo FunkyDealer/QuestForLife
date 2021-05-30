@@ -8,7 +8,7 @@ public class HallMapTile : Tile
 
     public int hallNumber;
 
-    public HallMapTile(bool occupied, int x, int y) : base(occupied, x, y)
+    public HallMapTile(bool occupied, int x, int y, int hallNumber) : base(occupied, x, y)
     {
         this.occupied = occupied;
         this.x = x;
@@ -21,9 +21,10 @@ public class HallMapTile : Tile
         west = null;
         east = null;
 
+        this.hallNumber = hallNumber;
     }
 
-    public HallMapTile(Tile t)
+    public HallMapTile(Tile t, int hallNumber)
     {
         this.floor = t.floor;
         this.occupied = t.occupied;
@@ -36,7 +37,7 @@ public class HallMapTile : Tile
         west = t.west;
         east = t.east;
 
-        hallNumber = 0;
+        this.hallNumber = hallNumber;
     }
 
 

@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject FinalZoneObj;
 
+    public MusicPlayerController musicPlayer;
 
     void Awake()
     {

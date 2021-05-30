@@ -70,6 +70,7 @@ public class ShopSellMenuController : ShopMenuController
     public void SellAmmount(int ammount, int cost)
     {
         player.addGold(cost * ammount);
+        player.audioController.PlaySellSound();
         manager.UpdateMoneyDisplay();
     }
 

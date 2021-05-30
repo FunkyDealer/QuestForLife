@@ -13,6 +13,9 @@ public class RoomTile : PhysicalTile
     GameObject chandelierObj;
 
     [SerializeField]
+    GameObject soundObj;
+
+    [SerializeField]
     int maxMajorProps = 1;
     [SerializeField]
     int maxFloorProps = 1;
@@ -29,7 +32,21 @@ public class RoomTile : PhysicalTile
     [SerializeField]
     int ceilingChange = 10; //chance that there will be ceiling props
 
+    [HideInInspector]
     public MapManager m;
+
+    [SerializeField]
+    int chanceForSound = 4;
+    
+
+    public int RoomNumber;
+
+    public void Init(MapManager m, int RoomNumber, Tile t)
+    {
+        this.m = m;
+        this.RoomNumber = RoomNumber;
+        this.tile = t;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -116,10 +133,25 @@ public class RoomTile : PhysicalTile
                 }
             }
 
+            SpawnSound();
+
         }
 
     } //end prop builder
 
+
+    void SpawnSound()
+    {
+        if (chanceForSound >= Global.Range(1, 101, m)) //chance for a sound prop
+        {
+            int prop = Global.Range(0, PropsDataBase.inst.DungeonSoundProps.Count, m);
+
+            GameObject prefab = PropsDataBase.inst.DungeonSoundProps[prop];
+            GameObject o = Instantiate(prefab, soundObj.transform.position, Quaternion.identity, soundObj.transform.transform);
+            AudioController a = o.GetComponent<AudioController>();
+            a.p = m.gameManager.player;
+        }
+    }
 
     
 } //end of class

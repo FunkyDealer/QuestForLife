@@ -127,6 +127,9 @@ public class Player : Entity
     [SerializeField]
     AudioSource SpellVoicePlayer;
 
+    [SerializeField]
+    public PlayerAudioController audioController;
+
     public enum Location
     {
         DUNGEON,
@@ -251,7 +254,7 @@ public class Player : Entity
             AddInterfaceMessage($"You Climb to a new Floor\nYou feel like this is it.", TextMessage.MessageSpeed.VERYSLOW);
 
             location = Location.FINALZONE;
-
+            gameManager.musicPlayer.StopMusic();
             keys.Clear();
             navigationInterFace.ClearKeyHolder();
         }
@@ -557,6 +560,9 @@ public class Player : Entity
         if (currentHealth < maxHealth || currentMana < maxMana)
         {
             RecoverAll();
+
+            audioController.PlayWaterDrinking();
+
             AddInterfaceMessage($"You Drink From the fountain.\n You Feel refreshed.", TextMessage.MessageSpeed.VERYSLOW);
             return true;
         }
@@ -586,6 +592,8 @@ public class Player : Entity
                 sendUpdateMana();
                 sendUpdateHealth();
 
+                audioController.PlaySpellSound(b.spell.type);
+
                 animationTime += 0.5f;
                 animationTime += enemy.ReceiveAction(action);
                 break;
@@ -593,6 +601,9 @@ public class Player : Entity
                 Item i = Inventory.getSlot(c.slot).getItem();
 
                 Inventory.ConsumeItem(c.slot);
+
+                audioController.PlayWaterDrinking();
+
                 battleInterface.AddMessage($"The mage used a {i.Name}", TextMessage.MessageSpeed.FAST);
 
                 animationTime += 1f;
@@ -862,9 +873,11 @@ public class Player : Entity
         updateGold();
     }
 
+
     public void spendGold(int ammount)
     {
         currentMoney -= ammount;
+        audioController.PlayBuySound();
         updateGold();
     }
 

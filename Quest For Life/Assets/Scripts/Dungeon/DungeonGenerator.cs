@@ -254,7 +254,7 @@ public class DungeonGenerator : MapGenerator
                             if (x > h.x && x <= h.x + h.width && y > h.y && y <= h.y + h.height)
                             {
                                 map[x, y].occupied = false;
-                                map[x, y] = new HallMapTile(map[x, y]);
+                                map[x, y] = new HallMapTile(map[x, y], numberOfHalls);
                             }
                             else
                             {
@@ -671,7 +671,7 @@ public class DungeonGenerator : MapGenerator
                                     GameObject g = InstantiateFreeObj(RoomTileObj, position, x, y);
 
                                     RoomTile RT = g.GetComponent<RoomTile>();
-                                    RT.m = manager;
+                                    RT.Init(manager, r.roomNumber, r);
 
                                     if (data != null)
                                     {
@@ -698,7 +698,7 @@ public class DungeonGenerator : MapGenerator
                                 case RoomMapTile.RoomFeature.None:
                                     GameObject o = InstantiateFreeObj(RoomTileObj, position, x, y);
                                     RoomTile rt = o.GetComponent<RoomTile>();
-                                    rt.m = manager;
+                                    rt.Init(manager, r.roomNumber, r);
                                     break;
                                 default:
                                     Debug.Log($"Error Drawing a room tile in a room at X: {x} Y: {y}");
@@ -706,7 +706,9 @@ public class DungeonGenerator : MapGenerator
                             }
                             break;
                         case HallMapTile h:
-                            InstantiateFreeObj(HallTileObj, position, x, y);
+                            GameObject H = InstantiateFreeObj(HallTileObj, position, x, y);
+                            HallTile HT = H.GetComponent<HallTile>();
+                            HT.Init(manager, h.hallNumber, h);
                             break;
                         default:
                             Debug.Log($"Error drawing a Free tile at X: {x} Y: {y}");
