@@ -437,7 +437,7 @@ public class Player : Entity
         int multiplier = 3;
 
         int ammount = (int)(baseExp + (baseExp * multiplier) * Mathf.Log(Elevel, 2));
-        Debug.Log($"Gained {ammount} exp!");
+        //Debug.Log($"Gained {ammount} exp!");
         battleInterface.AddMessage($"I gained {ammount} experience Points!", TextMessage.MessageSpeed.NORMAL);
 
         currentExperience += ammount;
@@ -549,8 +549,9 @@ public class Player : Entity
 
         if (currentHealth <= 0)
         {
+            StartCoroutine(gameManager.PlayerDeath(5f));
             battleManager.PlayerDeath();
-            battleInterface.PlayerDeath();
+            battleInterface.PlayerDeath();            
             dead = true;
         }
     }
@@ -682,7 +683,7 @@ public class Player : Entity
             case RunAction e:
 
                 float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
-                Debug.Log($"Chance to escape: {chanceToEscape}");
+                //Debug.Log($"Chance to escape: {chanceToEscape}");
                 if (chanceToEscape > 100)
                 {
                     battleManager.RunAway();
@@ -714,7 +715,7 @@ public class Player : Entity
             {
                 this.currentHealth += b.spell.Power;
                 if (currentHealth >= maxHealth) currentHealth = maxHealth;
-                Debug.Log($"{b.user}  healed himself for {b.spell.Power} hp points!");
+                battleInterface.AddMessage($"{b.user}  healed himself for {b.spell.Power} hp points!", TextMessage.MessageSpeed.FAST);
             }
         }
 

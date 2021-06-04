@@ -506,16 +506,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityName: Ghost
-  Level: 7
-  maxHealth: 85
-  currentHealth: 85
-  maxMana: 85
-  currentMana: 85
-  Power: 33
-  Defence: 26
-  Accuracy: 31
-  Dodge: 31
-  Speed: 21
+  Level: 6
+  maxHealth: 80
+  currentHealth: 80
+  maxMana: 80
+  currentMana: 80
+  Power: 29
+  Defence: 23
+  Accuracy: 28
+  Dodge: 28
+  Speed: 19
   BaseAttackPower: 35
   battleManager: {fileID: 0}
   Resistence: 5
@@ -528,6 +528,7 @@ MonoBehaviour:
   BaseExpReward: 200
   MonsterID: 7
   audioSource: {fileID: 7557702303486079261}
+  deathmat: {fileID: 2100000, guid: 6004ab22b13ad6a4e91a8cf2c77a609c, type: 2}
 --- !u!1 &7035719356356445299
 GameObject:
   m_ObjectHideFlags: 0

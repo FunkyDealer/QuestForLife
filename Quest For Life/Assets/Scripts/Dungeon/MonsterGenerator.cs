@@ -28,18 +28,18 @@ public class MonsterGenerator : MonoBehaviour
     void generateMonster()
     {
         List<int> floorMonsters = generateFloorMonsterList();
-        Debug.Log($"floor monsters list generated - size: {floorMonsters.Count}");
+        //Debug.Log($"floor monsters list generated - size: {floorMonsters.Count}");
 
         Global.DungeonMonsterInfo monster = DataBase.inst.Monsters[floorMonsters[Random.Range(0, floorMonsters.Count)]];
 
-        Debug.Log($"Monster type Generated: {monster.Name}, Generating Prefab...");
+        //Debug.Log($"Monster type Generated: {monster.Name}, Generating Prefab...");
 
         GameObject o = DataBase.inst.MonsterPrefabs[monster.id];
         o.GetComponent<Enemy>().getStats(monster, currentFloor);
         o.name = $"{monster.Name} - lvl {currentFloor}";       
         MonsterRoomManager.inst.SetMonster(o);  //Send monster Object to Monster Room for Spawning
 
-        Debug.Log("Finished Monster generation.");
+        //Debug.Log("Finished Monster generation.");
 
         Finish();
     }

@@ -21,18 +21,18 @@ public class SpellEnemy : Node
     {
         int i = Random.Range(0, 10);
 
-        Debug.Log("\n" + i + "_" + prob);
+        //Debug.Log("\n" + i + "_" + prob);
 
         if (spell.Cost > enemy.currentMana)
         {
-            Debug.Log("\nERROR_MANA");
+          //  Debug.Log("\nERROR_MANA");
             return NodeState.FAILURE;
         }
         else
         {
             if (i <= prob)
             {
-                Debug.Log("\nATACOU " + spell.Name);
+              //  Debug.Log("\nATACOU " + spell.Name);
                 CastSpellAction _spell = new CastSpellAction();
                 _spell.spell = this.spell;
                 _spell.Target = enemy.entityEnemy;
@@ -42,7 +42,7 @@ public class SpellEnemy : Node
             }
             else
             {
-                Debug.Log("\nERROR_PROB");
+              //  Debug.Log("\nERROR_PROB");
                 return NodeState.FAILURE;
 
             }

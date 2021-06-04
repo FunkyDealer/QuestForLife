@@ -815,3 +815,5 @@ E:\Unity Projects\Quest For Life\obj\Debug\Assembly-CSharp.csproj.CoreCompileInp
 E:\Unity Projects\Quest For Life\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 E:\Unity Projects\Quest For Life\obj\Debug\Assembly-CSharp.dll
 E:\Unity Projects\Quest For Life\obj\Debug\Assembly-CSharp.pdb
+E:\Unity Projects\Quest For Life\Temp\bin\Debug\Unity.2D.Sprite.Editor.dll
+E:\Unity Projects\Quest For Life\Temp\bin\Debug\Unity.2D.Sprite.Editor.pdb

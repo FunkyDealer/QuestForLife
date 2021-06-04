@@ -188,6 +188,7 @@ MonoBehaviour:
   BaseExpReward: 150
   MonsterID: 2
   audioSource: {fileID: 8075896647795209647}
+  deathmat: {fileID: 2100000, guid: 607998ccb6bbf1244905d262b8be461e, type: 2}
 --- !u!1 &2731851957829007045
 GameObject:
   m_ObjectHideFlags: 0

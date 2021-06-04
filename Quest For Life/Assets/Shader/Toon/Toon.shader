@@ -12,9 +12,9 @@
     SubShader
     {
 		Tags
-			{
-			"RenderType"="Opaque"
-			}
+		{
+		"RenderType"="Opaque"
+		}
 
         Pass
         {
@@ -69,13 +69,14 @@
 
 				o.normal = normalize(mul(float4(v.normal, 0), unity_WorldToObject).xyz); 
 
-				//o.world = mul(UNITY_MATRIX_M, v.pos).xyz;
 				o.world = mul(unity_ObjectToWorld, v.pos);
 
 				TRANSFER_SHADOW(o);
                 UNITY_TRANSFER_FOG(o,o.pos);
                 return o;
             }
+
+
 
             fixed4 frag (v2f i) : SV_Target
             {
@@ -88,7 +89,7 @@
 					atten = 1.0;
 					lightDirection = normalize( _WorldSpaceLightPos0);
 				}
-				else 
+				else //Point light
 				{
 					float3 framentToLightSource = _WorldSpaceLightPos0.xyz - i.world.xyz;
 					float distance = length(framentToLightSource);
@@ -115,6 +116,7 @@
 
 				float4 light = lightIntensity * _LightColor0; //Light effects
 				
+				//Specular light
 				float3 h = normalize(_WorldSpaceCameraPos.xyz - world);
 				float NdotH = max(_ambientPower, dot(i.normal, h));	
 				float4 specularIntensity = pow(NdotH * shadow, _Shininess * _Shininess);
@@ -124,7 +126,6 @@
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, sample);
-
 
 				fixed4 color = (sample * _Color) * (light + specular);
 				float4 FinalColor = float4(color.rgb, _Color.a);
@@ -140,7 +141,7 @@
 			}
 			Blend One One //Determines how the GPU combines the output of the fragment shader with the render target.
 
-              CGPROGRAM
+            CGPROGRAM
 			
             #pragma vertex vert
             #pragma fragment frag

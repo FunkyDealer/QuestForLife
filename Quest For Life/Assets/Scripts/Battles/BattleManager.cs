@@ -144,7 +144,6 @@ public class BattleManager : MonoBehaviour
 
         if (player.dead)
         {
-            Debug.Log("Player Died");
             interfaceManager.AddMessage("You Have Died a tragic death in the dungeon. another adventure's body to zombify", TextMessage.MessageSpeed.VERYSLOW);
         }
         else if (monster.dead)
@@ -157,7 +156,7 @@ public class BattleManager : MonoBehaviour
 
             StartCoroutine(FinishBattle(TimeforFinish, false));
 
-            Debug.Log("Player has Won the battle!");
+           // Debug.Log("Player has Won the battle!");
         }
     }
 

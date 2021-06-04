@@ -113,7 +113,7 @@ public class DataBase : MonoBehaviour
 
         string[] lines = file.text.Split(new string[] { "\n" }, StringSplitOptions.None);
         int lineCount = lines.Length;
-        Debug.Log($"{lineCount - 2} spells found");
+        //Debug.Log($"{lineCount - 2} spells found");
 
         for (int i = 1; i < lineCount - 1; i++)
         {
@@ -176,7 +176,7 @@ public class DataBase : MonoBehaviour
 
          string[] lines = file.text.Split(new string[] { "\n" }, StringSplitOptions.None);
             int lineCount = lines.Length;
-        Debug.Log($"{lineCount - 2} Monsters found");
+        //Debug.Log($"{lineCount - 2} Monsters found");
 
         for (int i = 1; i < lineCount - 1; i++)
             {
@@ -241,7 +241,7 @@ public class DataBase : MonoBehaviour
         }
         catch (Exception)
         {
-            Debug.Log($"Trying to return an empty Spell - Spell ID: {i}");
+           // Debug.Log($"Trying to return an empty Spell - Spell ID: {i}");
             return new Global.Spell();
         }        
     }
@@ -251,7 +251,7 @@ public class DataBase : MonoBehaviour
         Consumables = new Dictionary<int, HealItem>();
         string[] lines = file.text.Split(new string[] { "\n" }, StringSplitOptions.None);
         int lineCount = lines.Length;
-        Debug.Log($"{lineCount - 2} consumable found");
+        // Debug.Log($"{lineCount - 2} consumable found");
 
         for (int i = 1; i < lineCount - 1; i++)
         {
@@ -298,7 +298,7 @@ public class DataBase : MonoBehaviour
         Gears = new Dictionary<int, EquipableItem>();
         string[] lines = file.text.Split(new string[] { "\n" }, StringSplitOptions.None);
         int lineCount = lines.Length;
-        Debug.Log($"{lineCount - 2} gear found");
+       // Debug.Log($"{lineCount - 2} gear found");
 
         for (int i = 1; i < lineCount - 1; i++)
         {

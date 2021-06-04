@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
 
     void GoToEndGame()
     {
-        Debug.Log("Ending Game");
+       // Debug.Log("Ending Game");
         SceneManager.LoadScene("EndGameScene", LoadSceneMode.Single);
     }
 
@@ -148,5 +148,21 @@ public class GameManager : MonoBehaviour
         spawnPos.y = 1f;
 
         LoadPlayer(data, spawnPos, Map);
+    }
+
+    public IEnumerator PlayerDeath(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        GameObject o = Instantiate(DataBase.inst.ScreenChanger, Vector3.zero, Quaternion.identity);
+        FadeToBlackScreenChange c = o.GetComponent<FadeToBlackScreenChange>();
+        c.Init(changeToMainMenu, false);
+       // Debug.Log("Changing to main Menu");
+
+    }
+
+    void changeToMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
     }
 }

@@ -14,7 +14,7 @@ public class AtakEnemy : Node
 
     public override NodeState Evaluate()
     {
-        Debug.Log("\nATK");
+       // Debug.Log("\nATK");
 
         AttackAction attack = new AttackAction(enemy, enemy.entityEnemy, enemy.BaseAttackPower, 100, Global.Type.NONE);
         enemy.BattleActionChangetoAtk(attack);

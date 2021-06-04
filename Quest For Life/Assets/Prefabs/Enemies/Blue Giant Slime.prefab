@@ -300,16 +300,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EntityName: Giant Blue Slime
-  Level: 15
-  maxHealth: 245
-  currentHealth: 245
-  maxMana: 245
-  currentMana: 245
-  Power: 51
-  Defence: 67
-  Accuracy: 55
-  Dodge: 20
-  Speed: 37
+  Level: 12
+  maxHealth: 206
+  currentHealth: 206
+  maxMana: 206
+  currentMana: 206
+  Power: 42
+  Defence: 55
+  Accuracy: 46
+  Dodge: 17
+  Speed: 31
   BaseAttackPower: 80
   battleManager: {fileID: 0}
   Resistence: 1
@@ -322,6 +322,7 @@ MonoBehaviour:
   BaseExpReward: 440
   MonsterID: 6
   audioSource: {fileID: 7654418087286681422}
+  deathmat: {fileID: 2100000, guid: 607998ccb6bbf1244905d262b8be461e, type: 2}
 --- !u!1 &4793697671164832052
 GameObject:
   m_ObjectHideFlags: 0

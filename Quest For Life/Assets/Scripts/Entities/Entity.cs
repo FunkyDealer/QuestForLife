@@ -150,7 +150,7 @@ public class Entity : MonoBehaviour
             case RunAction e:
 
                 float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
-                Debug.Log($"Chance to escape: {chanceToEscape}");
+                //Debug.Log($"Chance to escape: {chanceToEscape}");
                 if (chanceToEscape > 100) { battleManager.RunAway(); }
                 else if (chanceToEscape > Random.Range(0, 100)) {
                     battleManager.RunAway();
@@ -169,7 +169,7 @@ public class Entity : MonoBehaviour
     {
         currentHealth -= attackPower;
 
-        Debug.Log($"Monster Received {attackPower} damage!");
+        //Debug.Log($"Monster Received {attackPower} damage!");
 
         if (currentHealth <= 0)
         {
@@ -205,7 +205,7 @@ public class Entity : MonoBehaviour
             {
                 this.currentHealth += b.spell.Power;
                 if (currentHealth >= maxHealth) currentHealth = maxHealth;
-                Debug.Log($"{b.user}  healed himself for {b.spell.Power} hp points!");
+                //Debug.Log($"{b.user}  healed himself for {b.spell.Power} hp points!");
             }
         }       
     }
@@ -215,7 +215,7 @@ public class Entity : MonoBehaviour
         if (b.Target == this)
         {
             Vector2 weakness = checkForWeakness(b.spell.type);
-            int spellDamage = (((int)(b.user.Power * weakness.x) * b.spell.Power) / (Defence + 1));
+            int spellDamage = (((int)(b.user.Power * weakness.x) * b.spell.Power) / (Defence + 1));            
 
             ReceiveDamage(spellDamage);
         }

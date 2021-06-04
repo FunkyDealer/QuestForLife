@@ -11,8 +11,7 @@ public class Key : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Entered");
+        {          
             Player p = other.gameObject.GetComponent<Player>();
             playSound();
 

@@ -455,7 +455,7 @@ public class PlayerMov : MonoBehaviour
         GameObject o = Instantiate(DataBase.inst.confirmationInterface, Vector3.zero, Quaternion.identity);
         GenericConfirmInterface g = o.GetComponent<GenericConfirmInterface>();
 
-        g.Init(UseExit, ResumeMovement, "Move to next floor?");
+        g.Init(UseExit, doNothing, "Move to next floor?");
         movementState = MovementState.FROZEN;
     }
 
@@ -511,5 +511,10 @@ public class PlayerMov : MonoBehaviour
     public void leaveDungeon()
     {
         inDungeon = false;
+    }
+
+    void doNothing()
+    {
+
     }
 }

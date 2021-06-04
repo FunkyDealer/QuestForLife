@@ -79,7 +79,7 @@ public class GearSlotIF : MonoBehaviour
         if (this.ID == i)
         {
             GearSlot s = manager.GetGearSlot(ID);
-            Debug.Log($"adding a {s.GetItem().Name}");
+            //Debug.Log($"adding a {s.GetItem().Name}");
 
             GameObject imgPrefab = DataBase.inst.gearPrefabs[s.GetItem().ID];
             itemImage = Instantiate(imgPrefab, this.gameObject.transform);

@@ -42,6 +42,9 @@ public class Enemy : Entity
     [SerializeField]
     AudioSource audioSource;
 
+    [SerializeField]
+    protected Material deathmat;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -50,7 +53,7 @@ public class Enemy : Entity
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log($"{EntityName}: Level:{Level}; Health: {currentHealth}; - {currentMana};{Power};{Defence};{Accuracy};{Dodge};{Speed}{BaseAttackPower};{BaseMoneyReward}");
+        //Debug.Log($"{EntityName}: Level:{Level}; Health: {currentHealth}; - {currentMana};{Power};{Defence};{Accuracy};{Dodge};{Speed}{BaseAttackPower};{BaseMoneyReward}");
         //AQUI
         AtakEnemy atk = new AtakEnemy(this);
         Global.Spell i = new Global.Spell();
@@ -69,6 +72,8 @@ public class Enemy : Entity
     // Update is called once per frame
     void Update()
     {
+        //if (animator.GetBool("Dead") && animator.
+
 
     }
 
@@ -141,7 +146,7 @@ public class Enemy : Entity
 
         AttackAction AttackAction = new AttackAction(this, enemy, this.BaseAttackPower, 100, Global.Type.NONE);
 
-        Debug.Log("the Monster Chose to do a normal Attack");
+        //Debug.Log("the Monster Chose to do a normal Attack");
 
         this._currentBattleAction = AttackAction;
 
@@ -198,7 +203,6 @@ public class Enemy : Entity
 
         battleManager.MonsterDeath();
         animator.SetBool("Dead", true);
-
 
         battleInterface.MonsterDeath();
         //Debug.Log($"Monster Died!");
@@ -266,28 +270,41 @@ public class Enemy : Entity
                 {
                     animator.SetTrigger("Dodge");
                     animationTime += 2.1f;
-                    battleInterface.AddMessage($"The {a.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
+                    battleInterface.AddMessage($"The {a.user.EntityName}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
                 }
                 break;
             case CastSpellAction b:
-                float tohit2 = (b.user.Accuracy * b.spell.Accuracy / b.Target.Dodge);
-                int ToHit2 = (int)tohit2;
+                if (b.Target == this)
+                {
+                    if (b.spell.type != Global.Type.LIGHT)
+                    {
+                        float tohit2 = (b.user.Accuracy * b.spell.Accuracy / b.Target.Dodge);
+                        int ToHit2 = (int)tohit2;
 
-                if (tohit2 > 100)
-                {
-                    ReceiveSpellAttack(b);
-                    animationTime += 1.3f;
-                }
-                else if (ToHit2 > Random.Range(0, 100))
-                {
-                    ReceiveSpellAttack(b);
-                    animationTime += 1.3f;
-                }
-                else
-                {
-                    animator.SetTrigger("Dodge");
-                    animationTime += 2.1f;
-                    battleInterface.AddMessage($"The {b.user}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
+                        if (tohit2 > 100)
+                        {
+                            ReceiveSpellAttack(b);
+                            animator.SetTrigger("TakeDmg");
+                            animationTime += 1.3f;
+                        }
+                        else if (ToHit2 > Random.Range(0, 100))
+                        {
+                            ReceiveSpellAttack(b);
+                            animator.SetTrigger("TakeDmg");
+                            animationTime += 1.3f;
+                        }
+                        else
+                        {
+                            animator.SetTrigger("Dodge");
+                            animationTime += 2.1f;
+                            battleInterface.AddMessage($"The {b.user.EntityName}'s Attack Missed!", TextMessage.MessageSpeed.FAST);
+                        }
+                    }
+                    else
+                    {
+                        receiveHolySpell(b);
+                        animationTime += 1.3f;
+                    }
                 }
                 break;
             case ItemUseAction c:
@@ -298,7 +315,7 @@ public class Enemy : Entity
                 break;
             case RunAction e:
                 float chanceToEscape = ((e.speed * 40) / this.Speed) + 30;
-                Debug.Log($"Chance to escape: {chanceToEscape}");
+                //Debug.Log($"Chance to escape: {chanceToEscape}");
                 if (chanceToEscape > 100)
                 {
                     battleManager.RunAway();
@@ -319,6 +336,23 @@ public class Enemy : Entity
         }
 
         return animationTime;
+    }
+
+    void receiveHolySpell(CastSpellAction b)
+    {
+        if (this.Weakness == Global.Type.LIGHT)
+        {
+            int spellDamage = (((int)(b.user.Power * 2) * b.spell.Power) / (Defence + 1));
+            battleInterface.AddMessage($"That attack did massive ammount of damage!", TextMessage.MessageSpeed.FAST);
+            animator.SetTrigger("TakeDmg");
+
+            ReceiveDamage(spellDamage);
+        } else
+        {
+            this.currentHealth += b.spell.Power;
+            if (currentHealth >= maxHealth) currentHealth = maxHealth;
+            battleInterface.AddMessage($"You Healed the enemy!", TextMessage.MessageSpeed.FAST);
+        }
     }
 
     void PlayDodgeSound()
@@ -378,6 +412,14 @@ public class Enemy : Entity
         }
     }
 
+    public void ChangeToDeathmat()
+    {
+        Renderer rend = gameObject.GetComponentInChildren<Renderer>();
+
+        rend.material = deathmat;
+        rend.material.SetFloat("startTime", Time.time);
+
+    }
 
 
 }

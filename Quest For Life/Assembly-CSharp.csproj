@@ -55,12 +55,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\AudioController.cs" />
-     <Compile Include="Assets\FarAudioController.cs" />
-     <Compile Include="Assets\HallTile.cs" />
-     <Compile Include="Assets\MusicPlayerController.cs" />
-     <Compile Include="Assets\PlayerAudioController.cs" />
-     <Compile Include="Assets\RepeatingAudioController.cs" />
      <Compile Include="Assets\Scripts\AI\AtakEnemy.cs" />
      <Compile Include="Assets\Scripts\AI\EnemyIA.cs" />
      <Compile Include="Assets\Scripts\AI\Inverter.cs" />
@@ -69,7 +63,8 @@
      <Compile Include="Assets\Scripts\AI\Sequence.cs" />
      <Compile Include="Assets\Scripts\AI\SpellEnemy.cs" />
      <Compile Include="Assets\Scripts\AppManager.cs" />
-     <Compile Include="Assets\Scripts\AudioDataBase.cs" />
+     <Compile Include="Assets\Scripts\Audio Controllers\AudioController.cs" />
+     <Compile Include="Assets\Scripts\Audio Controllers\FarAudioController.cs" />
      <Compile Include="Assets\Scripts\BattleItemManagementMenu.cs" />
      <Compile Include="Assets\Scripts\BattlePlayerStatsManager.cs" />
      <Compile Include="Assets\Scripts\BattleStatsmenuManager.cs" />
@@ -81,7 +76,9 @@
      <Compile Include="Assets\Scripts\Battles\ItemUseAction.cs" />
      <Compile Include="Assets\Scripts\Battles\RunAction.cs" />
      <Compile Include="Assets\Scripts\CompassController.cs" />
-     <Compile Include="Assets\Scripts\DataBase.cs" />
+     <Compile Include="Assets\Scripts\DataBases\AudioDataBase.cs" />
+     <Compile Include="Assets\Scripts\DataBases\DataBase.cs" />
+     <Compile Include="Assets\Scripts\DataBases\PropsDataBase.cs" />
      <Compile Include="Assets\Scripts\DataGameMail.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonGenerator.cs" />
      <Compile Include="Assets\Scripts\Dungeon\DungeonGenerator\DungeonGenPreset.cs" />
@@ -101,19 +98,25 @@
      <Compile Include="Assets\Scripts\Entities\Entity.cs" />
      <Compile Include="Assets\Scripts\FadeToBlackScreenChange.cs" />
      <Compile Include="Assets\Scripts\FinalZoneGenerator.cs" />
-     <Compile Include="Assets\Scripts\GearManagementMenu.cs" />
-     <Compile Include="Assets\Scripts\GenericConfirmInterface.cs" />
-     <Compile Include="Assets\Scripts\GenericQuantityConfirmInterface.cs" />
      <Compile Include="Assets\Scripts\Global.cs" />
+     <Compile Include="Assets\Scripts\HallTile.cs" />
      <Compile Include="Assets\Scripts\Interfaces\BattleInterFaceManager.cs" />
      <Compile Include="Assets\Scripts\Interfaces\Buttons\Battle\BattleButton.cs" />
      <Compile Include="Assets\Scripts\Interfaces\Buttons\Battle\BattleSpellButton.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\GearManagementMenu.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\GenericConfirmInterface.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\GenericQuantityConfirmInterface.cs" />
      <Compile Include="Assets\Scripts\Interfaces\HudManager.cs" />
      <Compile Include="Assets\Scripts\Interfaces\Inventory\GearSlotIF.cs" />
      <Compile Include="Assets\Scripts\Interfaces\Inventory\InventoryIFManager.cs" />
      <Compile Include="Assets\Scripts\Interfaces\Inventory\InventorySlotIF.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\ItemManagementMenu.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\LoadSlotController.cs" />
      <Compile Include="Assets\Scripts\Interfaces\MessageDisplayer.cs" />
      <Compile Include="Assets\Scripts\Interfaces\NavigationInterfaceManager.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\PauseMenu.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\SaveGameController.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\SaveSlotController.cs" />
      <Compile Include="Assets\Scripts\Interfaces\ShopInterface\BuyItemDisplayController.cs" />
      <Compile Include="Assets\Scripts\Interfaces\ShopInterface\SellItemDisplayController.cs" />
      <Compile Include="Assets\Scripts\Interfaces\ShopInterface\ShopBuyMenuController.cs" />
@@ -129,13 +132,10 @@
      <Compile Include="Assets\Scripts\Inventory\InventorySlot.cs" />
      <Compile Include="Assets\Scripts\Inventory\ItemStack.cs" />
      <Compile Include="Assets\Scripts\Inventory\Slot.cs" />
-     <Compile Include="Assets\Scripts\ItemManagementMenu.cs" />
      <Compile Include="Assets\Scripts\Items\EquipableItem.cs" />
      <Compile Include="Assets\Scripts\Items\HealItem.cs" />
      <Compile Include="Assets\Scripts\Items\Item.cs" />
      <Compile Include="Assets\Scripts\Key.cs" />
-     <Compile Include="Assets\Scripts\LoadSlotController.cs" />
-     <Compile Include="Assets\Scripts\LockedStairs.cs" />
      <Compile Include="Assets\Scripts\MapGenerator.cs" />
      <Compile Include="Assets\Scripts\MapManager.cs" />
      <Compile Include="Assets\Scripts\Menus\LoadGameController.cs" />
@@ -145,17 +145,17 @@
      <Compile Include="Assets\Scripts\MiniMapGenerator.cs" />
      <Compile Include="Assets\Scripts\MiniMapManager.cs" />
      <Compile Include="Assets\Scripts\MonsterRoomManager.cs" />
-     <Compile Include="Assets\Scripts\PauseMenu.cs" />
+     <Compile Include="Assets\Scripts\MusicPlayerController.cs" />
      <Compile Include="Assets\Scripts\Physical Tiles\Chest.cs" />
+     <Compile Include="Assets\Scripts\Physical Tiles\LockedStairs.cs" />
      <Compile Include="Assets\Scripts\Physical Tiles\PhysicalTile.cs" />
+     <Compile Include="Assets\Scripts\Physical Tiles\RoomTile.cs" />
      <Compile Include="Assets\Scripts\Physical Tiles\ShopEntrance.cs" />
      <Compile Include="Assets\Scripts\Physical Tiles\ShopExit.cs" />
      <Compile Include="Assets\Scripts\Player\Player.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerAudioController.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerMov.cs" />
-     <Compile Include="Assets\Scripts\PropsDataBase.cs" />
-     <Compile Include="Assets\Scripts\RoomTile.cs" />
-     <Compile Include="Assets\Scripts\SaveGameController.cs" />
-     <Compile Include="Assets\Scripts\SaveSlotController.cs" />
+     <Compile Include="Assets\Scripts\RepeatingAudioController.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\AppData.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\DataManager.cs" />
      <Compile Include="Assets\Scripts\SavingLoading\InventoryData.cs" />
@@ -167,8 +167,11 @@
      <Compile Include="Assets\Scripts\Shop\ShopGenerator.cs" />
      <Compile Include="Assets\Scripts\Shop\ShopManager.cs" />
      <Compile Include="Assets\Scripts\TextMessage.cs" />
+     <Compile Include="Assets\Scripts\WaterDepth.cs" />
+     <None Include="Assets\Shader\Destruction\TriangleDestruction.shader" />
      <None Include="Assets\Shader\outline\Outline.shader" />
      <None Include="Assets\Shader\Glass.shader" />
+     <None Include="Assets\Shader\Water\Water.shader" />
      <None Include="Assets\Shader\Toon\ToonOutline.shader" />
      <None Include="Assets\Shader\maskTexture.shader" />
      <None Include="Assets\Shader\Toon\ToonRimLight.shader" />
@@ -723,6 +726,9 @@
  </Reference>
  <Reference Include="Unity.Rider.Editor">
  <HintPath>E:/Unity Projects/Quest For Life/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.2D.Sprite.Editor">
+ <HintPath>E:/Unity Projects/Quest For Life/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
  <HintPath>E:/Unity Projects/Quest For Life/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>

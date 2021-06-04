@@ -8,8 +8,10 @@
 		_ambientPower ("AmbientPower", Range(0,1)) = 0.1
 		_SpecularColor("Specular Color", Color) = (0.9,0.9,0.9,1)
 		_Shininess("Shininess", int) = 10
+
 		_RimColor("Rim Color", Color) = (1,1,1,1)
 		_RimAmount("Rim Amount", Range(0, 1)) = 0.5
+
 		_RimThreshold("Rim Threshold", Range(0, 1)) = 0.1
     }
     SubShader

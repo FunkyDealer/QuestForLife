@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1994563552106129412}
   - component: {fileID: 5205072644948555162}
   m_Layer: 5
-  m_Name: TextMessage
+  m_Name: BattleTextMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 84d150a3284e1094a8d988648d3ae77d, type: 3}
     m_FontSize: 38
     m_FontStyle: 0
     m_BestFit: 0

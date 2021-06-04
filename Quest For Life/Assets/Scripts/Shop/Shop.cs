@@ -35,7 +35,7 @@ public class Shop
         }
 
         int healItemCount = availableHealItems.Count;
-        Debug.Log("Heal Items available for sale: " + healItemCount);
+       // Debug.Log("Heal Items available for sale: " + healItemCount);
         if (healItemCount > 0)
         {
             for (int i = 0; i < consumableInventory.Length; i++) //fill consumable inventory
@@ -46,7 +46,7 @@ public class Shop
         }
 
         int equipItemCount = availableEquipItem.Count;
-        Debug.Log("equipament Items available for sale: " + equipItemCount);
+       // Debug.Log("equipament Items available for sale: " + equipItemCount);
         if (equipItemCount > 0) {
 
             for (int i = 0; i < equipableInventory.Length; i++) //fill the equipable inventory
@@ -61,7 +61,7 @@ public class Shop
 
     public void LoadShop(ShopData data)
     {
-        Debug.Log("Loading Shop");
+       // Debug.Log("Loading Shop");
         List<HealItem> HealItems = new List<HealItem>(); //List of available heal Items
         List<EquipableItem> EquipItems = new List<EquipableItem>(); //list of available equipItems
 
@@ -95,7 +95,6 @@ public class Shop
 
     public bool buyItem(Item item, int slot, Player player)
     {
-        Debug.Log("entered");
         if (item is HealItem)
         {          
             if (player.Inventory.TryToAddToInventory(item, 1)) //try to add to inventory
