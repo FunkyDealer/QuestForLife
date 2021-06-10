@@ -20,7 +20,7 @@
         {
 		    Tags
 			{ 
-			"LightMode" = "ForwardBase" //tells that this pass is the base pass
+				"LightMode" = "ForwardBase" //tells that this pass is the base pass
 			}
 
             CGPROGRAM

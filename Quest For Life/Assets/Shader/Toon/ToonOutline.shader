@@ -12,7 +12,9 @@
 		//Outline
 		_OutlineColor("Outline Color", Color) = (0,0,0,1)
 		_outlineThickness ("Outline Thickness", Range(0, 1)) = 0.03
+
     }
+
     SubShader
     {
 		Tags
@@ -167,7 +169,7 @@
 
             struct v2f
             {
-				float4 vertex : SV_POSITION;
+				float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
 				float3 normal : NORMAL;
 				float4 world : TEXCOORD3;
@@ -188,7 +190,7 @@
             {
                 v2f o;
 
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.pos = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
 				o.normal = normalize(mul(float4(v.normal, 0), unity_WorldToObject).xyz); 
@@ -196,7 +198,7 @@
 				o.world = mul(unity_ObjectToWorld, v.vertex);
 
 				TRANSFER_SHADOW(o);
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                UNITY_TRANSFER_FOG(o,o.pos);
                 return o;
             }
 

@@ -22,6 +22,9 @@ public class PlayerMov : MonoBehaviour
     bool inputDelayOn = false;
     bool inCutScene;
 
+    [SerializeField]
+    GameObject freeCamPrefab;
+
     enum MovementState
     {
         WAITINGINPUT,
@@ -157,34 +160,40 @@ public class PlayerMov : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown("r"))
-        {
-            OpenShop();
-            return;
-        }
+        //if (Input.GetKeyDown("r"))
+        //{
+        //    OpenShop();
+        //    return;
+        //}
 
-        if (Input.GetKeyDown("z"))
-        {
-            MoveToNextFloor();
-            movementState = MovementState.COOLDOWN;
-            return;
-        }
+        //if (Input.GetKeyDown("z"))
+        //{
+        //    MoveToNextFloor();
+        //    movementState = MovementState.COOLDOWN;
+        //    return;
+        //}
 
-        if (Input.GetKeyDown("l"))
-        {
-            player.AddInterfaceMessage($"Testing a message \n 2nd line", TextMessage.MessageSpeed.VERYSLOW);
-            movementState = MovementState.COOLDOWN;
-            return;
-        }
+        //if (Input.GetKeyDown("l"))
+        //{
+        //    player.AddInterfaceMessage($"Testing a message \n 2nd line", TextMessage.MessageSpeed.VERYSLOW);
+        //    movementState = MovementState.COOLDOWN;
+        //    return;
+        //}
 
-        if (Input.GetKeyDown("k"))
-        {
-           // Debug.Log("Leveling Up manually");
+        //if (Input.GetKeyDown("k"))
+        //{
+        //   // Debug.Log("Leveling Up manually");
            
-            player.LevelUpManually();
-            movementState = MovementState.COOLDOWN;
-            return;
-        }
+        //    player.LevelUpManually();
+        //    movementState = MovementState.COOLDOWN;
+        //    return;
+        //}
+
+        //if (Input.GetKeyDown(","))
+        //{
+        //    StartFreeCamera();
+        //    return;
+        //}
 
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -516,5 +525,25 @@ public class PlayerMov : MonoBehaviour
     void doNothing()
     {
 
+    }
+
+    void StartFreeCamera()
+    {
+        movementState = MovementState.FROZEN;
+
+        GameObject o = Instantiate(freeCamPrefab, gameObject.transform.position, Quaternion.identity);
+        FreeCamController f = o.GetComponentInChildren<FreeCamController>();
+        f.mov = this;
+
+        this.gameObject.SetActive(false);
+        player.DeactiveNavigationInterface();
+
+    }
+
+    public void returnToPlayer()
+    {
+        player.ActivateNavigationInterface();
+        this.gameObject.SetActive(true);
+        movementState = MovementState.COOLDOWN;
     }
 }

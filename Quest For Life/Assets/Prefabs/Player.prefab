@@ -771,6 +771,8 @@ MonoBehaviour:
   inputDelay: 0.2
   velocity: 25
   turningVelocity: 10
+  freeCamPrefab: {fileID: 137241310214488207, guid: 1ba4376df5dbb8641a28d67810d02052,
+    type: 3}
 --- !u!1 &4576866299833141260
 GameObject:
   m_ObjectHideFlags: 0

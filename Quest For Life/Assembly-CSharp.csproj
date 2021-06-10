@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\FreeCamController.cs" />
      <Compile Include="Assets\Scripts\AI\AtakEnemy.cs" />
      <Compile Include="Assets\Scripts\AI\EnemyIA.cs" />
      <Compile Include="Assets\Scripts\AI\Inverter.cs" />

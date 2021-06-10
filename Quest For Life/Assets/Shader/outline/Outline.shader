@@ -62,7 +62,8 @@
         }
 
 		//Second Pass for outlines
-		Pass {
+		Pass
+		{
 		Name "Outline"
 		Cull front
 
@@ -86,25 +87,27 @@
                 float4 position : SV_POSITION;
             };
 
+				
+
 			uniform fixed4 _OutlineColor;
 			uniform float _outlineThickness;
 
 			v2f vert(appdata v)
 			{
-			v2f o;			
-			//calculate the position of the expanded object
-			float3 normal = normalize(v.normal);
+				v2f o;			
+				//calculate the position of the expanded object
+				float3 normal = normalize(v.normal);
 
-			v.vertex *= (1 + _outlineThickness);
+				v.vertex *= (1 + _outlineThickness);
 
-			//float3 outlineOffset = normal * _outlineThickness;
-			//float3 position = v.vertex + outlineOffset;
+				//alternate way
+				//float3 outlineOffset = normal * _outlineThickness;
+				//float3 position = v.vertex + outlineOffset;
 
-			//convert the vertex positions from object space to clip space so they can be rendered
-			//o.position = UnityObjectToClipPos(position);
-			o.position = UnityObjectToClipPos(v.vertex);
-			
-			return o;
+				//convert the vertex positions from object space to clip space so they can be rendered
+				o.position = UnityObjectToClipPos(v.vertex);
+				
+				return o;
 			}
 		
 			fixed4 frag(v2f i) : SV_TARGET 
@@ -114,5 +117,6 @@
 
 			ENDCG
 		}
+
     }
 }

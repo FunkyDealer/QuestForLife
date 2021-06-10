@@ -1,13 +1,10 @@
-Shader "my/Water"
+﻿Shader "my/Water"
 {
 	Properties
 	{
 		_Color("Color", Color) = (1, 1, 1, 1)
-		_EdgeColor("Edge Color", Color) = (1, 1, 1, 1)
-		_DepthFactor("Depth Factor", float) = 1.0
 		_WaveSpeed("Wave Speed", float) = 1.0
 		_WaveAmp("Wave Amp", float) = 0.2
-		_DepthRampTex("Depth Ramp", 2D) = "white" {}
 		_NoiseTex("Noise Texture", 2D) = "white" {}
 		_MainTex("Main Texture", 2D) = "white" {}
 		_DistortStrength("Distort Strength", float) = 1.0
@@ -45,44 +42,40 @@ Shader "my/Water"
 				uniform float _WaveAmp;
 				uniform float _MovText;
 
-				struct vertexInput
+				struct appdata
 				{
 					float4 vertex : POSITION;
-					float3 normal : NORMAL;
-					float3 texCoord : TEXCOORD0;
+					float2 uv : TEXCOORD0;
 				};
 
-				struct vertexOutput
+				struct v2f
 				{
 					float4 pos : SV_POSITION;
 					float4 grabPos : TEXCOORD0;
 				};
 
-				vertexOutput vert(vertexInput input)
+				v2f vert(appdata v)
 				{
-					vertexOutput output;
-
-					// converte input para world space
-					output.pos = UnityObjectToClipPos(input.vertex);
-					float4 normal4 = float4(input.normal, 0.0);
-					float3 normal = normalize(mul(normal4, unity_WorldToObject).xyz);
-
+					v2f o;
+					// convert input clip pos
+					o.pos = UnityObjectToClipPos(v.vertex);
 					// use ComputeGrabScreenPos function from UnityCG.cginc
 					// to get the correct texture coordinate
-					output.grabPos = ComputeGrabScreenPos(output.pos);
+					o.grabPos = ComputeGrabScreenPos(o.pos);
 
 					// distort based on bump map
-					float noiseSample = tex2Dlod(_NoiseTex, float4(input.texCoord.xy, 0, 0));
-					output.grabPos.y += sin(_Time * _WaveSpeed * noiseSample) * _WaveAmp * _DistortStrength;
-					output.grabPos.x += cos(_Time * _WaveSpeed * noiseSample) * _WaveAmp * _DistortStrength;
+					float noiseSample = tex2Dlod(_NoiseTex, float4(v.uv, 0, 0));
+					o.grabPos.y += sin(_Time * _WaveSpeed * noiseSample) * _WaveAmp * _DistortStrength;
+					o.grabPos.x += cos(_Time * _WaveSpeed * noiseSample) * _WaveAmp * _DistortStrength;
 
-					return output;
+					return o;
 				}
 
-				float4 frag(vertexOutput input) : COLOR
+				float4 frag(v2f i) : COLOR
 				{
-					return tex2Dproj(_BackgroundTexture, input.grabPos);
+					return tex2Dproj(_BackgroundTexture, i.grabPos);
 				}
+
 				ENDCG
 			}
 
@@ -98,77 +91,60 @@ Shader "my/Water"
 
 				// Properties
 				uniform float4 _Color;
-				uniform float4 _EdgeColor;
-				uniform float  _DepthFactor;
 				uniform float  _WaveSpeed;
 				uniform float  _WaveAmp;
 				uniform float _ExtraHeight;
 				uniform float _MovText;
 				uniform sampler2D _CameraDepthTexture;
-				uniform sampler2D _DepthRampTex;
 				uniform sampler2D _NoiseTex;
 				uniform sampler2D _MainTex;
 
-					struct vertexInput
+					struct appdata
 					{
 						float4 vertex : POSITION;
-						float4 texCoord : TEXCOORD1;
+						float2 uv : TEXCOORD1;
 					};
 
-					struct vertexOutput
+					struct v2f
 					{
 						float4 pos : SV_POSITION;
-						float4 texCoord : TEXCOORD0;
-						float4 screenPos : TEXCOORD1;
+						float2 uv : TEXCOORD0;
 					};
 
-					vertexOutput vert(vertexInput input)
+					v2f vert(appdata v)
 					{
-						vertexOutput output;
-
+						v2f o;
 						// convert to world space
-						output.pos = UnityObjectToClipPos(input.vertex);
-
+						o.pos = UnityObjectToClipPos(v.vertex);
 						// apply wave animation
-						float noiseSample = tex2Dlod(_NoiseTex, float4(input.texCoord.xy, 0, 0));
+						float noiseSample = tex2Dlod(_NoiseTex, float4(v.uv, 0, 0));
 
-						output.pos.y += sin(_Time * _WaveSpeed * noiseSample) * _WaveAmp + _ExtraHeight;
-						output.pos.x += cos(_Time * _WaveSpeed * noiseSample) * _WaveAmp;
-
-						// compute depth
-						output.screenPos = ComputeScreenPos(output.pos);
+						o.pos.y += sin(_Time * _WaveSpeed * noiseSample) * _WaveAmp + _ExtraHeight;
+						o.pos.x += cos(_Time * _WaveSpeed * noiseSample) * _WaveAmp;
 
 						// texture coordinates 
-						output.texCoord = input.texCoord;
+						o.uv = v.uv;
 
-						return output;
+						return o;
 					}
 
-					float4 frag(vertexOutput input) : COLOR
+					float4 frag(v2f i) : COLOR
 					{
-						// apply depth texture
-						float4 depthSample = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, input.screenPos);
-						float depth = Linear01Depth(depthSample).r;
-
-						// create foamline
-						float foamLine = 1 - saturate(_DepthFactor * (depth - input.screenPos.w));
-						float4 foamRamp = float4(tex2D(_DepthRampTex, float2(foamLine, 0.5)).rgb, 1);
-
 						//Move Text
 						float2 mov;
 						if (_MovText >= 1.0f)
 						{
-							mov = input.texCoord.xy + float2(1, 0) * _Time.x * _MovText;
+							mov = i.uv + float2(1, 0) * _Time.x * _MovText;
 						}
 						else
 						{
-							mov = input.texCoord.xy;
+							mov = i.uv;
 						}
 
 						// sample main texture
 						float4 albedo = tex2D(_MainTex, mov);
 
-						float4 col = _Color * foamRamp * albedo;
+						float4 col = _Color * albedo;
 						return col;
 					}
 

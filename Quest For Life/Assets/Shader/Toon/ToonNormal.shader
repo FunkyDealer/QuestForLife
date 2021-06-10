@@ -192,7 +192,7 @@ Shader "toon/ToonNormal"
 
             struct v2f
             {
-				float4 vertex : SV_POSITION;
+				float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
 				float3 normal : NORMAL;
 				float4 world : TEXCOORD3;
@@ -217,7 +217,7 @@ Shader "toon/ToonNormal"
             {
                 v2f o;
 
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.pos = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
 				o.normal = normalize(mul(float4(v.normal, 0), unity_WorldToObject).xyz); 
@@ -235,7 +235,7 @@ Shader "toon/ToonNormal"
 				o.viewDir = mul(o.tbn, o.viewDir);
 
 				TRANSFER_SHADOW(o);
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                UNITY_TRANSFER_FOG(o,o.pos);
                 return o;
             }
 
